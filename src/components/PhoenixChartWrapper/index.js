@@ -4,14 +4,14 @@ import loadable from '@loadable/component';
 import Loading from '../Loading';
 
 
-let ChartiqCustom = Loading;
+let PhoenixChartWrapper = Loading;
 if(typeof document != 'undefined') {
-  ChartiqCustom = loadable(() => import('./PhoenixChartWrapper'));
+  PhoenixChartWrapper = loadable(() => import('./PhoenixChartWrapper'));
 }
 
 const Renderer = () => {
   return (
-    <ChartiqCustom />
+    <PhoenixChartWrapper />
   );
 }
 
