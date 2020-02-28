@@ -1,4 +1,24 @@
+$test: (
+  "one": red,
+  "two": green
+);
+
+.title {
+  background: rgb(141, 141, 172);
+  color: map-get($test, "two" );
+  text-align: center;
+  font-family: MyFont;
+}
+
 .wrapper {
-  color: red;
-  background: blue;
+  display:flex;
+}
+
+.leftRail {
+  width:60%;
+  border: 1px solid blue;
+}
+
+.rightRail {
+
 }

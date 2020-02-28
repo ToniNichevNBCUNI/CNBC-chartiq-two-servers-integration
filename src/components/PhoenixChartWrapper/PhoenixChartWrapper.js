@@ -27,7 +27,7 @@ const chartInitialized = ({ chartEngine, uiContext }) => {
 };
 
 
-const CustomChart = () => {
+const PhoenixChartWrapper = () => {
   return (
     <div> 
         <AdvancedChart
@@ -39,4 +39,4 @@ const CustomChart = () => {
   );
 }
  
-export default CustomChart;
+export default PhoenixChartWrapper;

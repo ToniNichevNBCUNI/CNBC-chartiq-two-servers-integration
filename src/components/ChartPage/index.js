@@ -1,18 +1,20 @@
 import React from 'react';
-import loadable from '@loadable/component';
-//import Loadable from 'react-loadable';
-import Loading from '../Loading';
+import PhoenixChartWrapper from '../PhoenixChartWrapper';
+import styles from './styles.scss';
 
-
-let ChartiqCustom = Loading;
-if(typeof document != 'undefined') {
-  ChartiqCustom = loadable(() => import('./PhoenixChartWrapper'));
-}
-
-const Renderer = () => {
+const ChartPage = () => {
   return (
-    <ChartiqCustom />
+    <div className={styles.wrapper}>
+        <div className={styles.leftRail}>
+          <div className={styles.title}>Chart</div>
+          <PhoenixChartWrapper />
+        </div>
+        <div className={styles.rightRail}>
+          <p>right rail</p>
+        </div>
+
+    </div>
   );
 }
 
-export default Renderer;
+export default ChartPage;
