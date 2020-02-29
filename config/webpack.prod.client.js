@@ -17,15 +17,15 @@ module.exports = {
 
 	resolve: {
 		extensions: ['.js', '.jsx']
-	},    
+  },
+  
+  externals: {
+		jquery: 'jQuery'
+	},     
 
   entry: [
     './src/index.js',
-  ],
-
-  externals: {
-		jquery: 'jQuery'
-	},    
+  ], 
 
   output: {
     filename: '[name]-bundle.js',

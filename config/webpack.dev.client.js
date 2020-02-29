@@ -16,15 +16,21 @@ module.exports = {
 
 	resolve: {
 		extensions: ['.js', '.jsx']
-	},  
+  },
+  
+	externals: {
+		jquery: 'jQuery'
+	},   
 
   entry: [
     './src/index.js',
-  ],
+  ],    
 
-	externals: {
-		jquery: 'jQuery'
-	},    
+  output: {
+    // path: `${projectRootPath}/src`,    
+    filename: '[name]-bundle.js',
+    publicPath
+  },  
 
   devServer: {
     staticOptions: {
@@ -36,13 +42,7 @@ module.exports = {
     hot: true,
     port: process.env.ASSETS_SERVER_PORT,
     noInfo: true,
-  },  
-
-  output: {
-    path: `${projectRootPath}/src`,    
-    filename: '[name]-bundle.js',
-    publicPath
-  },  
+  },   
 
   module: {
     rules: [
@@ -127,7 +127,7 @@ module.exports = {
 						options: {
 							name: '[name].[ext]',
 							outputPath: './css/img/',
-							publicPath: 'css/img/'
+							publicPath: 'http://localhost:3006/dist/css/img'
 						}
 					}
 				]

@@ -6,7 +6,7 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const getEnvironmentConstants = require('../getEnvironmentConstants');
 
-var e = getEnvironmentConstants();
+console.log(`Server is starting at: ${process.env.APP_HOST} ${process.env.SERVER_PORT}`);
 
 module.exports = {
   mode: 'development',
@@ -14,11 +14,14 @@ module.exports = {
   devtool: 'source-map',
   
   target: "node",
-  
+  /*
   node: {
     __dirname: false, // use the standard Node behavior of __dirname
   },
-  externals: [nodeExternals(), {jquery: 'jQuery'}],
+  */
+
+  //externals: [nodeExternals(), {jquery: 'jQuery'}],
+  externals: [nodeExternals()],
  
 	resolve: {
 		extensions: ['.js', '.jsx']
@@ -146,6 +149,6 @@ module.exports = {
       verbose: true,
       // Node arguments.
       // nodeArgs: [ '--inspect-brk' ]
-    }),    
+    }),
   ]
 };
