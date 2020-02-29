@@ -111,7 +111,7 @@ module.exports = {
 						options: {
 							name: '[name].[ext]',
 							outputPath: './css/img/',
-							publicPath: 'http://localhost:3006/dist/css/img'
+							publicPath: `http://localhost:${process.env.ASSETS_SERVER_PORT}/dist/css/img`
 						}
 					}
 				]
