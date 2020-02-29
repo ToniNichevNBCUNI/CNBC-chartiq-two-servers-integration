@@ -8,7 +8,7 @@ const getEnvironmentConstants = require('../getEnvironmentConstants');
 console.log(`Server is starting at: ${process.env.APP_HOST} ${process.env.SERVER_PORT}`);
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
 
   devtool: '',
 
@@ -51,14 +51,12 @@ module.exports = {
                 localIdentName: '[folder]-[local]--[hash:base64:5]',
               },
               importLoaders: 2,              
-              sourceMap: true
             }
           },
           {
             loader: 'postcss-loader',
             options: {
               plugins: () => [require('autoprefixer')()],
-              sourceMap: true              
             },
           },
           {

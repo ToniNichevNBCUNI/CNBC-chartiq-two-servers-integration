@@ -11,9 +11,9 @@
     "build-dev": "webpack-dev-server --config ./config/webpack.dev.client.js",
     "build-dev-ssr": "webpack --config ./config/webpack.dev.ssr.server.js --watch",
     "build-prod-ssr": "NODE_ENV=production webpack --config ./config/webpack.prod.ssr.server.js",
-    "run-prod-server": "node ./server-build/server-bundle.js",
+    "run-server": "node ./server-build/server-bundle.js",
     "start-dev": "yarn clean; yarn build-dev & yarn build-dev-ssr",
-    "start-prod": "yarn clean; yarn build-prod; yarn build-prod-ssr; yarn run-prod-server",
+    "start-prod": "yarn clean; yarn build-prod; yarn build-prod-ssr; yarn run-server",
     "test": "jest"
   },
   "jest": {

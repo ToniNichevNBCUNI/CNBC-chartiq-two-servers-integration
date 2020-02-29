@@ -54,14 +54,12 @@ module.exports = {
                 localIdentName: '[folder]-[local]--[hash:base64:5]',
               },
               importLoaders: 2,              
-              sourceMap: true
             }
           },
           {
             loader: 'postcss-loader',
             options: {
-              plugins: () => [require('autoprefixer')()],
-              sourceMap: true              
+              plugins: () => [require('autoprefixer')()],           
             },
           },
           {
