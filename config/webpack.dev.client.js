@@ -127,7 +127,7 @@ module.exports = {
 						options: {
 							name: '[name].[ext]',
 							outputPath: './css/img/',
-							publicPath: 'http://localhost:3006/dist/css/img'
+							publicPath: 'http://localhost:8000/dist/css/img'
 						}
 					}
 				]
