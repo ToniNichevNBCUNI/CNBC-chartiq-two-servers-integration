@@ -9,9 +9,16 @@ console.log(`Server is starting at: ${process.env.APP_HOST} ${process.env.SERVER
 
 module.exports = {
   mode: 'development',
+
   devtool: '',
+
   target: "node",
+
   externals: [nodeExternals()],
+
+	resolve: {
+		extensions: ['.js', '.jsx']
+	},      
 
   entry: {
     server: './ssr-server.js'
@@ -25,7 +32,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader"
@@ -59,9 +66,11 @@ module.exports = {
           }
         ],
       },
+
       // images
       {
-        test: /\.(png|jp(e*)g|svg)$/,  
+        // test: /\.(png|jp(e*)g|svg)$/,  
+        test: /^((?!(chartiq)).)*\.(png|jp(e*)g|svg)$/,  
         use: [{
             loader: 'url-loader',
             options: { 
@@ -70,11 +79,43 @@ module.exports = {
             } 
         }]
       },
+
       //File loader used to load fonts
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: ['file-loader']
-      }                    
+      },
+
+      // *************************************
+      // ChartIQ
+      // *************************************
+
+			/* CHARTIQ CSS bundling rule, using SASS */
+			{
+				test: /.*(chartiq).*\.css$/,
+				use: [
+          'style-loader',
+					'css-loader',
+					'sass-loader'
+				]
+			},      
+
+			/* image bundling rule, images are referenced via css */
+			{
+				test: /.*(chartiq).*\.(jpg|gif|png|svg|cur)$/,
+        //test: /\.(jpg|gif|png|svg|cur)$/,
+				use: [
+					{
+						loader: 'file-loader',
+						options: {
+							name: '[name].[ext]',
+							outputPath: './css/img/',
+							publicPath: 'css/img/'
+						}
+					}
+				]
+			},        
+
     ]
   },
   plugins: [
