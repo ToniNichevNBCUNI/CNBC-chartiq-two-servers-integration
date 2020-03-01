@@ -111,9 +111,30 @@ module.exports = {
 			{
 				test: /.*(chartiq).*\.css$/,
 				use: [
-          'style-loader',
-					'css-loader',
-					'sass-loader'
+          {
+            loader: 'style-loader',
+            options: {
+              attributes: {
+                sourceMap: true,
+              }
+            },            
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 2,              
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                outputStyle: 'expanded',
+              },
+              sourceMap: true,
+            },
+          },
 				]
 			},      
 

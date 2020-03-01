@@ -80,7 +80,7 @@ module.exports = {
       // images
       {
         //test: /\.(png|jp(e*)g|svg)$/,  
-        test: /^((?!(chartiq)).)*\.(png|jp(e*)g|svg)$/, 
+        test: /^((?!(PhoenixChartWrapper)).)*\.(png|jp(e*)g|svg)$/, 
         use: [{
             loader: 'url-loader',
             options: { 
@@ -99,32 +99,7 @@ module.exports = {
       // *************************************
       // ChartIQ
       // *************************************
-
-			/* CHARTIQ CSS bundling rule, using SASS */
-			{
-				test: /.*(chartiq).*\.css$/,
-				use: [
-          'style-loader',
-					'css-loader',
-					'sass-loader'
-				]
-			},      
-
-			/* image bundling rule, images are referenced via css */
-			{
-				test: /.*(chartiq).*\.(jpg|gif|png|svg|cur)$/,
-        //test: /\.(jpg|gif|png|svg|cur)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name].[ext]',
-							outputPath: './css/img/',
-							publicPath: 'css/img/'
-						}
-					}
-				]
-			},      
+          
     ]
   },
   plugins: [
@@ -150,5 +125,10 @@ module.exports = {
       // Node arguments.
       // nodeArgs: [ '--inspect-brk' ]
     }),
+    
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\/PhoenixChartWrapper$/,
+      contextRegExp: /.*$/
+    })    
   ]
 };

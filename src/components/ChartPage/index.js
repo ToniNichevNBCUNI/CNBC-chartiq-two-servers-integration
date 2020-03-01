@@ -6,7 +6,6 @@ const ChartPage = () => {
   return (
     <div className={styles.wrapper}>
         <div className={styles.leftRail}>
-          <div className={styles.title}>Chart</div>
           <PhoenixChartWrapper />
         </div>
         <div className={styles.rightRail}>
