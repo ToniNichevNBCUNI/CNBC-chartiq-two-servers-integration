@@ -1,23 +1,21 @@
 import React from 'react';
-import loadable from '@loadable/component';
-//import Loadable from 'react-loadable';
-import Loading from '../Loading';
+import Loadable from 'react-loadable';
+import Loading from './Loading';
 
+let PhoenixChartWrapper = Loading;
 
-let PhoenixChartWrapper = () => (
-  <div>
-    <p><b>########## Loading Chart... ###########</b></p>
-  </div>
-)
-
-if(typeof document != 'undefined') {
-  PhoenixChartWrapper = loadable(() => import('./PhoenixChartWrapper'));
+if (typeof document !== 'undefined') {
+  PhoenixChartWrapper = Loadable({
+    loader: () => import ('./PhoenixChartWrapper'),
+    loading: Loading
+  });
 }
 
-const Renderer = () => {
-  return (
+
+const Renderer = () => (
+  <div className="chartiqWrapper">
     <PhoenixChartWrapper />
-  );
-}
+  </div>
+);
 
 export default Renderer;

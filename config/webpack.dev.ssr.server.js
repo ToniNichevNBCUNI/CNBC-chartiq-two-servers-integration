@@ -2,7 +2,6 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const webpack =require('webpack');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const getEnvironmentConstants = require('../getEnvironmentConstants');
 
@@ -10,8 +9,6 @@ console.log(`Server is starting at: ${process.env.APP_HOST} ${process.env.SERVER
 
 module.exports = {
   mode: 'development',
-
-  devtool: 'source-map',
   
   target: "node",
   /*
@@ -58,29 +55,17 @@ module.exports = {
               modules: {
                 localIdentName: '[folder]-[local]--[hash:base64:5]',
               },
-              importLoaders: 2,              
-              sourceMap: true
             }
           },
           {
-            loader: 'postcss-loader',
-            options: {
-              plugins: () => [require('autoprefixer')()],
-              sourceMap: true              
-            },
-          },
-          {
             loader: 'sass-loader',
-            options: {
-              sourceMap: true,
-            },            
           }
         ],
       },
       // images
       {
-        //test: /\.(png|jp(e*)g|svg)$/,  
-        test: /^((?!(PhoenixChartWrapper)).)*\.(png|jp(e*)g|svg)$/, 
+        test: /\.(png|jp(e*)g|svg)$/,  
+        //test: /^((?!(PhoenixChartWrapper\/chartiq)).)*\.(png|jp(e*)g|svg)$/, 
         use: [{
             loader: 'url-loader',
             options: { 
@@ -102,13 +87,12 @@ module.exports = {
           
     ]
   },
+
   plugins: [
     new MiniCssExtractPlugin({
         filename: "[name].css",
         chunkFilename: "[id].css"
     }), 
-
-    new OptimizeCSSAssetsPlugin({}),  
 
     // on the server we still need one bundle
     new webpack.optimize.LimitChunkCountPlugin({
@@ -126,9 +110,25 @@ module.exports = {
       // nodeArgs: [ '--inspect-brk' ]
     }),
     
+
+    /*
     new webpack.IgnorePlugin({
       resourceRegExp: /^\.\/PhoenixChartWrapper$/,
       contextRegExp: /.*$/
-    })    
+      })      
+      */
+
+      new webpack.IgnorePlugin({
+        checkResource 
+      }),       
   ]
 };
+
+function checkResource(resource, context) {
+  
+  // matching PhoenixChartWrapper component, loaded through loadable from PhoenixChartWrapper/index.js
+	if (/^\.\/PhoenixChartWrapper$/.test(resource)) { 
+		return true;
+  }
+	return false;
+}

@@ -1,4 +1,5 @@
 const getEnvironmentConstants = require('../getEnvironmentConstants');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require('webpack');
 const Loadable  = require('react-loadable/webpack');
 const path = require('path');
@@ -112,31 +113,15 @@ module.exports = {
 				test: /.*(chartiq).*\.css$/,
 				use: [
           {
-            loader: 'style-loader',
+            loader: MiniCssExtractPlugin.loader,
             options: {
-              attributes: {
-                sourceMap: true,
-              }
-            },            
+              hmr: true,
+            }
           },
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 2,              
-              sourceMap: true,
-            },
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              sassOptions: {
-                outputStyle: 'expanded',
-              },
-              sourceMap: true,
-            },
-          },
+					'css-loader',
+					'sass-loader'
 				]
-			},      
+			},    
 
 			/* image bundling rule, images are referenced via css */
 			{
@@ -159,6 +144,11 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({ 'process.env' : getEnvironmentConstants() } ),  
 
+    new MiniCssExtractPlugin({
+      chunkFilename: '[id].css',
+      filename: '[name].css',
+    }),    
+
     new Loadable.ReactLoadablePlugin({
         filename: './dist/loadable-manifest.json',
       }),
@@ -171,7 +161,6 @@ module.exports = {
 		}),    
   ]
 };
-
 
 function checkResource(resource, context) {
 	if (!/^chartiq\//.test(resource)) {

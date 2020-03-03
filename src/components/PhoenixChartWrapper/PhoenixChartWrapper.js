@@ -23,7 +23,19 @@ const config = getConfiguration();
  */
 const chartInitialized = ({ chartEngine, uiContext }) => {
 	// access to chart engine and uiContext
-	// console.log(chartEngine, uiContext);
+  console.log(chartEngine, uiContext);
+  
+  var helicopter=$(".stx-marker.abstract").clone();
+  helicopter.css({"z-index":"30","left":(0.4*chartEngine.chart.width).toString()+"px"});
+  var marker=new CIQ.Marker({
+      stx: chartEngine,
+      xPositioner:"none",
+      yPositioner:"above_candle",
+      label: "helicopter",
+      permanent: true,
+      chartContainer: true,
+      node: helicopter[0]
+  });
 };
 
 

@@ -3,19 +3,18 @@
 */
 
 .cq-chart-container.break-lg {
-	border: 1px solid silver;
-	height: 350px;
-  }
-  
-  .chartiqWrapper {
-	border: 1px solid silver;
-	height: 440px;
-  }
-  
-  div.cq-chart-container.break-lg {
-	position: relative;
-  }
-  
-  div.ciq-nav > cq-show-range {
-	position: relative;
-  }
+  border: 1px solid silver;
+  height: 350px;
+}
+
+.chartiqWrapper {
+  border: 1px solid silver;
+}
+
+div.cq-chart-container.break-lg {
+  position: relative;
+}
+
+div.ciq-nav > cq-show-range {
+  position: relative;
+}
