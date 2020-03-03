@@ -9,7 +9,7 @@ const styles = require('./styles.scss');
 const Loading = (props) => {
   if (props.error) {
     return (<div className={styles.wrapper}>
-              <h3>Error loading component!</h3> 
+              <h3>Error loading ChartIQ component!</h3> 
               <p><b>{props.error.message}</b></p>
               <p>{props.error.stack}</p>
               <div><button onClick={ props.retry }>Retry</button></div>

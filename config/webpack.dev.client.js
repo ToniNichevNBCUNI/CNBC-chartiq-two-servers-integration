@@ -88,6 +88,7 @@ module.exports = {
 
       // images
       {
+        // do not bundle ChartIQ assets
         test: /^((?!(PhoenixChartWrapperContainer)).)*\.(png|jp(e*)g|svg)$/,  
         use: [{
             loader: 'url-loader',
@@ -102,13 +103,7 @@ module.exports = {
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: ['file-loader']
-      },
-
-      // *************************************
-      // ChartIQ
-      // *************************************
-
-                        
+      },             
     ]
   },
   plugins: [
@@ -133,8 +128,7 @@ module.exports = {
 };
 
 function checkResource(resource, context) {
-  
-  // matching PhoenixChartWrapper component, loaded through loadable from PhoenixChartWrapper/index.js
+  // matching PhoenixChartWrapperContainer component and exclude it from the bundle
 	if (/^\.\/PhoenixChartWrapperContainer$/.test(resource)) { 
 		return true;
   }
