@@ -88,7 +88,7 @@ module.exports = {
 
       // images
       {
-        test: /^((?!(PhoenixChartWrapperContainer)).)*\.(png|jp(e*)g|svg)$/,  
+        test: /^((?!(chartiq)).)*\.(png|jp(e*)g|svg)$/,  
         use: [{
             loader: 'url-loader',
             options: { 
@@ -108,6 +108,36 @@ module.exports = {
       // ChartIQ
       // *************************************
 
+			/* CHARTIQ CSS bundling rule, using SASS */
+			{
+				test: /.*(chartiq).*\.css$/,
+				use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: true,
+            }
+          },
+					'css-loader',
+					'sass-loader'
+				]
+			},    
+
+			/* image bundling rule, images are referenced via css */
+			{
+				test: /.*(chartiq).*\.(jpg|gif|png|svg|cur)$/,
+        //test: /\.(jpg|gif|png|svg|cur)$/,
+				use: [
+					{
+						loader: 'file-loader',
+						options: {
+							name: '[name].[ext]',
+							outputPath: './css/img/',
+							publicPath: `http://localhost:${process.env.ASSETS_SERVER_PORT}/dist/css/img`
+						}
+					}
+				]
+			},
                         
     ]
   },
@@ -133,10 +163,16 @@ module.exports = {
 };
 
 function checkResource(resource, context) {
-  
-  // matching PhoenixChartWrapper component, loaded through loadable from PhoenixChartWrapper/index.js
-	if (/^\.\/PhoenixChartWrapperContainer$/.test(resource)) { 
-		return true;
-  }
-	return false;
+	if (!/^chartiq\//.test(resource)) {
+		return false;
+	}
+
+	if (
+		fs.existsSync('./node_modules/' + resource)
+		|| fs.existsSync('./node_modules/' + resource + '.js')
+	) {
+		return false;
+	}
+	console.warn('ERROR finding ' + resource);
+	return true;
 }

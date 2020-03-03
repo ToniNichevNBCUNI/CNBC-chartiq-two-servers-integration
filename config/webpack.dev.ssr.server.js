@@ -127,7 +127,7 @@ module.exports = {
 function checkResource(resource, context) {
   
   // matching PhoenixChartWrapper component, loaded through loadable from PhoenixChartWrapper/index.js
-	if (/^\.\/PhoenixChartWrapper$/.test(resource)) { 
+	if (/^\.\/PhoenixChartWrapperContainer$/.test(resource)) { 
 		return true;
   }
 	return false;
