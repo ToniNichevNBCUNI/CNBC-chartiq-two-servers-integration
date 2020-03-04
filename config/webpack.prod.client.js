@@ -101,25 +101,6 @@ module.exports = {
 					'sass-loader'
 				]
 			},
-
-
-			/* image bundling rule, images are referenced via css */
-      /*
-			{
-				//test: /.*(chartiq).*\.(jpg|gif|png|svg|cur)$/,
-        test: /\.(jpg|gif|png|svg|cur)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name].[ext]',
-							outputPath: './css/img/',
-							publicPath: `http://localhost:${process.env.ASSETS_SERVER_PORT}/dist/css/img`
-						}
-					}
-				]
-			},      
-      */
     ]
   },
 
