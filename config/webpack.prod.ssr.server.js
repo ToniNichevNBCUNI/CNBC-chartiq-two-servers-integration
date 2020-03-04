@@ -67,8 +67,8 @@ module.exports = {
 
       // images
       {
-        // test: /\.(png|jp(e*)g|svg)$/,  
-        test: /^((?!(chartiq)).)*\.(png|jp(e*)g|svg)$/,  
+         test: /\.(png|jp(e*)g|svg|gif|cur)$/,  
+        //test: /^((?!(chartiq)).)*\.(png|jp(e*)g|svg|gif|cur)$/,  
         use: [{
             loader: 'url-loader',
             options: { 
@@ -99,6 +99,7 @@ module.exports = {
 			},      
 
 			/* image bundling rule, images are referenced via css */
+      /*
 			{
 				test: /.*(chartiq).*\.(jpg|gif|png|svg|cur)$/,
         //test: /\.(jpg|gif|png|svg|cur)$/,
@@ -113,6 +114,7 @@ module.exports = {
 					}
 				]
 			},        
+      */
 
     ]
   },

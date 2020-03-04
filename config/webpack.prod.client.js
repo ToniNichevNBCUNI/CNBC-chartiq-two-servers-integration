@@ -11,7 +11,7 @@ const publicPath = `http://${process.env.APP_HOST}:${process.env.ASSETS_SERVER_P
 console.log(`Assets will be served from: ${process.env.APP_HOST} ${process.env.ASSETS_SERVER_PORT}`);
 
 module.exports = {
-  mode: 'production',
+  mode: 'development',
 
   devtool: '',
 
@@ -70,8 +70,8 @@ module.exports = {
 
       // images
       {
-        //test: /\.(png|jp(e*)g|svg)$/,  
-        test: /^((?!(chartiq)).)*\.(png|jp(e*)g|svg)$/,  
+        test: /\.(png|jp(e*)g|svg|gif|cur)$/,  
+        //test: /^((?!(chartiq)).)*\.(png|jp(e*)g|svg)$/,  
         use: [{
             loader: 'url-loader',
             options: { 
@@ -94,17 +94,20 @@ module.exports = {
 			/* CHARTIQ CSS bundling rule, using SASS */
 			{
 				test: /.*(chartiq).*\.css$/,
+        //test: /.*\.css$/,
 				use: [
           'style-loader',
 					'css-loader',
 					'sass-loader'
 				]
-			},      
+			},
+
 
 			/* image bundling rule, images are referenced via css */
+      /*
 			{
-				test: /.*(chartiq).*\.(jpg|gif|png|svg|cur)$/,
-        //test: /\.(jpg|gif|png|svg|cur)$/,
+				//test: /.*(chartiq).*\.(jpg|gif|png|svg|cur)$/,
+        test: /\.(jpg|gif|png|svg|cur)$/,
 				use: [
 					{
 						loader: 'file-loader',
@@ -116,7 +119,7 @@ module.exports = {
 					}
 				]
 			},      
-
+      */
     ]
   },
 
@@ -129,20 +132,29 @@ module.exports = {
 
     new MiniCssExtractPlugin({
         // these are optional
-        //filename: "[name].css",
-        //chunkFilename: "[id].css"
+        filename: "[name].css",
+        chunkFilename: "[id].css"
     }),
 
     new OptimizeCSSAssetsPlugin({}),
 
+
     new webpack.IgnorePlugin({
 			checkResource 
-		}),        
+		}),
+
   ]
 };
 
-
 function checkResource(resource, context) {
+
+  /*
+	if (/^\.\/PhoenixChartWrapperContainer$/.test(resource)) { 
+		return true;
+  }
+  */
+
+
 	if (!/^chartiq\//.test(resource)) {
 		return false;
 	}
