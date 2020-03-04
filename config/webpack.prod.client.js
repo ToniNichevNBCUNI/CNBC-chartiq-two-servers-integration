@@ -96,7 +96,7 @@ module.exports = {
 				test: /.*(chartiq).*\.css$/,
         //test: /.*\.css$/,
 				use: [
-          'style-loader',
+          MiniCssExtractPlugin.loader,
 					'css-loader',
 					'sass-loader'
 				]
