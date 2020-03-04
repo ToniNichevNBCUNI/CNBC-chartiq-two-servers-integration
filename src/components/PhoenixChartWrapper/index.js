@@ -14,7 +14,7 @@ if (typeof document !== 'undefined') {
 
 const Renderer = () => (
   <div className="chartiqWrapper">
-    <PhoenixChartWrapper />
+    <PhoenixChartWrapper/>
   </div>
 );
 

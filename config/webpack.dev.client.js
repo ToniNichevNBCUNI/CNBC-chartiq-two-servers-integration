@@ -89,7 +89,7 @@ module.exports = {
       // images
       {
         // do not bundle ChartIQ assets
-        test: /^((?!(PhoenixChartWrapperContainer)).)*\.(png|jp(e*)g|svg)$/,  
+        test: /^((?!(chartiq)).)*\.(png|jp(e*)g|svg|gif)$/,  
         use: [{
             loader: 'url-loader',
             options: { 

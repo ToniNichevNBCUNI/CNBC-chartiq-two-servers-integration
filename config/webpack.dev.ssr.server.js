@@ -64,8 +64,9 @@ module.exports = {
       },
       // images
       {
-        test: /\.(png|jp(e*)g|svg)$/,  
+        //test: /\.(png|jp(e*)g|svg|gif)$/,  
         //test: /^((?!(PhoenixChartWrapper\/chartiq)).)*\.(png|jp(e*)g|svg)$/, 
+        test: /^((?!(PhoenixChartWrapper\/chartiq)).)*\.(png|jp(e*)g|svg|gif)$/, 
         use: [{
             loader: 'url-loader',
             options: { 

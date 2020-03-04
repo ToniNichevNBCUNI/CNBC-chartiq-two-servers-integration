@@ -8,7 +8,7 @@
     "clean": "rm -rf ./dist ./server-build",
     "lint": "eslint .",
     "build-prod": "NODE_ENV=production webpack --config ./config/webpack.prod.client.js",
-    "build-dev-with-chart": "webpack-dev-server --config ./config/webpack.dev.client-with-chart.js",
+    "build-dev-with-chartiq": "webpack-dev-server --config ./config/webpack.dev.client-with-chart.js",
     "build-dev": "webpack-dev-server --config ./config/webpack.dev.client.js",
     "build-dev-ssr": "webpack --config ./config/webpack.dev.ssr.server.js --watch",
     "build-prod-ssr": "NODE_ENV=production webpack --config ./config/webpack.prod.ssr.server.js",
