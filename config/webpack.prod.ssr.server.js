@@ -67,8 +67,7 @@ module.exports = {
 
       // images
       {
-         test: /\.(png|jp(e*)g|svg|gif|cur)$/,  
-        //test: /^((?!(chartiq)).)*\.(png|jp(e*)g|svg|gif|cur)$/,  
+        test: /\.(png|jp(e*)g|svg|gif|cur)$/,  
         use: [{
             loader: 'url-loader',
             options: { 
@@ -97,25 +96,6 @@ module.exports = {
 					'sass-loader'
 				]
 			},      
-
-			/* image bundling rule, images are referenced via css */
-      /*
-			{
-				test: /.*(chartiq).*\.(jpg|gif|png|svg|cur)$/,
-        //test: /\.(jpg|gif|png|svg|cur)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name].[ext]',
-							outputPath: './css/img/',
-							publicPath: 'css/img/'
-						}
-					}
-				]
-			},        
-      */
-
     ]
   },
   plugins: [

@@ -22,6 +22,7 @@ const config = getConfiguration();
  * Optional callback function to access chart engine and uiContext
  */
 const chartInitialized = ({ chartEngine, uiContext }) => {
+  console.log("@@@@@@@@@@@@@@@");
 	// access to chart engine and uiContext
   console.log(chartEngine, uiContext);
   
