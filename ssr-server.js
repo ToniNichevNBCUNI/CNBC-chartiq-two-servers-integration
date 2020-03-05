@@ -45,7 +45,7 @@ function response(req, res, apiData) {
 
 
 app.get('/*', (req, res) => {   
-  fetch('https://learnappmaking.com/ex/users.json')
+  fetch('https://quote.cnbc.com/quote-html-webservice/quote.htm?noform=1&partnerId=2&fund=1&exthrs=1&output=json&events=1&symbols=VOD-GB&requestMethod=itv')
   .then(function(response) {
       if (response.status >= 400) {
           throw new Error("Bad response from server");

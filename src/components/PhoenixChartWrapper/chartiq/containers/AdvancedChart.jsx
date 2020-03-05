@@ -20,6 +20,7 @@ import MarketDepthBookmark from '../components/Plugins/CryptoIQ/MarketDepthBookm
 
 import { ChartContext } from '../context/ChartContext';
 import { getDefaultConfig } from '../_config';
+import { ShareChart, RangeBar } from '../components/Features';
 
 /**
  * This is a fully functional example showing how to load a chart with complete user interface.
@@ -279,6 +280,9 @@ export default class AdvancedChart extends React.Component {
 		return (
 			<ChartContext.Provider value={this.state}>
 				<div cq-context="true" ref={this.chartContextEl}>
+        	<div class="ciq-nav">
+            <RangeBar />
+          </div>
 					{UIContext && (
 						<>
 							<div className={breakpointClass} ref={this.chartContainer}>

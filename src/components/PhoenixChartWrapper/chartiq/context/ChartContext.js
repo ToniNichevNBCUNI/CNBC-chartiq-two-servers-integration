@@ -1,3 +1,5 @@
-import React from 'react'
+import { createContext } from 'react'
 
-export const ChartContext = React.createContext({})
+const ChartContext = createContext({})
+
+export { ChartContext }

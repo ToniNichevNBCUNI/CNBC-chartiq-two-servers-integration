@@ -26,7 +26,8 @@
 .wrapper {
   background:none;
   border: 1px solid silver;
-  height: 352px;
+  padding-bottom: 10px;
+  height: 440px;
   
   h1 {
     position: relative;
@@ -38,8 +39,12 @@
   .timeRange {
     text-align: center;
     position: relative;
-    height: 45px;
+    height: 44px;
     border-bottom: 1px solid silver;
+
+    p {
+      margin: 0;
+    }
   }
   
   h3 {

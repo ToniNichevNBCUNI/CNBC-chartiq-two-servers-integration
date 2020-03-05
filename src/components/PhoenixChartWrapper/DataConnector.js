@@ -44,29 +44,27 @@ const DataConnector = (config) => {
     const chartData = rawChartData.barData.priceBars
     if (chartData.length === 0) return
     
-    // const symbol = chartData
     const formatedChartData = []
-    let dd = chartData.length
-    for (dd; dd--; 0) {
+
+    // fix for loop
+    for (let dd = chartData.length-1; dd >= 0; dd-=1) {
       const UTCDate = DateHelper.dateStringToDateObject(chartData[dd].tradeTime)
       if (sliceLastImportedData === true && UTCDate < lastUpdatedTime) {
-        console.log(UTCDate, lastUpdatedTime)
     		break
       }
-      console.log('after break')
-      formatedChartData[dd] = {
+      formatedChartData.unshift({
         DT: UTCDate,
         Close: parseFloat(chartData[dd].close),
         Open: parseFloat(chartData[dd].open),
         High: parseFloat(chartData[dd].high),
         Low: parseFloat(chartData[dd].low),
-        Volume: chartData[dd].volume == null ? undefined : parseInt(chartData[dd].volume),
-      }
+        Volume: chartData[dd].volume == null ? undefined : parseInt(chartData[dd].volume, 10),
+      })
     }
     const lastDataPoint = chartData.length - 1
     lastUpdatedTime = DateHelper.dateStringToDateObject(chartData[lastDataPoint].tradeTime)
-    console.log('FORMATED CHART DATA')
-    console.log(formatedChartData)
+    // console.log('FORMATED CHART DATA')
+    // console.log(formatedChartData)
     return formatedChartData
   }
 
@@ -79,19 +77,18 @@ const DataConnector = (config) => {
         let formatedChartData = {}
         if (addNewDataOnly) {
           formatedChartData = formatChartData(rawChartData, true)
-          // console.log(formatedChartData)
         } else {
           formatedChartData = formatChartData(rawChartData, false)
         }
 
         if (lastUrl === queryUrl && addNewDataOnly === false) {
-          console.log('herere')
           chartBuilder({ moreAvailable: false })
         } else {
           chartBuilder({ 
             quotes: formatedChartData, 
-            attribution: { source: 'CNBC', exchange: 'RANDOM' } 
-          }); // return the fetched data; init moreAvailable to enable pagination
+            attribution: { source: 'CNBC' } 
+          }); 
+          // return the fetched data; init moreAvailable to enable pagination
         }
         lastUrl = queryUrl
         // return the fetched data; init moreAvailable to enable pagination
@@ -109,13 +106,11 @@ const DataConnector = (config) => {
 
   // called by chart to fetch initial data
   function fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, cb) {
-    consoleLogHelper('fetchInitialData', suggestedStartDate, suggestedEndDate, params)
-
     if (config.noHistoryDataList.indexOf(symbol.toLowerCase()) !== -1) {
       const today = DateHelper.getBeginningOfTheDay()
       startDate = DateHelper.dateToDateStr(today)
     } else {
-      startDate = DateHelper.dateToDateStr( suggestedStartDate)
+      startDate = DateHelper.dateToDateStr(suggestedStartDate)
     }
     endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay())
     granularity = getGranularity(params.interval, params.period)
@@ -125,18 +120,19 @@ const DataConnector = (config) => {
 
   // called by chart to fetch pagination data
   function fetchPaginationData(symbol, suggestedStartDate, suggestedEndDate, params, cb) {
-    consoleLogHelper('fetchPaginationData', suggestedStartDate, endDate, params)
-
-    startDate = DateHelper.dateToDateStr(suggestedStartDate)
-    endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay())
-    granularity = getGranularity(params.interval, params.period)
-    const queryUrl = `${tsDataURL}${symbol}/${granularity}/${startDate}/${endDate}${tsAppendURL}`
-    supplyChartData(queryUrl, cb, false)
+    // consoleLogHelper('fetchPaginationData', suggestedStartDate, endDate, params)
+    if (config.noHistoryDataList.indexOf(symbol.toLowerCase()) === -1) {
+      startDate = DateHelper.dateToDateStr(suggestedStartDate)
+      endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay())
+      granularity = getGranularity(params.interval, params.period)
+      const queryUrl = `${tsDataURL}${symbol}/${granularity}/${startDate}/${endDate}${tsAppendURL}`
+      supplyChartData(queryUrl, cb, false)
+    }
   }
 
   // called by chart to fetch update data
   function fetchUpdateData(symbol, suggestedStartDate, params, cb) {
-    consoleLogHelper('fetchUpdateData', suggestedStartDate, '', params)
+    // consoleLogHelper('fetchUpdateData', suggestedStartDate, '', params)
     if (noStreamableList.indexOf(symbol) === -1) {
       console.info('Chart update request ...')
       // if symbol is not in the 'noStreamableList', proceed with update
