@@ -14,7 +14,7 @@
     "build-prod-ssr": "NODE_ENV=production webpack --config ./config/webpack.prod.ssr.server.js",
     "run-server": "node ./server-build/server-bundle.js",
     "start-dev": "yarn clean; yarn build-dev & yarn build-dev-ssr",
-    "start-dev-with-chart": "yarn clean; yarn build-dev-with-chart & yarn build-dev-ssr",
+    "start-dev-with-chartiq": "yarn clean; yarn build-dev-with-chartiq & yarn build-dev-ssr",
     "start-prod": "yarn clean; yarn build-prod; yarn build-prod-ssr; yarn run-server",
     "test": "jest"
   },
