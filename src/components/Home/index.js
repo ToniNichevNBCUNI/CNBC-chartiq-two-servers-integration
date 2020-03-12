@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './styles.scss';
 
 const Renderer = ({title}) => {
-  const names = typeof window == 'undefined' ? 'no data on server side' : __API_DATA__.map( (data) => { return data.first_name }).join(',');
+  const names = typeof window == 'undefined' ? 'no data on server side' : __API_DATA__.ITVQuoteResult.ITVQuote.symbol;
   return (
     <div className={styles.wrapper}>
         <div className={styles.leftRail}>

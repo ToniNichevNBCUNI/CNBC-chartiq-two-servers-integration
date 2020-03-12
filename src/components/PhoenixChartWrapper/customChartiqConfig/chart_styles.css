@@ -9,13 +9,18 @@
   color: #fff;
 }
 
-.cq-chart-container.break-lg {
+.cq-chart-container, .cq-chart-container.break-lg, .cq-chart-container.break-sm, .cq-chart-container.break-lg {
 	border: 1px solid silver;
-	height: 395px;
+  height: 395px;
+  position: relative;
+  }
+
+  .cq-chart-container.break-lg {
+    border: 5px solid red;
   }
   
   .chartiqWrapper {
-	border: 1px solid silver;
+	  border: 1px solid silver;
   }
   
   div.cq-chart-container.break-lg {

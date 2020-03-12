@@ -69,7 +69,6 @@ const DataConnector = (config) => {
   }
 
   function supplyChartData(queryUrl, chartBuilder, addNewDataOnly) {
-    console.log(queryUrl)
     const processTimeSeriesResponseCallback = (status, response) => {
       // process the HTTP response from the datafeed
       if (status === 200) { // if successful response from datafeed
@@ -101,7 +100,9 @@ const DataConnector = (config) => {
       cb: processTimeSeriesResponseCallback,
       noEpoch: true, // tells chartiq to not use a cache burst query string
     }
+    console.log(postAjaxParamsObj);
     CIQ.postAjax(postAjaxParamsObj);
+    return postAjaxParamsObj;
   }
 
   // called by chart to fetch initial data
@@ -115,7 +116,7 @@ const DataConnector = (config) => {
     endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay())
     granularity = getGranularity(params.interval, params.period)
     const queryUrl = `${tsDataURL}${symbol}/${granularity}/${startDate}/${endDate}${tsAppendURL}`
-    supplyChartData(queryUrl, cb, false)
+    return supplyChartData(queryUrl, cb, false)
   }
 
   // called by chart to fetch pagination data
@@ -126,7 +127,7 @@ const DataConnector = (config) => {
       endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay())
       granularity = getGranularity(params.interval, params.period)
       const queryUrl = `${tsDataURL}${symbol}/${granularity}/${startDate}/${endDate}${tsAppendURL}`
-      supplyChartData(queryUrl, cb, false)
+      return supplyChartData(queryUrl, cb, false)
     }
   }
 
@@ -140,7 +141,7 @@ const DataConnector = (config) => {
       endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay())
       granularity = getGranularity(params.interval, params.period)
       const queryUrl = `${tsDataURL}${symbol}/${granularity}/${startDate}/${endDate}${tsAppendURL}`
-		  supplyChartData(queryUrl, cb, true)
+		  return supplyChartData(queryUrl, cb, true)
     }
   }
 
