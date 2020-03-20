@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styles from './styles.scss';
+import image from './quotePageDownload.svg';
 
 var config = {
   "canvas": {
@@ -68,9 +69,9 @@ const renderModalContent = (props) => {
 const chartSharing = (props) => {
   // renderModalContent(props);
   return(
-    <div>
-      <a href='#'>
-        <img src='./quote_page_downlownload.svg' />
+    <div className={styles.downloadButton}>
+      <a href='#' onClick={ () => { renderModalContent(props) }}>
+        <img src={image} />
       </a>
     </div>
   );
