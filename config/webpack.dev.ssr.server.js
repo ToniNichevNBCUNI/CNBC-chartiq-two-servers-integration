@@ -9,7 +9,7 @@ console.log(`Server is starting at: ${process.env.APP_HOST} ${process.env.SERVER
 
 module.exports = {
   mode: 'development',
-  
+  devtool: 'source-map',
   target: "node",
   /*
   node: {

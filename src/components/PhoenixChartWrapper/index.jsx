@@ -1,18 +1,20 @@
 import React from 'react';
-import Loadable from 'react-loadable';
+import loadable from '@loadable/component';
 import Loading from './Loading';
+import ErrorBoundary from './ErrorChartBoundary'
 
 let PhoenixChartWrapper = Loading;
 if (typeof document !== 'undefined') {
-  PhoenixChartWrapper = Loadable({
-    loader: () => import ('./PhoenixChartWrapperContainer'),
-    loading: Loading
+  PhoenixChartWrapper = loadable(() => import ('./PhoenixChartWrapperContainer'), {
+    fallback: <Loading />,
   });
 }
 
 const Renderer = () => (
   <div className="chartiqWrapper">
-    <PhoenixChartWrapper/>
+    <ErrorBoundary>
+      <PhoenixChartWrapper />
+    </ErrorBoundary>
   </div>
 );
 

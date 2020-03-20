@@ -6,6 +6,8 @@ import 'chartiq/examples/markets/marketDefinitionsSample';
 import QuoteFeed from './DataConnector';
 import marketFactory from './marketFactory';
 import { AdvancedChart } from './chartComponent';
+import ChartSharing from './ChartSharing';
+
 // sets up additonal exchanges not provided by chartiq by default
 import exchanges from './exchanges'
 // chart style sheets
@@ -22,6 +24,7 @@ import { getConfiguration, pluginsToLoadLazy } from './customChartiqConfig';
 
 // remove following line for production use
 CIQ.debug = true;
+window.ciq = {};
 
 const config = getConfiguration();
 const noHistoryDataList = ['.ftse', '.ftmib', '.ftsti', '.klse']
@@ -124,6 +127,7 @@ const chartInitialized = ({
   chartEngine.chart.symbolObject = initialSymbolData
   chartEngine.marketData = null
   chartEngine.loadChart(initialSymbolData.symbol, getChartInitParams(initialSymbolData))
+  window.ciq = chartEngine;
 
   setUpChartRefreshWithQuoteData(chartEngine)
   // uiContext.setLookupDriver(new LookupDriver(chartEngine))
@@ -157,8 +161,26 @@ const CustomChart = () => {
     }
   }, [hasInitialized])
 
+  function fullScreen() {
+    if(document.querySelector('.fullScreen').textContent == 'ZOOM IN') {
+      document.querySelector('.fullScreen').textContent = 'ZOOM OUT';
+      document.querySelector('.cq-chart-container').style.top = '0px';
+      document.querySelector('.cq-chart-container').style.height = '100%'
+      document.querySelector('.cq-chart-container').style.position = 'absolute';
+    }
+    else {
+      document.querySelector('.fullScreen').textContent = 'ZOOM IN';
+      document.querySelector('.cq-chart-container').style.top = '0px';
+      document.querySelector('.cq-chart-container').style.height = '395px'
+      document.querySelector('.cq-chart-container').style.position = 'relative';
+    }
+    ciq.zoomIn();
+  }
+
   return ( 
     <div >
+      <ChartSharing />
+      <button className="fullScreen" onClick={() => { fullScreen() } }>ZOOM IN</button>      
       <AdvancedChart
         config={config}
         chartInitialized={chartInitialized}

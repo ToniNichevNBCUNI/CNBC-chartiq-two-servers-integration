@@ -277,12 +277,12 @@ class AdvancedChart extends React.Component {
     return (
       <ChartContext.Provider value={this.state}>
         <div cq-context="true" ref={this.chartContextEl}>
-          <div className="ciq-nav">
-            <RangeBar />
-          </div>
           {UIContext && (
           <>
             <div className={breakpointClass} ref={this.chartContainer}>
+              <div className="ciq-nav">
+                <RangeBar />
+              </div>              
               <ColorPicker />
               {header && <ChartNav config={config} />}
               {plugins.cryptoiq && stx && (

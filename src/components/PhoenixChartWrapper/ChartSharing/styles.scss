@@ -1,0 +1,95 @@
+.wrapper {
+    display: block;
+    position: fixed;
+    z-index: 10001;
+    left: 50%;
+    top: 50px!important;
+    width: auto;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 10px!important;
+    border-radius: 5px;
+
+    .invisibleCanvas {
+        display: none;
+    }
+
+    .visibleCanvas {
+
+    }
+
+
+    .personalMesage {
+        color: red;
+        input {
+            width: 85%;
+            font-family: 'Proxima Nova Semi Bold';
+            font-size: 22px;
+            margin-left: 15px;
+        }
+    }
+
+    .containerFooter {
+        color: red;
+        height: 40px;
+    }
+
+    .buttonsContainer {
+        width: 100%;
+        text-align: center;
+        display: inline-block;
+        margin: 0px 10px;
+        padding: 5px 0px;        
+    }
+
+    .optionButton {
+        float: right;
+        display: inline-block;
+        margin: 0px 10px;
+        padding: 5px 0px;
+        
+        a {
+            background: #3DA7F1;
+            height: 30px;
+            font: 14px "Proxima Nova Semi Bold";
+            border: none;
+            padding: 8px;
+            text-decoration: none;
+            text-transform: uppercase;
+            padding: 5px;
+            font-family: "Proxima Nova Semi Bold";
+            font-size: 14px;
+            border: 2px solid #FFF;
+            border-radius: 4px;
+            transition: ease all 400ms;
+            color: #FFF;                        
+        }
+    }
+
+    .personalMesage {
+        color: red;
+    }
+
+    .optinQuotesLaunch {
+        color: red;
+    }
+
+    .shareChartText {
+        width: 85%;
+    }
+}
+
+.picoOverlay {
+    display: block; 
+    position: fixed; 
+    top: 0px; 
+    left: 0px; 
+    height: 100%; 
+    width: 100%; 
+    z-index: 10000; 
+    opacity: 0.5; 
+    background: rgb(0, 0, 0);
+    border: 2px solid red;
+}
+
+

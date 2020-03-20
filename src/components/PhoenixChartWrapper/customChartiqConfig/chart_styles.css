@@ -9,6 +9,20 @@
   color: #fff;
 }
 
+.ciq-chart-area {
+  top: 85px;
+}
+
+.ciq-nav { 
+  color: black;
+}
+
+.fullScreen {
+  color: red;
+  position: relative;
+  z-index: 100;
+}
+
 .cq-chart-container, .cq-chart-container.break-lg, .cq-chart-container.break-sm, .cq-chart-container.break-lg {
 	border: 1px solid silver;
   height: 395px;
@@ -21,10 +35,6 @@
   
   .chartiqWrapper {
 	  border: 1px solid silver;
-  }
-  
-  div.cq-chart-container.break-lg {
-	position: relative;
   }
   
   div.ciq-nav > cq-show-range {
