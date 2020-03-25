@@ -17,6 +17,16 @@ const chartUtils = {
             };
             images[src].src = sources[src];
         }        
+        return images;
+    },
+
+    drawText: (dest_ctx, txt, x, y, color, font) => {
+        color = color || "#737373";
+        font = font || "12px Arial";
+
+        dest_ctx.fillStyle = color;
+        dest_ctx.font = font;
+        dest_ctx.fillText(txt, x, y);
     }
 }
 

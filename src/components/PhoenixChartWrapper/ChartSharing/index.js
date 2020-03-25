@@ -27,7 +27,9 @@ var config = {
 let popupCreated = false;
 
 var symbolInfo = {
-  symbol: 'AAPL'
+  symbol: 'AAPL',
+  name: 'Apple INC',
+  exchange: 'Nasdaq'
 }
 
 var export_file_name = symbolInfo.symbol + '_chart.jpeg';
@@ -42,8 +44,6 @@ var draw = {
     y: 0
 }
 
-
-
 const modal = document.createElement('span');
 document.body.prepend(modal);
 
@@ -54,7 +54,7 @@ const generateChartShareImage = () => {
   var dest_canvas = document.getElementById('shareChartContainerCanvas');
 
   if (chart_canvas.getContext) {
-    var dest_ctx = dest_canvas.getContext("2d");
+    dest_ctx = dest_canvas.getContext("2d");
     dest_ctx.fillStyle = "red";
     var width = isRetina ? chart_canvas.width/2 : chart_canvas.width;
     var height = isRetina ? chart_canvas.height/2 : chart_canvas.height;
@@ -63,61 +63,44 @@ const generateChartShareImage = () => {
     // draw the chart
     dest_ctx.drawImage(chart_canvas, 0, 100, width, height);
 
-    // load the logo
-    var img = new Image();
-    //img.setAttribute('crossOrigin', 'anonymous');
-    img.src = cnbcLogo;
-    img.onload = function() {
-      dest_ctx.drawImage(img, 350,295);
+    var sources = {
+      logo: cnbcLogoTransparent,
+      watermark: cnbcLogo 
+    };
+
+    chartUtils.loadImages(sources, (images) => {
+      const pos = config.textPosition;
+
+      const firstLine = symbolInfo.name + ' (' + symbolInfo.symbol + ':' + symbolInfo.exchange + ')'      
+      const titlelong = firstLine.length > 65 ? true : false;
+      const secondLine = 'some text';
+      const thirdtLine = 'third line';
+      // watermark
+      dest_ctx.globalAlpha = 0.5;
+      if(titlelong)
+        dest_ctx.drawImage(images.watermark, pos.x + 200, pos.y + 185, 220, 150);
+      else
+        dest_ctx.drawImage(images.watermark, pos.x + 200, pos.y + 165, 220, 150);
+      // logo
+      dest_ctx.globalAlpha = 1;
+      if(titlelong)
+        dest_ctx.drawImage(images.logo, pos.x, pos.y + 385, 115, 20)
+      else
+        dest_ctx.drawImage(images.logo, pos.x, pos.y + 370, 115, 20)      
+      // draw text
       dest_ctx.fillStyle = "black";
-
-      // add quote data details
-      /*
-      dest_ctx.font="21px Arial";
-      dest_ctx.fillText(symbolInfo.onAirName, 0, 20);
-
-      dest_ctx.font="12px Arial";
-      dest_ctx.fillStyle = "#737373";
-      var txt = "Real Time Quote " + $('.sub-header span')[1].innerHTML + $('.sub-header span')[2].innerHTML
-      dest_ctx.fillText(txt, 0, 35);
-
-      txt = $('.last_time.table-row-group td span')[0].innerHTML + ' | ' + $('.last_time.table-row-group td span')[2].innerHTML
-      dest_ctx.fillText(txt, 0, 50);
-
-      dest_ctx.fillStyle = "black";
-      dest_ctx.font="20px Arial";
-      txt = symbolInfo.last + ' ' + symbolInfo.currencyCode;
-      dest_ctx.fillText(txt, 0, 70);
-
-      // add custom text labels
-      dest_ctx.font="16px Arial";
-      txt = $('#share_chart_text').val()
-      dest_ctx.fillText(txt,0, 90);
-      */
-
-      //var myImage = dest_canvas.toDataURL("image/png");
-      //document.getElementById("shareChartContainerImage").src = myImage
-
-      /*
-      var imageCanvas = $('#share-quote-pop #shareChartContainerCanvas')[0]
-      var dataURL = dest_canvas.toDataURL('image/jpeg', 1);
-      button.href = dataURL;
-      */
-
-      // attach export image action
-      /*
-      var button = $('#share-quote-pop #download-chart-image')[0];
-      button.addEventListener('click', function(e) {
-          customMessageTextEdited()
-          var imageCanvas = $('#share-quote-pop #shareChartContainerCanvas')[0]
-          var dataURL = imageCanvas.toDataURL('image/jpeg', 1);
-          button.href = dataURL;
-          $('.pico-content.quotes-moodle').remove();
-          $('.pico-overlay').css('display', 'none');
-      });
-      */      
+      chartUtils.drawText(dest_ctx, firstLine, pos.x, pos.y + 22, 'black', config.canvas.title_text_small);
+      chartUtils.drawText(dest_ctx, secondLine, pos.x, pos.y + 42, 'black', config.canvas.title_text_small);
+      chartUtils.drawText(dest_ctx, thirdtLine, pos.x, pos.y + 62, 'black', config.canvas.title_text_small);
+    });
   }
 }
+
+const addCustomMessageText = () => {
+  // custom text label
+  var pos = config.textPosition;
+  const txt = document.getElementById('share_chart_text').value;
+  chartUtils.drawText(dest_ctx, txt, pos.x, pos.y-1, '#333333', config.canvas.user_text);
 }
 
 const closePopup = () => {
@@ -127,13 +110,13 @@ const closePopup = () => {
 
 const attachEvents = () => {
   // attach close button action
-  document.querySelector('.ChartSharing-containerFooter--3-Guh > div.ChartSharing-closeIt--u3T_3 > div').addEventListener('click', () => { 
+    document.querySelector(`.${styles.picoClose}`).addEventListener('click', (e) => { 
     closePopup();
   });    
   // attach export image action
   var button = document.getElementById('download-chart-image');
   button.addEventListener('click', function(e) {
-      // customMessageTextEdited()
+      addCustomMessageText();
       var imageCanvas = document.getElementById('shareChartContainerCanvas');
       var dataURL = imageCanvas.toDataURL('image/jpeg', 1);
       button.href = dataURL;
