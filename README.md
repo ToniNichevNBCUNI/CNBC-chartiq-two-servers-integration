@@ -1,18 +1,11 @@
-# A short version of WebpackReactReduxApolloTutorial
+# A short version of WebpackReactReduxApolloTutorial Integrating ChartIQ with SSR
 
 # The tutorial link: https://www.toni-develops.com/webpack/
 
+# Hor to run the project:
 
-- Run for development:
+```yarn install;yarn build-dev-with-chartiq```
 
-- start with express SSR server 
+and navigate to:
+http://localhost:3006/chart
 
-and webpack-dev-server
-
-yarn start-dev
-
-or only with webpack-dev-server
-yarn start-api
-
-- Run production server
-yarn start-prod
