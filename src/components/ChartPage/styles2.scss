@@ -8,11 +8,12 @@
 .wrapper {
   display:flex;
   background: silver;
+  border: 5px solid red;
 }
 
 .leftRail {
   width:60%;
-  border: 1px solid blue;
+  border: 5px solid red;
 }
 
 .rightRail {

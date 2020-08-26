@@ -1,19 +1,30 @@
 import React from 'react';
-import PhoenixChartWrapper from '../PhoenixChartWrapper';
-import styles from './styles.scss';
+import Loadable from 'react-loadable';
+import Loading from '../Loading';
 
-const ChartPage = () => {
-  return (
-    <div className={styles.wrapper}>
-        <div className={styles.leftRail}>
-          <PhoenixChartWrapper />
-        </div>
-        <div className={styles.rightRail}>
-          <p>right rail</p>
-        </div>
 
-    </div>
-  );
+
+const chartA = Loadable({
+  loader: () => import ('./chartA'),
+  loading: Loading
+});
+
+const chartB = Loadable({
+  loader: () => import ('./chartB'),
+  loading: Loading
+});
+
+const components = {
+  chartA,
+  chartB
 }
 
-export default ChartPage;
+const Home = () => {
+  const chartType = process.env.CHART_TYPE;
+
+  const Component = components[chartType];
+  return (
+      <Component />
+  )
+}
+export default Home;

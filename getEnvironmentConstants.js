@@ -6,7 +6,8 @@ const frontendConstants = [
   'APP_HOST',
   'SERVER_PORT',
   'ASSETS_SERVER_PORT',
-  'ENVIRONMENT'
+  'ENVIRONMENT',
+  'CHART_TYPE'
 ];
 
 const { NODE_ENV } = process.env;
