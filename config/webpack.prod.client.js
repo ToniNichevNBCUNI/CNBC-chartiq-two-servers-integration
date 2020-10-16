@@ -11,9 +11,8 @@ const publicPath = `http://${process.env.APP_HOST}:${process.env.ASSETS_SERVER_P
 console.log(`Assets will be served from: ${process.env.APP_HOST} ${process.env.ASSETS_SERVER_PORT}`);
 
 module.exports = {
-  mode: 'development',
-
-  devtool: '',
+  mode: 'production',
+  devtool: 'source-map',
 
 	resolve: {
 		extensions: ['.js', '.jsx']
@@ -30,6 +29,27 @@ module.exports = {
   output: {
     filename: '[name]-bundle.js',
     publicPath
+  },  
+
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        polyfillVendors: {
+          test: /[\\/]node_modules\/@babel\/polyfill/, // all the files inside node_modules
+          name: 'polyfillVendors',
+          reuseExistingChunk: true,
+          chunks: 'all',
+          priority: 25,
+        },    
+        chartIQ: {
+          test: /[\\/]node_modules\/chartiq/, // all the files inside node_modules
+          name: 'ChartIQ-lib',
+          reuseExistingChunk: true,
+          chunks: 'all',
+          priority: 25,
+        },
+      },
+    },    
   },  
 
   module: {
