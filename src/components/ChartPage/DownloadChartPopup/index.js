@@ -1,13 +1,43 @@
 import React, {useEffect} from 'react';
 import styles from './styles.scss';
-//const _symbolInfo = typeof window == 'undefined' ? null : window.__API_DATA__.ITVQuoteResult.ITVQuote;
 const symbolInfo = typeof window == 'undefined' ? null : window.__API_DATA__.ITVQuoteResult.ITVQuote;
+import CnbcLogo from '../../../assets/images/CNBC_logo_grey.png';
 
 if(typeof window !== 'undefined') {
   symbolInfo.ExtendedMktQuote = {
     last: '22.65'
   }
 }
+
+const config = {
+  "canvas": {
+      "width": 670,
+      "height": 450,
+      "chartVerticalPosition": 100, 
+      "bold_text": '26px "Proxima Nova Semi Bold"',
+      "regular_text": '12px "Proxima Nova Semi Bold"',
+      "title_text":'20px "Proxima Nova Semi Bold"',
+      "title_text_small":'18px "Proxima Nova Semi Bold"',
+      "user_text" : '24px "Proxima Nova Semi Bold"',
+      "change_text" : '14px "Proxima Nova Semi Bold"',
+      "time_range" : '16px "Proxima Nova Semi Bold"'
+  },  
+  textPosition: {
+      x: 15,
+      y: 29
+  }
+}
+
+const export_file_name = typeof window !== 'undefined' ? symbolInfo.altName + '_chart.jpeg' : null;
+
+let dest_ctx;   
+
+let draw = {
+  mode: 0,
+  x: 0,
+  y: 0
+}
+
 
 const DownloadChart = (props) => {
 
@@ -35,9 +65,9 @@ const DownloadChart = (props) => {
           dest_ctx.fillRect(0, 0, width, height + 180);
 
           // draw chart image
-          dest_ctx.drawImage(chart_canvas, 0, 130, width, height);
+          dest_ctx.drawImage(chart_canvas, 0, config.canvas.chartVerticalPosition, width, height);
 
-          var pos = config.textPosition
+          var pos = config.textPosition;
 
           // custom text label
           txt = $('#share_chart_text').val()
@@ -91,7 +121,7 @@ const DownloadChart = (props) => {
           txt = symbolInfo.last + ' ' + symbolInfo.currencyCode;
           dest_ctx.fillText(txt, x, pos.y + 112)
 
-          // Chartworks attribution
+          // attribution
           /*
           txt = 'chart by';
           var y = pos.y + config.canvas.height - 105
@@ -103,13 +133,16 @@ const DownloadChart = (props) => {
           */
 
           // CNBC logo
+
+          debugger;
           var img = new Image();
           img.setAttribute('crossOrigin', 'anonymous')
-          img.src = 'https://sc.cnbcfm.com/applications/cnbc.com/staticContent/img/cnbc-logo-gray.png';
+          img.src = CnbcLogo;
+          
           img.onload = function() {
-              dest_ctx.drawImage(img, pos.x + 350, pos.y + 357);
+              dest_ctx.drawImage(img, pos.x + 100, pos.y + 357);
               dest_ctx.fillStyle = "white";
-              var myImage = dest_canvas.toDataURL("image/png");
+              dest_canvas.toDataURL("image/png");
               captureGraphState()
           }
       }
@@ -200,12 +233,12 @@ const DownloadChart = (props) => {
           tox = Math.round(x1 + (x2 - x1) * ratio);
           toy = Math.round(y1 + (y2 - y1) * ratio);
 
-          ctx.beginPath()
-          ctx.lineWidth = lineWidth
-          ctx.strokeStyle = color
-          ctx.moveTo(fromx, fromy)
-          ctx.lineTo(tox, toy)
-          ctx.stroke()
+          ctx.beginPath();
+          ctx.lineWidth = lineWidth;
+          ctx.strokeStyle = color;
+          ctx.moveTo(fromx, fromy);
+          ctx.lineTo(tox, toy);
+          ctx.stroke();
 
           // calculate the angle of the line
           var lineangle = Math.atan2(y2 - y1, x2 - x1);
@@ -240,37 +273,7 @@ const DownloadChart = (props) => {
       }
     }
 
-  
-
-    const config = {
-        "canvas": {
-            "width": 670,
-            "height": 350,
-            "bold_text": '26px "Proxima Nova Semi Bold"',
-            "regular_text": '12px "Proxima Nova Semi Bold"',
-            "title_text":'20px "Proxima Nova Semi Bold"',
-            "title_text_small":'18px "Proxima Nova Semi Bold"',
-            "user_text" : '24px "Proxima Nova Semi Bold"',
-            "change_text" : '14px "Proxima Nova Semi Bold"',
-            "time_range" : '16px "Proxima Nova Semi Bold"'
-        },
-        textPosition: {
-            x: 15,
-            y: 29
-        }
-    }
-
-    var export_file_name = symbolInfo.altName + '_chart.jpeg';
-
-    var dest_ctx;   
-
-    var interval = null;
-    var drawTextMode = 0
-    var draw = {
-        mode: 0,
-        x: 0,
-        y: 0
-    }
+    //console.log(">>", CnbcLogo);
 
     return(
         <div className={styles.wrapper}>
@@ -278,9 +281,11 @@ const DownloadChart = (props) => {
                 <span className={styles.personalMesage}>
                     <p>
                       <input className={styles.message} type="text" id="share_chart_text" placeholder="Add your headline (optional)" maxLength="72" />
-                    </p>                      
-                    <canvas id='shareChartContainerHiddenCanvas1' className={styles.hiddenCanvas} width={config.canvas.width} height={config.canvas.height}></canvas>
-                    <canvas id='shareChartContainerHiddenCanvas2' className={styles.hiddenCanvas}></canvas>
+                    </p>          
+                    <p>
+                      <canvas id='shareChartContainerHiddenCanvas1' className={styles.hiddenCanvas} width={config.canvas.width} height={config.canvas.height}></canvas>
+                      <canvas id='shareChartContainerHiddenCanvas2' className={styles.hiddenCanvas}></canvas>
+                    </p>                                  
                     <p>
                       <canvas width={config.canvas.width} className={styles.visibleCanvas} height={config.canvas.height} id="shareChartContainerCanvas"></canvas>
                     </p>
