@@ -1,0 +1,57 @@
+.errorWrapper {
+  background:none;
+  border: 1px solid silver;
+  background: red;
+  color: white;
+  height: 352px;
+
+  .msg {
+    position: relative;
+    top: 35%;
+    text-align: center;
+
+    span {
+      color: #000;
+      margin: 0;
+      padding: 2px;
+      border-radius: 3px;
+      line-height: inherit;
+      font-size: 12px;
+      font-family: inherit;
+      background: white;
+    }
+  }
+}
+
+.wrapper {
+  background:none;
+  border: 1px solid silver;
+  padding-bottom: 10px;
+  height: 440px;
+  
+  h1 {
+    position: relative;
+    top: 35%;
+    text-align: center;
+    color: #636363;
+  }
+
+  .timeRange {
+    text-align: center;
+    position: relative;
+    height: 44px;
+    border-bottom: 1px solid silver;
+
+    p {
+      margin: 0;
+    }
+  }
+  
+  h3 {
+    background: red;
+    text-align: center;
+  }
+  div{
+    text-align: center;
+  }
+}
