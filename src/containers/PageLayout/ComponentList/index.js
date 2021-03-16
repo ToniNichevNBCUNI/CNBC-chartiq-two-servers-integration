@@ -13,6 +13,10 @@ const ChartPage = Loadable({
   loader: () => import ('../../../components/ChartPage'),
   loading: Loading
 });
+const ActiveTraderChart = Loadable({
+  loader: () => import ('../../../components/ActiveTraderChart'),
+  loading: Loading
+});
 const About = Loadable({
   loader: () => import ('../../../components/About'),
   loading: Loading
@@ -26,5 +30,6 @@ export default {
   About,
   Greetings,
   ChartPage,
+  ActiveTraderChart,
   Header
 }

@@ -10,7 +10,8 @@ const Header = ( {title} ) => (
       <ul>
         <li><Link to='/home'>HOME</Link></li>
         <li><Link to='/greetings'>GREETINGS</Link></li>     
-        <li><Link to='/chart'>CHART</Link></li>       
+        <li><Link to='/chart'>CUSTOM CHART</Link></li>       
+        <li><Link to='/active-trader-chart'>ACTIVE TRADER CHART</Link></li>
         <li><Link to='/about'>ABOUT</Link></li>
       </ul>
     </div>

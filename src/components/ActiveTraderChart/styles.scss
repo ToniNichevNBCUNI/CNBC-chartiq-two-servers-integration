@@ -1,0 +1,28 @@
+.title {
+    background: rgb(141, 141, 172);
+  
+    text-align: center;
+    font-family: MyFont;
+  }
+  
+  .wrapper {
+    display:flex;
+    background: silver;
+  }
+  
+  .leftRail {
+    width:60%;
+    border: 1px solid blue;
+  }
+  
+  .rightRail {
+    width: 50%;
+    background-image:url('../../assets/images/cnbcTvAudio.gif');
+  }
+  
+  .addWatchlist {
+    bottom: 6px;
+    height: 15px;
+    width: 50px;
+    border: 0;  
+  }
