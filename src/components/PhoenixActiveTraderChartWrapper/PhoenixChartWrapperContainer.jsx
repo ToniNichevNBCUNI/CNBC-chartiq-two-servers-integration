@@ -11,6 +11,7 @@ import "./ActiveTraderWorkstation.css";
 
 export default function ({ chartInitialized, config, symbol, chartId }) {
 	const [configObj] = useState(config || getCustomConfig({ symbol, chartId }));
+	
 
 	return (
 		<ActiveTraderWorkstation

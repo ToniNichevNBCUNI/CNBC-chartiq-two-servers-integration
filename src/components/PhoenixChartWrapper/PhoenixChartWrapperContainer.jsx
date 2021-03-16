@@ -50,10 +50,16 @@ export default class CustomChart extends React.Component {
 
 	componentDidMount() {}
 
+
 	postInit({ chartEngine, uiContext }) {
 		window.stxx = chartEngine; // CNBC bad idea but we need to make chart engine global
 		
 		chartEngine.setChartType("mountain"); // CNBC customization 
+
+		chartEngine.loadChart(
+			'CMCSA'
+		  );
+
 
 		if (this.props.chartIntialized) {
 			this.props.chartIntialized({ chartEngine, uiContext });

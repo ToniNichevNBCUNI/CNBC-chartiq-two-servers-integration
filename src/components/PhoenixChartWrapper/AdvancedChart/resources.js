@@ -24,11 +24,6 @@ import 'chartiq/examples/markers/tradeAnalyticsSample';
 import 'chartiq/examples/markers/videoSample';
 
 
-let symbolData = {
-	symbol: 'CMCSA'
-}
-
-
 //import quoteFeed from "chartiq/examples/feeds/quoteFeedSimulator.js";
 
 // Setting up custom CNBC data connector using time series api
@@ -88,14 +83,13 @@ function getConfig() {
 // Creates a complete customised configuration object
 function getCustomConfig({ chartId, symbol, onChartReady } = {}) {
 	const config = getConfig();
-	debugger;
 
 	// Update chart configuration by modifying default configuration
 	config.chartId = chartId || "_advanced-chart";
 
 
 	config.initialSymbol = symbol || {
-		symbol: "AAPL",
+		symbol: "CMCSA",
 		name: "Apple Inc",
 		exchDisp: "NASDAQ"
 	};

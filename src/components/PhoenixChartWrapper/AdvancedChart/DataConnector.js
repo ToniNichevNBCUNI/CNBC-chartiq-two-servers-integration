@@ -54,7 +54,6 @@ function supplyChartData(queryUrl) {
   }
 
 
-
   // called by chart to fetch initial data
   quoteFeedSimulator.fetchInitialData= function(symbol, suggestedStartDate, suggestedEndDate, params, cb) {
     if (!window.stxx) {

@@ -10,10 +10,13 @@ if (typeof document !== 'undefined') {
   });
 }
 
+const onChartReady = (chartEngine)=> {
+  console.log("CHART READY >>>", chartEngine);
+}
 
 const Renderer = () => (
   <div className="chartiqWrapper">
-    <PhoenixChartWrapper/>
+    <PhoenixChartWrapper onChartReady={onChartReady()} />
   </div>
 );
 
