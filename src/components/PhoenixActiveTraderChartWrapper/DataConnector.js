@@ -1,3 +1,9 @@
+// -------------------------------------------------------------------------------------------
+// Copyright 2012-2017 by ChartIQ, Inc
+// -------------------------------------------------------------------------------------------
+// SAMPLE QUOTEFEED IMPLEMENTATION -- Connects charts to ChartIQ Simulator
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 import getChartTimeRange from './getChartTimeRange';
 import DateHelper from './DateHelper';
 import { CIQ } from 'chartiq/js/chartiq';
@@ -117,6 +123,56 @@ function supplyChartData(queryUrl) {
       chartBuilderGlobal({ error: status });
     }
   };
+  
+  
+
+
+  
+
+
+
+
+
+// called by chart to fetch initial data
+quoteFeedSimulator.fetchInitialData_old = function (
+	symbol,
+	suggestedStartDate,
+	suggestedEndDate,
+	params,
+	cb
+) {
+	var queryUrl =
+		quoteFeedSimulator.url +
+		"?session=" +
+		params.quoteDriverID + // add on unique sessionID required by ChartIQ simulator;
+		"&identifier=" +
+		symbol +
+		"&startdate=" +
+		suggestedStartDate.toISOString() +
+		"&enddate=" +
+		suggestedEndDate.toISOString() +
+		"&interval=" +
+		params.interval +
+		"&period=" +
+		params.period +
+		"&extended=" +
+		(params.extended ? 1 : 0); // using filter:true for after hours
+	quoteFeedSimulator.postAjax(queryUrl, function (status, response) {
+		// process the HTTP response from the datafeed
+		if (status == 200) {
+			// if successful response from datafeed
+			var newQuotes = quoteFeedSimulator.formatChartData(response, symbol);
+			cb({
+				quotes: newQuotes,
+				moreAvailable: true,
+				attribution: { source: "simulator", exchange: "RANDOM" }
+			}); // return the fetched data; init moreAvailable to enable pagination
+		} else {
+			// else error response from datafeed
+			cb({ error: response ? response : status }); // specify error in callback
+		}
+	});
+};
 
 
 // called by chart to fetch update data

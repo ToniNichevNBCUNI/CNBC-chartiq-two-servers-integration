@@ -5,10 +5,7 @@ import { default as AdvancedChart } from "./AdvancedChart/AdvancedChart";
 import { getCustomConfig } from "./AdvancedChart/resources";
 
 // Base styles required for all charts
-import 'chartiq/css/normalize.css';
-import 'chartiq/css/page-defaults.css';
-import 'chartiq/css/stx-chart.css';
-import 'chartiq/css/chartiq.css';
+import "./styles/base-imports";
 
 // Custom Chart IQ
 import "./CustomChart.css";
@@ -54,7 +51,10 @@ export default class CustomChart extends React.Component {
 	componentDidMount() {}
 
 	postInit({ chartEngine, uiContext }) {
-		window.stxx = chartEngine;
+		window.stxx = chartEngine; // CNBC bad idea but we need to make chart engine global
+		
+		chartEngine.setChartType("mountain"); // CNBC customization 
+
 		if (this.props.chartIntialized) {
 			this.props.chartIntialized({ chartEngine, uiContext });
 		}

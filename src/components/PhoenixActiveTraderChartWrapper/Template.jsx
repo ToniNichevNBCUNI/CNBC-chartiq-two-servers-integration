@@ -327,55 +327,7 @@ export default function () {
 
 			<div className="ciq-chart-area">
 				<div chartarea="true">
-					<div id="flexContainer">
-						<div id="cryptoGroup1">
-							<div id="tradeHistoryContainer">
-								<cq-tradehistory cq-active>
-									<cq-tradehistory-table>
-										<cq-scroll cq-no-claim>
-											<cq-tradehistory-body maxrows="500"></cq-tradehistory-body>
-										</cq-scroll>
-										<div pie-chart="true">
-											<span>Money Flow</span>
-											<div></div>
-										</div>
-									</cq-tradehistory-table>
-									<template>
-										<cq-item>
-											<div col="time">Time</div>
-											<div col="qty">Qty</div>
-											<div col="price">Price</div>
-											<div col="amount">Amount</div>
-										</cq-item>
-									</template>
-								</cq-tradehistory>
-							</div>
-						</div>
-						<div id="cryptoGroup2">
-							<div id="marketDepthBookmark"></div>
-							<div id="orderBookContainer">
-								<cq-orderbook cq-active>
-									<cq-orderbook-table reverse>
-										<cq-scroll cq-no-claim>
-											<cq-orderbook-bids></cq-orderbook-bids>
-										</cq-scroll>
-									</cq-orderbook-table>
-									<cq-orderbook-table>
-										<cq-scroll cq-no-claim>
-											<cq-orderbook-asks></cq-orderbook-asks>
-										</cq-scroll>
-									</cq-orderbook-table>
-									<template>
-										<cq-item cq-size-shading>
-											<div col="price">Price</div>
-											<div col="size">Size</div>
-											<div col="amount">Amount</div>
-										</cq-item>
-									</template>
-								</cq-orderbook>
-							</div>
-						</div>
-
+					<div id="flexContainer">						
 						<div
 							id="mainChartGroup"
 							packager-append-child="div.ciq-chart-area div.ciq-chart"

@@ -23,7 +23,10 @@ import 'chartiq/examples/markers/videoSample';
 
 import "chartiq/js/extras/svgcharts/piechart.js";
 
-import quoteFeed from "chartiq/examples/feeds/quoteFeedSimulator.js";
+//import quoteFeed from "chartiq/examples/feeds/quoteFeedSimulator.js";
+
+// Setting up custom CNBC data connector using time series api
+import quoteFeed from './DataConnector';
 
 // Uncomment the following for the forecasting simulator (required for the forecasting sample).
 // import forecastQuoteFeed from "chartiq/examples/feeds/quoteFeedForecastSimulator.js";
@@ -82,6 +85,10 @@ function getCustomConfig({ chartId, symbol, onChartReady }) {
 	config.initialSymbol = symbol || "^USDAUD";
 	// config.quoteFeeds[0].behavior.refreshInterval = 0; // disables quotefeed refresh
 	config.onChartReady = onChartReady;
+
+	config.themes.defaultTheme = 'ciq-day';
+
+	config.initialSymbol = 'AAPL';
 
 	// Enable / disable addOns here before creating the chart
 	// config.enabledAddOns.forecasting = true;

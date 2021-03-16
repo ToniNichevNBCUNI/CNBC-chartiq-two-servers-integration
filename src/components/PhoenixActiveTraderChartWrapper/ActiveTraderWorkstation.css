@@ -72,3 +72,31 @@ div[pie-chart] > div {
 .pie text .value {
 	font-weight: normal;
 }
+
+
+cq-context, *[cq-context] {
+    position: unset;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+}
+
+.ciq-chart-area, cq-side-panel {
+	position: unset;	
+	height:  400px;
+}
+
+#flexContainer {
+	position: unset;
+}
+
+.ciq-chart {
+	height: 400px;
+}
+
+.chartiqWrapper {
+}
+
+.ciq-chart-area {
+}

@@ -16,11 +16,17 @@ import 'chartiq/examples/translations/translationSample';
 import 'chartiq/js/componentUI';
 import 'chartiq/js/components';
 
+import marketFactory from '../marketFactory'; // CNBC market factory
+
 // Event Markers 
 import marker from 'chartiq/examples/markers/markersSample.js';
 import 'chartiq/examples/markers/tradeAnalyticsSample';
 import 'chartiq/examples/markers/videoSample';
 
+
+let symbolData = {
+	symbol: 'CMCSA'
+}
 
 
 //import quoteFeed from "chartiq/examples/feeds/quoteFeedSimulator.js";
@@ -82,18 +88,40 @@ function getConfig() {
 // Creates a complete customised configuration object
 function getCustomConfig({ chartId, symbol, onChartReady } = {}) {
 	const config = getConfig();
+	debugger;
 
 	// Update chart configuration by modifying default configuration
 	config.chartId = chartId || "_advanced-chart";
 
 
 	config.initialSymbol = symbol || {
-		symbol: "CMCSA",
+		symbol: "AAPL",
 		name: "Apple Inc",
 		exchDisp: "NASDAQ"
 	};
 
+	// default config override for CNBC
+	config.builtInThemes = { "ciq-day": "Day"};
 	config.themes.defaultTheme = 'ciq-day';
+
+	const feedConfig = {
+		CIQ,
+		timeSeriesAppendUrl: '/adjusted/EST5EDT.json',
+		//noStreamableList,
+		//noHistoryDataList,
+		quotePageSymbol: 'CMCSA'
+	};
+
+	/*
+	config.quoteFeed = new QuoteFeed(feedConfig); // setup the quoteFeed using time series API
+	config.defaultSymbol = symbolData.symbol;
+	config.chartConfig.layout = {
+	chartType: 'mountain',
+	crosshair: true,
+	};
+	*/	  
+
+	config.marketFactory = marketFactory;
 
 	// config.quoteFeeds[0].behavior.refreshInterval = 0; // disables quotefeed refresh
 	config.onChartReady = onChartReady;
