@@ -27,7 +27,7 @@ import 'chartiq/examples/markers/videoSample';
 //import quoteFeed from "chartiq/examples/feeds/quoteFeedSimulator.js";
 
 // Setting up custom CNBC data connector using time series api
-import quoteFeed from './DataConnector';
+import QuoteFeed from './DataConnector';
 
 
 
@@ -70,6 +70,13 @@ import defaultConfig from 'chartiq/js/defaultConfiguration';
 // Uncomment the following for the L2 simulator (required for the crypto sample and MarketDepth addOn)
 // import 'chartiq/examples/feeds/L2_simulator'; /* for use with cryptoiq */
 
+let initialCNBCconfig = {
+	quotePageSymbol: 'AAPL',
+	noHistoryDataList : '',
+  noStreamableList: ''
+}
+
+const quoteFeed = new QuoteFeed(initialCNBCconfig);
 // Creates a complete customised configuration object
 function getConfig() { 
 	console.log(quoteFeed);
