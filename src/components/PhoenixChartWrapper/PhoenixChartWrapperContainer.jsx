@@ -22,7 +22,14 @@ export default class CustomChart extends React.Component {
 	constructor(props) {
 		super(props);
 		
-		this.config = getCustomConfig(props);
+		let initialCNBCconfig = {
+			quotePageSymbol: 'AAPL',
+			noHistoryDataList : '',
+			noStreamableList: '',
+			timeSeriesAppendUrl: '/adjusted/EST5EDT.json',
+		}
+
+		this.config = getCustomConfig({ ... props, initialCNBCconfig});
 
 		// optionally store CIQ, stx, uiContext, ... objects in the state for easy access
 		/*

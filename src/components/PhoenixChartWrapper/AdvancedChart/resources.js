@@ -70,17 +70,12 @@ import defaultConfig from 'chartiq/js/defaultConfiguration';
 // Uncomment the following for the L2 simulator (required for the crypto sample and MarketDepth addOn)
 // import 'chartiq/examples/feeds/L2_simulator'; /* for use with cryptoiq */
 
-let initialCNBCconfig = {
-	quotePageSymbol: 'AAPL',
-	noHistoryDataList : '',
-  noStreamableList: ''
-}
 
-const quoteFeed = new QuoteFeed(initialCNBCconfig);
 // Creates a complete customised configuration object
-function getConfig() { 
-	console.log(quoteFeed);
-	debugger;
+function getConfig(initialCNBCconfig) { 
+
+	const quoteFeed = new QuoteFeed(initialCNBCconfig);
+
 	return defaultConfig({
 		quoteFeed,
 		// forecastQuoteFeed, // uncomment to enable forecast quote feed simulator
@@ -90,8 +85,8 @@ function getConfig() {
 }
 
 // Creates a complete customised configuration object
-function getCustomConfig({ chartId, symbol, onChartReady } = {}) {
-	const config = getConfig();
+function getCustomConfig({ chartId, symbol, onChartReady, initialCNBCconfig } = {}) {
+	const config = getConfig(initialCNBCconfig);
 
 	// Update chart configuration by modifying default configuration
 	config.chartId = chartId || "_advanced-chart";
@@ -122,7 +117,7 @@ function getCustomConfig({ chartId, symbol, onChartReady } = {}) {
 	};
 	*/	  
 
-	quoteFeed
+	//quoteFeed
 	
 	config.marketFactory = marketFactory;
 

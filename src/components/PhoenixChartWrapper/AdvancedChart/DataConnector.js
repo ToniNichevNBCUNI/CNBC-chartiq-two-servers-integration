@@ -21,7 +21,18 @@ let chartBuilderGlobal;
 
 const DataConnector = (config) => {
 
-  function supplyChartData(queryUrl) {
+  const getGranularity = (intervalValue, period, suggestedStartDate) => {
+    if (suggestedStartDate.getFullYear() < 1990) {
+      return '3MO';
+    } else if (intervalValue === 'minute') {
+      return `${period}M`;
+    } else if (intervalValue === 'day') {
+      return `${period}D`;
+    }
+    return `${period}Y`;
+  }
+
+  const supplyChartData = (queryUrl) => {
     const postAjaxParamsObj = {
       url: queryUrl,
       cb: processTimeSeriesResponseCallback,
@@ -32,8 +43,7 @@ const DataConnector = (config) => {
   }
   
   
-  
-  function formatChartData (rawChartData, sliceLastImportedData) {
+  const formatChartData = (rawChartData, sliceLastImportedData) => {
     if (rawChartData.barData === null) { return []; }
   
     const chartData = rawChartData.barData.priceBars;
@@ -62,7 +72,7 @@ const DataConnector = (config) => {
   }
   
 
-  function processTimeSeriesResponseCallback(status, response, deps) {
+  const processTimeSeriesResponseCallback = (status, response, deps) => {
     if (deps) {
       if (deps.cb) {
         chartBuilderGlobal = deps.cb;
@@ -104,14 +114,15 @@ const DataConnector = (config) => {
   // Public methods
 
   // called by chart to fetch initial data
-  function fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, cb) {
+  const fetchInitialData = (symbol, suggestedStartDate, suggestedEndDate, params, cb) => {
+    /*
     if (!window.stxx) {
       //return;
     }
+    */
 
     let chartTimeRange;
     chartBuilderGlobal = cb;
-    debugger;
     if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) !== -1) {
       chartTimeRange = '1D';
     } else {
@@ -121,11 +132,42 @@ const DataConnector = (config) => {
     const is5YorALL = chartTimeRange === '5Y' || chartTimeRange === 'ALL';
     const queryUrl = `${TIME_SERIES_CHART_API}/${chartTimeRange}.json?symbol=${symbol}`;
 
-    let shouldRequestBeMadeObj = { addNewDataOnly: false, fromInitialDataRequest: true, moreDataNeeded: !is5YorALL };
+    let shouldRequestBeMadeObj = { addNewDataOnly: false, fromInitialDataRequest: true, moreDataNeeded: !is5YorALL }; // to-do: what is this?!? This value is not even been used
     return supplyChartData(queryUrl);
   }
+
+  // called by chart to fetch pagination data
+  const fetchPaginationData = (symbol, suggestedStartDate, suggestedEndDate, params, cb) => {
+    // consoleLogHelper('fetchPaginationData', suggestedStartDate, endDate, params)
+    // TODO: can we not polute chart engine with custom props ?
+    //if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) === -1 && !stxx.justSelectedTimeRange) {
+      if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) === -1) {
+      startDate = DateHelper.dateToDateStr(suggestedStartDate);
+      endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay());
+      granularity = getGranularity(params.interval, params.period, suggestedStartDate);
+      const queryUrl = `${TIME_SERIES_BAR_API}/${symbol}/${granularity}/${startDate}/${endDate}${config.timeSeriesAppendUrl}?type=scroll`;
+      chartBuilderGlobal = cb;
+      shouldRequestBeMadeObj = { addNewDataOnly: false, fromInitialDataRequest: false };
+      return supplyChartData(queryUrl);
+    }
+  }  
+
+  // called by chart to fetch update data
+  const fetchUpdateData = (symbol, suggestedStartDate, params, cb) => {
+    // consoleLogHelper('fetchUpdateData', suggestedStartDate, '', params)
+    if (config.noStreamableList.indexOf(symbol) === -1) {
+      // if symbol is not in the 'noStreamableList', proceed with update
+      const queryUrl = `${TIME_SERIES_CHART_API}/${chartTimeRange}.json?symbol=${symbol}`;
+      chartBuilderGlobal = cb;
+      shouldRequestBeMadeObj = { addNewDataOnly: true, fromInitialDataRequest: false };
+		  return supplyChartData(queryUrl);
+    }
+  }  
+
   return {
-    fetchInitialData
+    fetchInitialData,
+    fetchPaginationData,
+    fetchUpdateData
   }
 }
 
