@@ -89,13 +89,12 @@ function getCustomConfig({ chartId, symbol, onChartReady } = {}) {
 
 
 	config.initialSymbol = symbol || {
-		symbol: "CMCSA",
+		symbol: "AAPL",
 		name: "Apple Inc",
 		exchDisp: "NASDAQ"
 	};
 
 	// default config override for CNBC
-	config.builtInThemes = { "ciq-day": "Day"};
 	config.themes.defaultTheme = 'ciq-day';
 
 	const feedConfig = {

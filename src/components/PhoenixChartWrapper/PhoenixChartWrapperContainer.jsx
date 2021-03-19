@@ -24,6 +24,8 @@ export default class CustomChart extends React.Component {
 		
 		this.config = props.config || getCustomConfig(props);
 
+		// optionally store CIQ, stx, uiContext, ... objects in the state for easy access
+		/*
 		this.state = {
 			chart: new CIQ.UI.Chart(),
 			stx: null,
@@ -31,24 +33,30 @@ export default class CustomChart extends React.Component {
 			chartInitializedCallback: props.chartInitialized,
 			shortcutDialog: false
 		};
+		*/
 	}
 
 	componentDidMount() {}
 
 
 	postInit({ chartEngine, uiContext }) {
-		window.stxx = chartEngine; // CNBC bad idea but we need to make chart engine global
+		//window.stxx = chartEngine; // CNBC bad idea but we need to make chart engine global
 		
 		chartEngine.setChartType("mountain"); // CNBC customization 
 
+		/*
 		chartEngine.loadChart(
 			'CMCSA'
-		  );
+		);
+		*/
 
-
+		// optionally call parent component post-init function if there is one defined.
+		/*
 		if (this.props.chartIntialized) {
 			this.props.chartIntialized({ chartEngine, uiContext });
 		}
+
+		*/
 
 
 		this.setState({ stx: chartEngine, uiContext: uiContext });
