@@ -72,6 +72,8 @@ import defaultConfig from 'chartiq/js/defaultConfiguration';
 
 // Creates a complete customised configuration object
 function getConfig() { 
+	console.log(quoteFeed);
+	debugger;
 	return defaultConfig({
 		quoteFeed,
 		// forecastQuoteFeed, // uncomment to enable forecast quote feed simulator

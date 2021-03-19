@@ -22,7 +22,7 @@ export default class CustomChart extends React.Component {
 	constructor(props) {
 		super(props);
 		
-		this.config = props.config || getCustomConfig(props);
+		this.config = getCustomConfig(props);
 
 		// optionally store CIQ, stx, uiContext, ... objects in the state for easy access
 		/*
@@ -59,7 +59,7 @@ export default class CustomChart extends React.Component {
 		*/
 
 
-		this.setState({ stx: chartEngine, uiContext: uiContext });
+		//this.setState({ stx: chartEngine, uiContext: uiContext });
 	}
 
 	render() {
