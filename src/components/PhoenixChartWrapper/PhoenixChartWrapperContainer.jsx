@@ -21,7 +21,17 @@ import { default as RecentSymbols } from "./RecentSymbols/RecentSymbols";
 export default class CustomChart extends React.Component {
 	constructor(props) {
 		super(props);
-		
+
+		const { quoteData } = props;
+
+		if (Array.isArray(quoteData)) {
+			//setUpChartConfig(quoteData[0], config);
+			this.initialSymbolData = quoteData[0];
+		} else {
+			this.initialSymbolData = quoteData;
+			//setUpChartConfig(quoteData, config);
+		}		
+				
 		let initialCNBCconfig = {
 			quotePageSymbol: 'AAPL',
 			noHistoryDataList : '',
@@ -47,6 +57,7 @@ export default class CustomChart extends React.Component {
 
 
 	postInit({ chartEngine, uiContext }) {
+		chartEngine.chart.symbolObject = this.initialSymbolData;
 		//window.stxx = chartEngine; // CNBC bad idea but we need to make chart engine global
 		
 		chartEngine.setChartType("mountain"); // CNBC customization 

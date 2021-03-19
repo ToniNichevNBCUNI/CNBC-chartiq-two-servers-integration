@@ -100,6 +100,7 @@ function getCustomConfig({ chartId, symbol, onChartReady, initialCNBCconfig } = 
 	// default config override for CNBC
 	config.themes.defaultTheme = 'ciq-day';
 
+	/*
 	const feedConfig = {
 		CIQ,
 		timeSeriesAppendUrl: '/adjusted/EST5EDT.json',
@@ -108,7 +109,7 @@ function getCustomConfig({ chartId, symbol, onChartReady, initialCNBCconfig } = 
 		quotePageSymbol: 'CMCSA'
 	};
 
-	/*
+
 	config.quoteFeed = new QuoteFeed(feedConfig); // setup the quoteFeed using time series API
 	config.defaultSymbol = symbolData.symbol;
 	config.chartConfig.layout = {

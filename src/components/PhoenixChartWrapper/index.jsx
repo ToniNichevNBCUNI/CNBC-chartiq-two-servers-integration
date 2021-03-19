@@ -14,9 +14,13 @@ const onChartReady = (chartEngine)=> {
   console.log("CHART READY >>>", chartEngine);
 }
 
+const quoteData =  {
+  symbol: 'CMCSA'
+}
+
 const Renderer = () => (
   <div className="chartiqWrapper">
-    <PhoenixChartWrapper onChartReady={onChartReady()} />
+    <PhoenixChartWrapper quoteData={quoteData} onChartReady={onChartReady()} />
   </div>
 );
 
