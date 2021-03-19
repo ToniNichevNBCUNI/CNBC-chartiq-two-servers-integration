@@ -13,7 +13,8 @@ const is5YorALL = chartTimeRange === '5Y' || chartTimeRange === 'ALL';
 
 let config = {
 	quotePageSymbol: 'AAPL',
-	noHistoryDataList : ''
+	noHistoryDataList : '',
+  noStreamableList: ''
 }
 
 let startDate;
@@ -25,19 +26,7 @@ let shouldRequestBeMadeObj = { addNewDataOnly: false, fromInitialDataRequest: tr
 let chartBuilderGlobal;
 
 
-// local, non-dependent implementation of XmlHttpRequest
-quoteFeedSimulator.postAjax = function (url, cb) {
-	var server = new XMLHttpRequest();
-	url += (url.indexOf("?") == -1 ? "?" : "&") + new Date().getTime();
-	server.open("GET", url);
-	server.onload = function () {
-		cb(this.status, this.responseText);
-	};
-	server.onerror = function () {
-		cb(500);
-	};
-	server.send();
-};
+
 quoteFeedSimulator.maxTicks = 20000;
 quoteFeedSimulator.url = "https://simulator.chartiq.com/datafeed";
 
@@ -119,77 +108,31 @@ function supplyChartData(queryUrl) {
 
 
 // called by chart to fetch update data
-quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params, cb) {
-	var queryUrl =
-		quoteFeedSimulator.url +
-		"?session=" +
-		params.quoteDriverID + // add on unique sessionID required by ChartIQ simulator;
-		"&identifier=" +
-		symbol +
-		"&startdate=" +
-		startDate.toISOString() +
-		"&interval=" +
-		params.interval +
-		"&period=" +
-		params.period +
-		"&extended=" +
-		(params.extended ? 1 : 0); // using filter:true for after hours
-	quoteFeedSimulator.postAjax(queryUrl, function (status, response) {
-		// process the HTTP response from the datafeed
-		if (status == 200) {
-			// if successful response from datafeed
-			var newQuotes = quoteFeedSimulator.formatChartData(response, symbol);
-			cb({
-				quotes: newQuotes,
-				attribution: { source: "simulator", exchange: "RANDOM" }
-			}); // return the fetched data
-		} else {
-			// else error response from datafeed
-			cb({ error: response ? response : status }); // specify error in callback
-		}
-	});
-};
+quoteFeedSimulator.fetchUpdateData = function(symbol, suggestedStartDate, params, cb) {
+  // consoleLogHelper('fetchUpdateData', suggestedStartDate, '', params)
+  if (config.noStreamableList.indexOf(symbol) === -1) {
+    // if symbol is not in the 'noStreamableList', proceed with update
+    const queryUrl = `${TIME_SERIES_CHART_API}/${chartTimeRange}.json?symbol=${symbol}`;
+    chartBuilderGlobal = cb;
+    shouldRequestBeMadeObj = { addNewDataOnly: true, fromInitialDataRequest: false };
+    return supplyChartData(queryUrl);
+  }
+}
+
+
 // called by chart to fetch pagination data
-quoteFeedSimulator.fetchPaginationData = function (
-	symbol,
-	suggestedStartDate,
-	endDate,
-	params,
-	cb
-) {
-	var queryUrl =
-		quoteFeedSimulator.url +
-		"?session=" +
-		params.quoteDriverID + // add on unique sessionID required by ChartIQ simulator;
-		"&identifier=" +
-		symbol +
-		"&startdate=" +
-		suggestedStartDate.toISOString() +
-		"&enddate=" +
-		endDate.toISOString() +
-		"&interval=" +
-		params.interval +
-		"&period=" +
-		params.period +
-		"&extended=" +
-		(params.extended ? 1 : 0); // using filter:true for after hours
-	quoteFeedSimulator.postAjax(queryUrl, function (status, response) {
-		// process the HTTP response from the datafeed
-		if (status == 200) {
-			// if successful response from datafeed
-			var newQuotes = quoteFeedSimulator.formatChartData(response, symbol);
-			cb({
-				quotes: newQuotes,
-				moreAvailable: suggestedStartDate.getTime() > 0,
-				upToDate: endDate.getTime() > Date.now(),
-				attribution: { source: "simulator", exchange: "RANDOM" }
-			}); // return fetched data (and set moreAvailable)
-		} else {
-			// else error response from datafeed
-			cb({ error: response ? response : status }); // specify error in callback
-		}
-	});
-};
+quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, suggestedEndDate, params, cb) {
+  // consoleLogHelper('fetchPaginationData', suggestedStartDate, endDate, params)
+  if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) === -1 && !stxx.justSelectedTimeRange) {
+    startDate = DateHelper.dateToDateStr(suggestedStartDate);
+    endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay());
+    granularity = getGranularity(params.interval, params.period, suggestedStartDate);
+    const queryUrl = `${TIME_SERIES_BAR_API}/${symbol}/${granularity}/${startDate}/${endDate}${tsAppendURL}?type=scroll`;
+    chartBuilderGlobal = cb;
+    shouldRequestBeMadeObj = { addNewDataOnly: false, fromInitialDataRequest: false };
+    return supplyChartData(queryUrl);
+  }
+}
 
 
 quoteFeedSimulator.formatChartData = function(rawChartData, sliceLastImportedData) {

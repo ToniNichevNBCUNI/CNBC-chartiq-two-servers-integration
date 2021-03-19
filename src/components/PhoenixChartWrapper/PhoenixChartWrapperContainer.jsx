@@ -9,7 +9,6 @@ import "./styles/base-imports";
 
 // Custom Chart IQ
 import "./CustomChart.css";
-import { default as ShortcutDialog } from "./ShortcutDialog/ShortcutDialog";
 import { default as RecentSymbols } from "./RecentSymbols/RecentSymbols";
 
 /**
@@ -22,21 +21,7 @@ import { default as RecentSymbols } from "./RecentSymbols/RecentSymbols";
 export default class CustomChart extends React.Component {
 	constructor(props) {
 		super(props);
-
-		this.store = new CIQ.NameValueStore();
-		this.symbolStorageName = "recentSymbols";
-		this.shortcutStorageName = "customDrawingToolShortcuts";
-		this.drawingToolsInfo = null;
-		// Additional description for a drawing tool that will be injected into the shortcuts listing
-		this.drawingToolDetails = {
-			annotation: `
-				Add text annotations to your chart.
-			`,
-			elliottwave: `
-				The Elliott Wave Theory was developed by Ralph Nelson Elliott to describe...
-			`
-		};
-
+		
 		this.config = props.config || getCustomConfig(props);
 
 		this.state = {
@@ -65,173 +50,14 @@ export default class CustomChart extends React.Component {
 			this.props.chartIntialized({ chartEngine, uiContext });
 		}
 
-		this.updateCustomization(this.config).then(() => {
-			this.addPreferencesHelper(uiContext);
-			this.drawingToolsInfo = this.getDrawingTools(uiContext);
-		});
-		// portalizeContextDialogs(container);
-
-		const self = this;
-		const isForecasting = (symbol) => /_fcst$/.test(symbol);
-		uiContext.stx.addEventListener(
-			"symbolChange",
-			({ symbol, symbolObject, action }) => {
-				if (
-					!isForecasting(symbol) &&
-					(action === "master" || action === "add-series")
-				) {
-					self.updateSymbolStore(symbol, symbolObject);
-				}
-			}
-		);
 
 		this.setState({ stx: chartEngine, uiContext: uiContext });
 	}
 
-	// Update chart configuration with drawing tool shortcuts stored
-	// in localStorage
-	updateCustomization(config) {
-		// currently only tool shortcuts are customized locally
-		return this.getValue(this.shortcutStorageName).then((shortcuts) => {
-			if (!shortcuts || !Object.keys(shortcuts).length) {
-				return;
-			}
-			config.drawingTools.forEach((item) => {
-				item.shortcut = shortcuts[item.tool] || "";
-			});
-		});
-	}
-
-	updateSymbolStore(symbol, { name = "", exchDisp = "" } = {}) {
-		return this.getRecentSymbols().then((list) => {
-			const count = ((list.symbol && list.symbol.count) || 0) + 1;
-			list[symbol] = { symbol, name, exchDisp, count, last: +new Date() };
-			return this.updateRecentSymbols(list);
-		});
-	}
-
-	getRecentSymbols() {
-		return this.getValue(this.symbolStorageName);
-	}
-
-	updateRecentSymbols(value) {
-		return this.setValue(this.symbolStorageName, value);
-	}
-
-	// Get a value from localStorage
-	getValue(name) {
-		return new Promise((resolve, reject) => {
-			this.store.get(name, (err, value) => {
-				if (err) return reject(err);
-				resolve(value || {});
-			});
-		});
-	}
-	// Set a value from localStorage
-	setValue(name, value) {
-		return new Promise((resolve, reject) => {
-			this.store.set(name, value, (err) => {
-				if (err) return reject(err);
-				resolve(value);
-			});
-		});
-	}
-
-	// Injects a helper into the ChartIQ UI Layout object to invoke when
-	// the custom added "Drawing Tools" item in the options menu is selected.
-	addPreferencesHelper(uiContext) {
-		const layoutHelper = uiContext.getAdvertised("Layout");
-
-		layoutHelper.openPreferences = (node, type) => {
-			this.setState({ shortcutDialog: true });
-		};
-	}
-
-	// Retrieve an array of the drawing tools from the ChartIQ config object to
-	// pass along to the custom ShortcutDialog component.
-	getDrawingTools(uiContext) {
-		const { drawingToolDetails: details } = this;
-
-		let drawingTools = this.config.drawingTools.slice();
-		return drawingTools.map(({ label, shortcut, tool }) => {
-			return {
-				label,
-				tool,
-				shortcut: shortcut || "",
-				detail: details[tool]
-			};
-		});
-	}
-
-	// Store shortcut changed from the custom ShortcutDialog component in
-	// localStorage
-	setDrawingToolShortcuts(shortcuts) {
-		const { topNode } = this.state.uiContext;
-
-		this.config.drawingTools.forEach((item) => {
-			item.shortcut = shortcuts[item.tool];
-		});
-
-		this.setValue(this.shortcutStorageName, shortcuts);
-
-		rebuildDrawingPalette(topNode);
-	}
-
-	// Handler to pass along to the custom ShortcutDialog component that sets
-	// its closed state
-	closeDialog() {
-		this.setState({ shortcutDialog: false });
-	}
-
-	// Return elements for chart plugin toggle buttons
-	getPluginToggles() {
-		const { tfc } = this.state.stx || {};
-		return (
-			<div className="trade-toggles ciq-toggles">
-				{tfc && (
-					<cq-toggle class="tfc-ui sidebar stx-trade" cq-member="tfc">
-						<span></span>
-						<cq-tooltip>Trade</cq-tooltip>
-					</cq-toggle>
-				)}
-				<cq-toggle
-					class="analystviews-ui stx-analystviews tc-ui stx-tradingcentral"
-					cq-member="analystviews"
-				>
-					<span></span>
-					<cq-tooltip>Analyst Views</cq-tooltip>
-				</cq-toggle>
-				<cq-toggle
-					class="technicalinsights-ui stx-technicalinsights recognia-ui stx-recognia"
-					cq-member="technicalinsights"
-				>
-					<span></span>
-					<cq-tooltip>Technical Insights</cq-tooltip>
-				</cq-toggle>
-			</div>
-		);
-	}
-
 	render() {
-		const pluginToggles = this.getPluginToggles();
-
-		let shortcutDialog = null;
-		if (this.state.shortcutDialog)
-			shortcutDialog = (
-				<ShortcutDialog
-					drawingToolsInfo={this.drawingToolsInfo}
-					closeDialog={(event) => {
-						this.closeDialog();
-					}}
-					setDrawingToolShortcuts={(shortcuts) => {
-						this.setDrawingToolShortcuts(shortcuts);
-					}}
-				></ShortcutDialog>
-			);
 
 		return (
 			<div className="chartWrapper">
-				<h1>Chart Wrapper</h1>
 				<AdvancedChart
 					config={this.config}
 					chartInitialized={this.postInit.bind(this)}
@@ -549,8 +375,6 @@ export default class CustomChart extends React.Component {
 									</cq-menu-dropdown>
 								</cq-menu>
 							</div>
-
-							{pluginToggles}
 						</div>
 					</div>
 
@@ -652,49 +476,8 @@ export default class CustomChart extends React.Component {
 					</div>
 
 					<cq-side-panel></cq-side-panel>
-
-					{shortcutDialog}
 				</AdvancedChart>
 			</div>
 		);
 	}
-}
-
-/**
- * For applications that have more then one chart, keep single dialog of the same type
- * and move it outside context node to be shared by all chart components
- */
-function portalizeContextDialogs(container) {
-	container.querySelectorAll("cq-dialog").forEach((dialog) => {
-		dialog.remove();
-		if (!dialogPortalized(dialog)) {
-			document.body.appendChild(dialog);
-		}
-	});
-}
-
-function dialogPortalized(el) {
-	const tag = el.firstChild.nodeName.toLowerCase();
-	return Array.from(document.querySelectorAll(tag)).some(
-		(el) => !el.closest("cq-context")
-	);
-}
-
-// Helper function that removes the existing drawing palette component and adds
-// a new one.
-function rebuildDrawingPalette(el) {
-	const qs = (path) => el.querySelector(path);
-	const container = qs(".palette-dock-container");
-	const palette = qs("cq-drawing-palette");
-	const newPalette = document.createElement("cq-drawing-palette");
-
-	newPalette.className = palette.className;
-	newPalette.setAttribute("docked", palette.getAttribute("docked"));
-	newPalette.setAttribute("orientation", palette.getAttribute("orientation"));
-	newPalette.setAttribute("min-height", palette.getAttribute("min-height"));
-	const noOp = () => {};
-	palette.keyStroke = palette.handleMessage = noOp;
-	palette.remove();
-
-	container.appendChild(newPalette);
 }

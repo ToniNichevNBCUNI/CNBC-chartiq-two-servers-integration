@@ -20,6 +20,7 @@ const ChartPage = () => {
       <div className={styles.wrapper}>
           <div className={styles.leftRail}>
             <PhoenixChartWrapper />
+            <div className={styles.contentAfterchart}>Test 12345 ...</div>
           </div>
           <div className={styles.rightRail}>
             <p>right rail</p>
