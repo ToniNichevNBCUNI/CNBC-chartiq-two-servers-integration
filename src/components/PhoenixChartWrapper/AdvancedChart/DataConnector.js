@@ -32,7 +32,6 @@ quoteFeedSimulator.url = "https://simulator.chartiq.com/datafeed";
 
 
 function supplyChartData(queryUrl) {
-	queryUrl = queryUrl.split('APPL').join('AAPL');
     const postAjaxParamsObj = {
       url: queryUrl,
       cb: processTimeSeriesResponseCallback,

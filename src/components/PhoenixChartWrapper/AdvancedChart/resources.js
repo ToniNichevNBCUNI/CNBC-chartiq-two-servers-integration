@@ -87,7 +87,6 @@ function getCustomConfig({ chartId, symbol, onChartReady } = {}) {
 	// Update chart configuration by modifying default configuration
 	config.chartId = chartId || "_advanced-chart";
 
-
 	config.initialSymbol = symbol || {
 		symbol: "AAPL",
 		name: "Apple Inc",
@@ -114,11 +113,14 @@ function getCustomConfig({ chartId, symbol, onChartReady } = {}) {
 	};
 	*/	  
 
+	quoteFeed
+	
 	config.marketFactory = marketFactory;
 
 	// config.quoteFeeds[0].behavior.refreshInterval = 0; // disables quotefeed refresh
+	/*
 	config.onChartReady = onChartReady;
-
+	
 	const {
 		marketDepth,
 		termStructure,
@@ -134,6 +136,7 @@ function getCustomConfig({ chartId, symbol, onChartReady } = {}) {
 		// timeSpanEventPanel,
 		// visualEarnings
 	};
+	*/
 
 	// Enable / disable addOns
 	// config.enabledAddOns.tooltip = false;
