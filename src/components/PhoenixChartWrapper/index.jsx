@@ -10,8 +10,8 @@ if (typeof document !== 'undefined') {
   });
 }
 
-const onChartReady = (chartEngine)=> {
-  console.log("CHART READY >>>", chartEngine);
+const onChartReady = ()=> {
+  console.log("do other stuff when chart is initialized");
 }
 
 const quoteData =  {

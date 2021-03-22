@@ -32,7 +32,7 @@ export default class CustomChart extends React.Component {
 			//setUpChartConfig(quoteData, config);
 		}		
 				
-		let initialCNBCconfig = {
+		const initialCNBCconfig = {
 			quotePageSymbol: this.initialSymbolData.symbol,
 			noHistoryDataList : '',
 			noStreamableList: '',
@@ -40,6 +40,14 @@ export default class CustomChart extends React.Component {
 		}
 
 		this.config = getCustomConfig({ ... props, initialCNBCconfig});
+
+		this.config.initialSymbol = {
+			symbol: this.initialSymbolData.symbol
+			//name: "Apple Inc",
+			//exchDisp: "NASDAQ"
+		};		
+		//let stxx = this.config.createChart();
+
 
 		// optionally store CIQ, stx, uiContext, ... objects in the state for easy access
 		/*
