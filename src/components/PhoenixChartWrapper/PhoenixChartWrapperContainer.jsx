@@ -33,7 +33,7 @@ export default class CustomChart extends React.Component {
 		}		
 				
 		let initialCNBCconfig = {
-			quotePageSymbol: 'AAPL',
+			quotePageSymbol: this.initialSymbolData.symbol,
 			noHistoryDataList : '',
 			noStreamableList: '',
 			timeSeriesAppendUrl: '/adjusted/EST5EDT.json',
@@ -57,16 +57,14 @@ export default class CustomChart extends React.Component {
 
 
 	postInit({ chartEngine, uiContext }) {
-		chartEngine.chart.symbolObject = this.initialSymbolData;
+		//chartEngine.chart.symbolObject = this.initialSymbolData;
+	
 		//window.stxx = chartEngine; // CNBC bad idea but we need to make chart engine global
 		
-		chartEngine.setChartType("mountain"); // CNBC customization 
+		//chartEngine.setChartType("mountain"); // CNBC customization 
 
-		/*
-		chartEngine.loadChart(
-			'CMCSA'
-		);
-		*/
+		
+
 
 		// optionally call parent component post-init function if there is one defined.
 		/*

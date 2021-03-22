@@ -15,7 +15,7 @@ const onChartReady = (chartEngine)=> {
 }
 
 const quoteData =  {
-  symbol: 'CMCSA'
+  symbol: 'TSLA'
 }
 
 const Renderer = () => (
