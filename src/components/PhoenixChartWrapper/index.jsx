@@ -15,7 +15,7 @@ const onChartReady = ()=> {
 }
 
 const quoteData =  {
-  symbol: 'TSLA'
+  symbol: 'TSLA',
 }
 
 const Renderer = () => (

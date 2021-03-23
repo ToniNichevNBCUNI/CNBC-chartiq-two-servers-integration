@@ -3,6 +3,8 @@
 import { CIQ } from 'chartiq/js/chartiq';
 import 'chartiq/js/advanced';
 
+import 'chartiq/js/advanced';
+
 import 'chartiq/js/addOns';
 
 // Symbol mapping to market definition
@@ -16,20 +18,14 @@ import 'chartiq/examples/translations/translationSample';
 import 'chartiq/js/componentUI';
 import 'chartiq/js/components';
 
-import marketFactory from '../marketFactory'; // CNBC market factory
-
 // Event Markers 
 import marker from 'chartiq/examples/markers/markersSample.js';
 import 'chartiq/examples/markers/tradeAnalyticsSample';
 import 'chartiq/examples/markers/videoSample';
 
-
 //import quoteFeed from "chartiq/examples/feeds/quoteFeedSimulator.js";
 
-// Setting up custom CNBC data connector using time series api
-import QuoteFeed from './DataConnector';
-
-
+import QuoteFeed from "../DataConnector.js";
 
 // Uncomment the following for the forecasting simulator (required for the forecasting sample).
 // import forecastQuoteFeed from "chartiq/examples/feeds/quoteFeedForecastSimulator.js";
@@ -70,12 +66,9 @@ import defaultConfig from 'chartiq/js/defaultConfiguration';
 // Uncomment the following for the L2 simulator (required for the crypto sample and MarketDepth addOn)
 // import 'chartiq/examples/feeds/L2_simulator'; /* for use with cryptoiq */
 
-
 // Creates a complete customised configuration object
 function getConfig(initialCNBCconfig) { 
-
 	const quoteFeed = new QuoteFeed(initialCNBCconfig);
-
 	return defaultConfig({
 		quoteFeed,
 		// forecastQuoteFeed, // uncomment to enable forecast quote feed simulator
@@ -90,42 +83,15 @@ function getCustomConfig({ chartId, symbol, onChartReady, initialCNBCconfig } = 
 
 	// Update chart configuration by modifying default configuration
 	config.chartId = chartId || "_advanced-chart";
-
 	config.initialSymbol = symbol || {
-		symbol: "AAPL",
+		symbol: "CMCSA",
 		name: "Apple Inc",
 		exchDisp: "NASDAQ"
 	};
 
-	// default config override for CNBC
-	config.themes.defaultTheme = 'ciq-day';
-
-	/*
-	const feedConfig = {
-		CIQ,
-		timeSeriesAppendUrl: '/adjusted/EST5EDT.json',
-		//noStreamableList,
-		//noHistoryDataList,
-		quotePageSymbol: 'CMCSA'
-	};
-
-
-	config.quoteFeed = new QuoteFeed(feedConfig); // setup the quoteFeed using time series API
-	config.defaultSymbol = symbolData.symbol;
-	config.chartConfig.layout = {
-	chartType: 'mountain',
-	crosshair: true,
-	};
-	*/	  
-
-	//quoteFeed
-	
-	config.marketFactory = marketFactory;
-
-	// config.quoteFeeds[0].behavior.refreshInterval = 0; // disables quotefeed refresh
-	/*
+	config.quoteFeeds[0].behavior.refreshInterval = 10; // disables quotefeed refresh
 	config.onChartReady = onChartReady;
-	
+
 	const {
 		marketDepth,
 		termStructure,
@@ -141,7 +107,6 @@ function getCustomConfig({ chartId, symbol, onChartReady, initialCNBCconfig } = 
 		// timeSpanEventPanel,
 		// visualEarnings
 	};
-	*/
 
 	// Enable / disable addOns
 	// config.enabledAddOns.tooltip = false;
