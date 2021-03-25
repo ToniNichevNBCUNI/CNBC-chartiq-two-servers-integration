@@ -1,0 +1,14 @@
+export const noHistoryDataList = ['.FTSE', '.FTMIB', '.FTSTI', '.KLSE'];
+export const noStreamableList = ['.DJIA'];
+export const weekendPremarketMultiplierValue = 2;
+export const minInHours = 60;
+export const firstPreMarketObjectEntry = 5;
+export const firstPostMarketObjectEntry = 10;
+export const timeZoneOffsetFromESTToUTC = 4;
+export const monthTimeUnit = 'month';
+export const weekTimeUnit = 'week';
+export const dayTimeUnit = 'day';
+export const minuteTimeUnit = 'minute';
+export const periodOrIntervalOne = 1;
+export const periodOrIntervalThree = 3;
+export const periodOrIntervalFive = 5;

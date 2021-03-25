@@ -110,7 +110,7 @@ module.exports = {
 
 			/* CHARTIQ CSS bundling rule, using SASS */
 			{
-				test: /.*(chartiq).*\.css$/,
+				test: /.*(chartiq|PhoenixChartWrapper).*\.css$/,
 				use: [
           {
             loader: MiniCssExtractPlugin.loader,
@@ -121,7 +121,7 @@ module.exports = {
 					'css-loader',
 					'sass-loader'
 				]
-			},    
+			},  
                         
     ]
   },
@@ -147,6 +147,7 @@ module.exports = {
 };
 
 function checkResource(resource, context) {
+  // exclude missing plug-ins that we don't have license.
 	if (!/^chartiq\//.test(resource)) {
 		return false;
 	}
@@ -157,6 +158,6 @@ function checkResource(resource, context) {
 	) {
 		return false;
 	}
-	console.warn('ERROR finding ' + resource);
+	console.warn('WARNING finding ' + resource);
 	return true;
 }

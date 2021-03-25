@@ -113,10 +113,10 @@ module.exports = {
 
 			/* CHARTIQ CSS bundling rule, using SASS */
 			{
-				test: /.*(chartiq).*\.css$/,
-        //test: /.*\.css$/,
+        test: /.*((c|C)hartiq).*\.css$/,
+        //test: /.*(chartiq).*\.css$/,
 				use: [
-          MiniCssExtractPlugin.loader,
+					MiniCssExtractPlugin.loader,
 					'css-loader',
 					'sass-loader'
 				]

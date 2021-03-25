@@ -5,7 +5,7 @@ import Loading from './Loading';
 let PhoenixChartWrapper = Loading;
 if (typeof document !== 'undefined') {
   PhoenixChartWrapper = Loadable({
-    loader: () => import ('./PhoenixChartWrapperContainer'),
+    loader: () => import ('./PhoenixChartWrapperWeb'),
     loading: Loading
   });
 }
