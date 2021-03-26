@@ -1,61 +1,57 @@
-import getChartTimeRange from './getChartTimeRange';
+import { CIQ } from "chartiq/js/componentUI";
 import DateHelper from './DateHelper';
-import { CIQ } from 'chartiq/js/chartiq';
 
-const TIME_SERIES_CHART_API = "//ts-api-qa.cnbc.com/harmony/app/charts";
-const TIME_SERIES_BAR_API = "//ts-api-qa.cnbc.com/harmony/app/bars";
+function consoleLogHelper(type, start, end, params) {
+  console.info(`===============================\n${type}\n-------------------------------`)
+  console.log(`interval: ${params.interval}`)
+  console.log(`period: ${params.period}`)
+  console.table([['StartDate', start], ['EndDate', end]])
+}
 
-let chartTimeRange = '1D';
-const is5YorALL = chartTimeRange === '5Y' || chartTimeRange === 'ALL';
-
-let startDate;
-let endDate;
-let granularity;
-
-let lastUpdatedTime;
-let shouldRequestBeMadeObj = { addNewDataOnly: false, fromInitialDataRequest: true, moreDataNeeded: !is5YorALL };
-let chartBuilderGlobal;
-
-
-
+function getGranularity(intervalValue, period) {
+  let interval
+  switch (intervalValue) {
+  case 'minute':
+    interval = 'M'
+    break
+  case 'day':
+    interval = 'D'
+    break
+  case 'year':
+    interval = 'Y'
+    break
+  default: 
+    interval = ''
+    break
+  }
+  return `${period}${interval}`
+}
 
 const DataConnector = (config) => {
+  const tsDataURL = config.time_series_api_url // http://ts-api.cnbc.com/harmony/app/bars/
+  const tsAppendURL = config.time_series_append_url // /adjusted/EST5EDT.json
+  const noStreamableList = config.no_streamable_list
+  //const CIQ = config.CIQ
 
-  const getGranularity = (intervalValue, period, suggestedStartDate) => {
-    if (suggestedStartDate.getFullYear() < 1990) {
-      return '3MO';
-    } else if (intervalValue === 'minute') {
-      return `${period}M`;
-    } else if (intervalValue === 'day') {
-      return `${period}D`;
-    }
-    return `${period}Y`;
-  }
+  let startDate
+  let endDate
+  let granularity
+  let lastUpdatedTime
+  let lastUrl
 
-  const supplyChartData = (queryUrl) => {
-    const postAjaxParamsObj = {
-      url: queryUrl,
-      cb: processTimeSeriesResponseCallback,
-      noEpoch: true, // tells chartiq to not use a cache burst query string
-    };
-    CIQ.postAjax(postAjaxParamsObj);
-    return postAjaxParamsObj;
-  }
-  
-  
-  const formatChartData = (rawChartData, sliceLastImportedData) => {
-    if (rawChartData.barData === null) { return []; }
-  
-    const chartData = rawChartData.barData.priceBars;
-    if (chartData.length === 0) { return []; }
-  
-    const formatedChartData = [];
-  
+  function formatChartData(rawChartData, sliceLastImportedData) {
+    if (rawChartData.barData === null) return
+    
+    const chartData = rawChartData.barData.priceBars
+    if (chartData.length === 0) return
+    
+    const formatedChartData = []
+
     // fix for loop
     for (let dd = chartData.length-1; dd >= 0; dd-=1) {
-      const UTCDate = DateHelper.dateStringToDateObject(chartData[dd].tradeTime);
-      if (sliceLastImportedData === true && UTCDate <= lastUpdatedTime) {
-        break;
+      const UTCDate = DateHelper.dateStringToDateObject(chartData[dd].tradeTime)
+      if (sliceLastImportedData === true && UTCDate < lastUpdatedTime) {
+    		break
       }
       formatedChartData.unshift({
         DT: UTCDate,
@@ -63,112 +59,98 @@ const DataConnector = (config) => {
         Open: parseFloat(chartData[dd].open),
         High: parseFloat(chartData[dd].high),
         Low: parseFloat(chartData[dd].low),
-        Volume: chartData[dd].volume === null ? undefined : parseInt(chartData[dd].volume, 10),
-      });
+        Volume: chartData[dd].volume == null ? undefined : parseInt(chartData[dd].volume, 10),
+      })
     }
-    const lastDataPoint = chartData.length - 1;
-    lastUpdatedTime = DateHelper.dateStringToDateObject(chartData[lastDataPoint].tradeTime);
-    return formatedChartData;
+    const lastDataPoint = chartData.length - 1
+    lastUpdatedTime = DateHelper.dateStringToDateObject(chartData[lastDataPoint].tradeTime)
+    // console.log('FORMATED CHART DATA')
+    // console.log(formatedChartData)
+    return formatedChartData
   }
-  
 
-  const processTimeSeriesResponseCallback = (status, response, deps) => {
-    if (deps) {
-      if (deps.cb) {
-        chartBuilderGlobal = deps.cb;
-      }
-      if (deps.shouldRequestBeMadeObj) {
-        shouldRequestBeMadeObj = deps.shouldRequestBeMadeObj;
+  function supplyChartData(queryUrl, chartBuilder, addNewDataOnly) {
+    const processTimeSeriesResponseCallback = (status, response) => {
+      // process the HTTP response from the datafeed
+      if (status === 200) { // if successful response from datafeed
+        const rawChartData=JSON.parse(response)
+        let formatedChartData = {}
+        if (addNewDataOnly) {
+          formatedChartData = formatChartData(rawChartData, true)
+        } else {
+          formatedChartData = formatChartData(rawChartData, false)
+        }
+
+        if (lastUrl === queryUrl && addNewDataOnly === false) {
+          chartBuilder({ moreAvailable: false })
+        } else {
+          chartBuilder({ 
+            quotes: formatedChartData, 
+            attribution: { source: 'CNBC' } 
+          }); 
+          // return the fetched data; init moreAvailable to enable pagination
+        }
+        lastUrl = queryUrl
+        // return the fetched data; init moreAvailable to enable pagination
+      } else { // else error response from datafeed
+        chartBuilder({ error: status });	// specify error in callback
       }
     }
-  
-    // process the HTTP response from the datafeed
-    if (status === 200) { // if successful response from datafeed
-      const rawChartData=JSON.parse(response);
-      let formatedChartData;
-      if (shouldRequestBeMadeObj.addNewDataOnly) {
-        formatedChartData = formatChartData(rawChartData, true);
-      } else {
-        formatedChartData = formatChartData(rawChartData, false);
-      }
-  
-      if (
-        shouldRequestBeMadeObj.addNewDataOnly === false &&
-        (config.noHistoryDataList.indexOf(config.quotePageSymbol.toUpperCase()) !== -1 ||
-        !shouldRequestBeMadeObj.fromInitialDataRequest)
-      ) {
-        chartBuilderGlobal({ quotes: formatedChartData, moreAvailable: false });
-        return;
-      }
-      chartBuilderGlobal({
-        quotes: formatedChartData,
-        attribution: { source: 'CNBC' },
-        moreAvailable: shouldRequestBeMadeObj.moreDataNeeded || false,
-      });
-    } else {
-      // else error response from datafeed & specify error in callback
-      chartBuilderGlobal({ error: status });
+    const postAjaxParamsObj = {
+      url: queryUrl,
+      cb: processTimeSeriesResponseCallback,
+      noEpoch: true, // tells chartiq to not use a cache burst query string
     }
-  };  
-
-  // Public methods
+    console.log(postAjaxParamsObj);
+    CIQ.postAjax(postAjaxParamsObj);
+    return postAjaxParamsObj;
+  }
 
   // called by chart to fetch initial data
-  const fetchInitialData = (symbol, suggestedStartDate, suggestedEndDate, params, cb) => {
-    /*
-    if (!window.stxx) {
-      //return;
-    }
-    */
-
-    let chartTimeRange;
-    chartBuilderGlobal = cb;
-    if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) !== -1) {
-      chartTimeRange = '1D';
+  function fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, cb) {
+    if (config.noHistoryDataList.indexOf(symbol.toLowerCase()) !== -1) {
+      const today = DateHelper.getBeginningOfTheDay()
+      startDate = DateHelper.dateToDateStr(today)
     } else {
-      chartTimeRange = getChartTimeRange();
+      startDate = DateHelper.dateToDateStr(suggestedStartDate)
     }
-
-    const is5YorALL = chartTimeRange === '5Y' || chartTimeRange === 'ALL';
-    const queryUrl = `${TIME_SERIES_CHART_API}/${chartTimeRange}.json?symbol=${symbol}`;
-
-    let shouldRequestBeMadeObj = { addNewDataOnly: false, fromInitialDataRequest: true, moreDataNeeded: !is5YorALL }; // to-do: what is this?!? This value is not even been used
-    return supplyChartData(queryUrl);
+    endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay())
+    granularity = getGranularity(params.interval, params.period)
+    const queryUrl = `${tsDataURL}${symbol}/${granularity}/${startDate}/${endDate}${tsAppendURL}`
+    return supplyChartData(queryUrl, cb, false)
   }
 
   // called by chart to fetch pagination data
-  const fetchPaginationData = (symbol, suggestedStartDate, suggestedEndDate, params, cb) => {
+  function fetchPaginationData(symbol, suggestedStartDate, suggestedEndDate, params, cb) {
     // consoleLogHelper('fetchPaginationData', suggestedStartDate, endDate, params)
-    // TODO: can we not polute chart engine with custom props ?
-    //if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) === -1 && !stxx.justSelectedTimeRange) {
-      if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) === -1) {
-      startDate = DateHelper.dateToDateStr(suggestedStartDate);
-      endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay());
-      granularity = getGranularity(params.interval, params.period, suggestedStartDate);
-      const queryUrl = `${TIME_SERIES_BAR_API}/${symbol}/${granularity}/${startDate}/${endDate}${config.timeSeriesAppendUrl}?type=scroll`;
-      chartBuilderGlobal = cb;
-      shouldRequestBeMadeObj = { addNewDataOnly: false, fromInitialDataRequest: false };
-      return supplyChartData(queryUrl);
+    if (config.noHistoryDataList.indexOf(symbol.toLowerCase()) === -1) {
+      startDate = DateHelper.dateToDateStr(suggestedStartDate)
+      endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay())
+      granularity = getGranularity(params.interval, params.period)
+      const queryUrl = `${tsDataURL}${symbol}/${granularity}/${startDate}/${endDate}${tsAppendURL}`
+      return supplyChartData(queryUrl, cb, false)
     }
-  }  
+  }
 
   // called by chart to fetch update data
-  const fetchUpdateData = (symbol, suggestedStartDate, params, cb) => {
+  function fetchUpdateData(symbol, suggestedStartDate, params, cb) {
     // consoleLogHelper('fetchUpdateData', suggestedStartDate, '', params)
-    if (config.noStreamableList.indexOf(symbol) === -1) {
+    if (noStreamableList.indexOf(symbol) === -1) {
+      console.info('Chart update request ...')
       // if symbol is not in the 'noStreamableList', proceed with update
-      const queryUrl = `${TIME_SERIES_CHART_API}/${chartTimeRange}.json?symbol=${symbol}`;
-      chartBuilderGlobal = cb;
-      shouldRequestBeMadeObj = { addNewDataOnly: true, fromInitialDataRequest: false };
-		  return supplyChartData(queryUrl);
+      startDate = DateHelper.dateToDateStr(DateHelper.getBeginningOfTheDay())
+      endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay())
+      granularity = getGranularity(params.interval, params.period)
+      const queryUrl = `${tsDataURL}${symbol}/${granularity}/${startDate}/${endDate}${tsAppendURL}`
+		  return supplyChartData(queryUrl, cb, true)
     }
-  }  
+  }
 
   return {
     fetchInitialData,
-    fetchPaginationData,
-    fetchUpdateData
+    fetchUpdateData,
+    fetchPaginationData
   }
 }
 
-export default DataConnector;
+export default DataConnector

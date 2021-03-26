@@ -37,6 +37,11 @@ export default class CustomChart extends React.Component {
 			noHistoryDataList : '',
 			noStreamableList: '',
 			timeSeriesAppendUrl: '/adjusted/EST5EDT.json',
+
+			quote_api_url: 'https://quote.cnbc.com/quote-html-webservice/quote.htm?exthrs=1&output=json&partnerId=2&1473869228859&symbols=',
+			time_series_api_url: 'https://ts-api.cnbc.com/harmony/app/bars/',
+			time_series_append_url: '/adjusted/EST5EDT.json',
+			no_streamable_list: ['.DJIA'],			
 		}
 
 		this.config = getCustomConfig({ ... props, initialCNBCconfig});
