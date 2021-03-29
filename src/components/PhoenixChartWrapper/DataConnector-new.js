@@ -126,7 +126,6 @@ const DataConnector = (config) => {
 
     const is5YorALL = chartTimeRange === '5Y' || chartTimeRange === 'ALL';
     const queryUrl = `${TIME_SERIES_CHART_API}/${chartTimeRange}.json?symbol=${symbol}`;
-    debugger;
 
     let shouldRequestBeMadeObj = { addNewDataOnly: false, fromInitialDataRequest: true, moreDataNeeded: !is5YorALL }; // to-do: what is this?!? This value is not even been used
     return supplyChartData(queryUrl);

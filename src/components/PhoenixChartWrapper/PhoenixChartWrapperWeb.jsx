@@ -4,6 +4,8 @@ import { CIQ } from "chartiq/js/componentUI";
 import { default as AdvancedChart } from "./AdvancedChart/AdvancedChart";
 import { getCustomConfig } from "./AdvancedChart/resources";
 
+import setSpanOverride from './untestableChartiqCustomLogic/setSpanOverride';
+
 // Base styles required for all charts
 import "./styles/base-imports";
 
@@ -67,8 +69,10 @@ export default class CustomChart extends React.Component {
 	componentDidMount() {}
 
 	postInit({ chartEngine, uiContext }) {
-		chartEngine.setChartType("mountain"); // CNBC customization 
+		chartEngine.setChartType("mountain"); // CNBC customizations
 		//this.setState({ stx: chartEngine, uiContext: uiContext });
+
+		//setSpanOverride();
 	}
 
 
