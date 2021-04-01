@@ -10,9 +10,7 @@ const Loading = (props) => {
   if (props.error) {
     return (<div className={styles.errorWrapper}>
               <div className={styles.msg}>
-                <h3>ChartIQ component not rendered!</h3> 
-                <p>If you wnat to have ChartIQ component rendered,</p>
-                <p>use <span>yarn start-dev-with-chart</span> instead of <span>start-dev</span></p>
+                <h3>Chart error:{props.error}</h3> 
               </div>
             </div>);
   } else {

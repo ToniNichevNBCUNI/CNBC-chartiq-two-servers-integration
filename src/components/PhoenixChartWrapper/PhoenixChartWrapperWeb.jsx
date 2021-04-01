@@ -4,7 +4,23 @@ import { CIQ } from "chartiq/js/componentUI";
 import { default as AdvancedChart } from "./AdvancedChart/AdvancedChart";
 import { getCustomConfig } from "./AdvancedChart/resources";
 
+import setUpChartConfig from './customChartLogic/setupChartConfig';
+
+import getChartInitParams from './customChartLogic/getChartInitParams';
+import setupThemeForChart from './customChartLogic/setupThemeForChart';
+import getPeriodicity from './customChartLogic/getPeriodicity';
+import updateLastChartTick from './customChartLogic/updateLastChartTick';
+
+
+import timeRangeOverride from './untestableChartiqCustomLogic/timeRangeOverride';
 import setSpanOverride from './untestableChartiqCustomLogic/setSpanOverride';
+import setPeriodicityOverride from './untestableChartiqCustomLogic/setPeriodicityOverride';
+import chartXAxisOVerride from './untestableChartiqCustomLogic/chartXAxisOverride';
+import setExtendedHours from './untestableChartiqCustomLogic/setExtendedHours';
+import keyStrokeOverride from './untestableChartiqCustomLogic/keyStrokeOverride';
+
+import LookupDriver from './lookupDriver';
+
 
 // Base styles required for all charts
 import "./styles/base-imports";
@@ -55,6 +71,8 @@ export default class CustomChart extends React.Component {
 		this.config.themes.defaultTheme = 'ciq-day';
 
 		//let stxx = this.config.createChart();
+
+		setUpChartConfig(this.initialSymbolData, this.config);
 
 		// optionally store CIQ, stx, uiContext, ... objects in the state for easy access
 		this.state = {

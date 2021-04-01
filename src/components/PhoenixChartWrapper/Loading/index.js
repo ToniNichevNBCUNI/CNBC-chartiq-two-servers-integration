@@ -8,11 +8,11 @@ const styles = require('./styles.scss');
  */
 const Loading = (props) => {
   if (props.error) {
+    const err =  props.error + "";
     return (<div className={styles.errorWrapper}>
               <div className={styles.msg}>
-                <h3>ChartIQ component not rendered!</h3> 
-                <p>If you wnat to have ChartIQ component rendered,</p>
-                <p>use <span>yarn start-dev-with-chart</span> instead of <span>start-dev</span></p>
+                <h3>Chart error: </h3> 
+                <p>{err}</p>
               </div>
             </div>);
   } else {

@@ -16,7 +16,10 @@ module.exports = {
   devtool: 'source-map',
 
 	resolve: {
-		extensions: ['.js', '.jsx']
+    alias: {
+      app: path.resolve(projectRootPath, 'src/app/'),
+    },     
+		extensions: ['.js', '.jsx']   
   },
   
 	externals: {
