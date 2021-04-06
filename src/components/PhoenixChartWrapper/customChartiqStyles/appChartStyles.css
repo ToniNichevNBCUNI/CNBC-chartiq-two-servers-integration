@@ -1,0 +1,154 @@
+.chartiqAppWrapper {
+  margin: 0;
+  height: 100%;
+}
+
+.chartiqAppWrapper .ciq-chart-area {
+  padding: 0;
+  top: 0;
+}
+
+.chartiqAppWrapper .cq-chart-container.break-sm,
+.chartiqAppWrapper .cq-chart-container.break-md {
+  height: 500px;
+  position: relative;
+}
+
+.chartiqAppWrapper .cq-chart-container.break-lg {
+  height: 395px;
+  position: relative;
+}
+
+.chartiqAppWrapper *[cq-context] .break-sm .sidenav-toggle,
+.chartiqAppWrapper .ciq-menu.ciq-studies,
+.chartiqAppWrapper .ciq-menu.ciq-display,
+.chartiqAppWrapper .ciq-search,
+.chartiqAppWrapper .ciq-nav,
+.chartiqAppWrapper chartiq-chart-container cq-chart-title,
+.chartiqAppWrapper cq-comparison[cq-show] {
+  display: none;
+}
+
+.chartiqAppWrapper stx-hu-tooltip {
+  border: 2px solid gray;
+  background-color: rgba(115, 115, 115, 0.8);
+  z-index: 99;
+}
+
+.stx-ico-handle {
+  display: none;
+}
+
+/* CHART TOOLS */
+.chartiqAppWrapper .ciq-nav {
+  background: #fff;
+}
+
+.chartiqAppWrapper .ciq-nav cq-toggle > * {
+  margin-left: 2px;
+}
+
+.chartiqAppWrapper cq-toolbar .ciq-select {
+  margin-left: 0px;
+}
+
+.chartiqAppWrapper cq-toolbar {
+  margin-top: 13px;
+  padding: 0;
+  font-size: 12px;
+  width: 94%;
+  display: inline-block;
+  float: none;
+}
+
+.chartiqAppWrapper .stx_chart_controls.chartControls,
+cq-study-legend {
+  display: none !important;
+}
+
+.chartiqAppWrapper .stx_mountain_chart {
+  width: 2px;
+  border-top-color: rgba(32, 119, 182, 1);
+  background-color: rgba(0, 103, 198, 1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.chartiqAppWrapper .stx_line_chart {
+  width: 1px;
+}
+
+.chartiqAppWrapper cq-dialog[cq-study-dialog] {
+  top: auto !important;
+}
+
+/* VOLUME UNDERLAY STUDY OVERRIDES */
+.chartiqAppWrapper .stx_volume_underlay_up,
+.chartiqAppWrapper .stx_volume_underlay_down {
+  opacity: 0.7;
+}
+
+.chartiqAppWrapper .ciq-nav > button {
+  float: right;
+}
+
+/* TIME RANGE */
+.chartiqAppWrapper cq-show-range > div {
+  padding: 0 12px;
+  font-weight: 500;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: rgba(32, 119, 182, 1);
+}
+
+.chartiqAppWrapper div.ciq-nav > cq-show-range {
+  position: relative;
+  float: left;
+}
+
+/* PREMARKET/POSTMARKET */
+.chartiqAppWrapper .stx_market_session.pre {
+  background-color: rgba(85, 85, 85, 0.2);
+}
+
+.chartiqAppWrapper .stx_market_session.post {
+  background-color: rgba(51, 51, 51, 0.1);
+}
+
+.chartiqAppWrapper .chartTimeIntervalSelected {
+  color: #2077b6;
+  border-bottom: 3px solid #2077b6;
+  background: transparent;
+}
+
+.chartiqAppWrapper cq-attrib-container {
+  display: none;
+}
+
+/* NIGHT MODE START */
+
+.chartiqAppWrapper .ciq-night .chartContainer {
+  background-color: #000;
+}
+
+.chartiqAppWrapper .ciq-night .stx_mountain_chart {
+  width: 2px;
+  border-top-color: rgba(180, 217, 255, 1);
+  background-color: transparent;
+  color: rgba(0, 102, 255, 0.01);
+}
+
+.chartiqAppWrapper .ciq-night cq-attrib-container {
+  display: none;
+}
+
+/* PREMARKET/POSTMARKET */
+.chartiqAppWrapper .ciq-night .stx_market_session.pre {
+  background-color: rgba(119, 119, 119, 0.3);
+}
+
+
+.chartiqAppWrapper .ciq-night .stx_market_session.post {
+  background-color: rgba(85, 85, 85, 0.3);
+}
+
+/* NIGHT MODE END */

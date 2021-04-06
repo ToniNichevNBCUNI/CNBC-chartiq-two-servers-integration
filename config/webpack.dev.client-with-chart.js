@@ -18,6 +18,7 @@ module.exports = {
 	resolve: {
     alias: {
       app: path.resolve(projectRootPath, 'src/app/'),
+      utilities: path.resolve(projectRootPath, 'src/utilities/'),
     },     
 		extensions: ['.js', '.jsx']   
   },

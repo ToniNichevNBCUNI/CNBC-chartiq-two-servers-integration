@@ -19,7 +19,7 @@ const quoteData =  {
 }
 
 const Renderer = () => (
-  <div className="chartiqWrapper">
+  <div className="chartiqWebWrapper">
     <PhoenixChartWrapper quoteData={quoteData} onChartReady={onChartReady()} />
   </div>
 );

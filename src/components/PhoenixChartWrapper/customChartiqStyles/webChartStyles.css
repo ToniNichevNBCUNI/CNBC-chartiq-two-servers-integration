@@ -1,0 +1,194 @@
+/* CHART CONTAINER OVERRIDES */
+.chartiqWebWrapper {
+  margin-top: 20px;
+}
+
+.chartiqWebWrapper .ciq-chart-area {
+  padding: 0;
+  top: 90px;
+}
+
+.chartiqWebWrapper .cq-chart-container,
+.chartiqWebWrapper .cq-chart-container.break-lg,
+.chartiqWebWrapper .cq-chart-container.break-sm,
+.chartiqWebWrapper .cq-chart-container.break-lg {
+  /* border: 1px solid silver; */
+  height: 395px;
+  position: relative;
+}
+
+/* CHART DRAW & STUDIES STYLE OVERRIDES */
+.chartiqWebWrapper .stx_mountain_chart {
+  width: 1px;
+  border-top-color: rgba(32, 119, 182, 1);
+  background-color: rgba(147, 184, 219, 1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.chartiqWebWrapper .stx_line_chart {
+  width: 1px;
+}
+
+.chartiqWebWrapper cq-dialog[cq-study-dialog] {
+  top: auto !important;
+}
+
+/* VOLUME UNDERLAY STUDY OVERRIDES */
+.chartiqWebWrapper .stx_volume_underlay_up,
+.chartiqWebWrapper .stx_volume_underlay_down {
+  opacity: 0.7;
+}
+
+/* TIME RANGE */
+.chartiqWebWrapper cq-show-range > div {
+  font-weight: 500;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: rgba(32, 119, 182, 1);
+}
+
+.chartiqWebWrapper .ciq-nav cq-show-range {
+  position: relative;
+  float: inherit;
+}
+
+.chartiqWebWrapper .chartTimeIntervalSelected {
+  background: #B4D9FF;
+}
+
+/* CHART TOOLS */
+.chartiqWebWrapper .ciq-nav {
+  background: #fff;
+}
+
+.chartiqWebWrapper .ciq-nav cq-toggle > * {
+  margin-left: 2px;
+}
+
+.chartiqWebWrapper cq-toolbar .ciq-select {
+  margin-left: 0px;
+}
+
+.chartiqWebWrapper cq-toolbar {
+  margin-top: 13px;
+  padding: 0;
+  font-size: 12px;
+  width: 94%;
+  display: inline-block;
+  float: none;
+}
+
+/* COMPARISON SEARCH */
+.chartiqWebWrapper .break-md .ciq-search {
+  width: 135px;
+}
+
+.chartiqWebWrapper .break-md cq-lookup {
+  width: auto;
+}
+
+.chartiqWebWrapper .ciq-search {
+  width: 180px;
+}
+
+.chartiqWebWrapper cq-lookup {
+  width: auto;
+}
+
+.chartiqWebWrapper .preloaded-comparison {
+  width: 1px;
+}
+
+.chartiqWebWrapper cq-lookup-results cq-scroll object,
+.chartiqWebWrapper cq-attrib-container,
+.chartiqWebWrapper cq-chart-title cq-symbol,
+.chartiqWebWrapper .ciq-search,
+.title-overlay-controls cq-chart-title.stx-show,
+.title-overlay-controls cq-comparison[cq-show],
+cq-comparison > cq-comparison-key > cq-comparison-item > cq-comparison-price {
+  display: none;
+}
+
+/* HEADSUP & TOOLTIP */
+.chartiqWebWrapper stx-hu-tooltip {
+  border: 2px solid gray;
+  background-color: rgba(115, 115, 115, 0.8);
+  z-index: 99;
+}
+
+.chartiqWebWrapper .stx_chart_controls {
+  display: none !important;
+}
+
+/* PREMARKET/POSTMARKET */
+.chartiqWebWrapper .stx_market_session.pre {
+  background-color: rgba(159, 217, 253, 0.2);
+}
+
+.chartiqWebWrapper .stx_market_session.post {
+  background-color: rgba(115, 115, 115, 0.1);
+}
+
+/* Expand chart button */
+
+.chartiqWebWrapper .ciq-nav > button {
+  float: right;
+}
+
+.chartiqWebWrapper .ciq-toggles {
+  padding: 0;
+  float: right;
+  padding-left: 10px;
+}
+
+.chartiqWebWrapper .break-md .ciq-menu-section {
+  float: right;
+  position: relative;
+  padding-left: 10px;
+}
+
+.ciq-nav cq-comparison {
+  float: left;
+  margin-top: 15px;
+}
+
+cq-comparison cq-comparison-add-label {
+  padding-left: 0;
+}
+
+.ciq-nav cq-comparison cq-menu,
+.ciq-nav cq-comparison[cq-show] {
+  display: inline;
+}
+
+.ciq-nav cq-comparison-key {
+  display: inline-block;
+  padding-left: 5px;
+  bottom: 7px;
+  float: right;
+  width: auto;
+}
+
+.chartiqWebWrapper cq-comparison {
+  width: auto;
+}
+
+cq-comparison cq-comparison-add {
+  min-width: 90px;
+}
+
+cq-comparison-key cq-comparison-item {
+  width: auto;
+  display: inline-block;
+}
+
+cq-comparison-key cq-comparison-item .ciq-close {
+  margin-left: 0;
+}
+
+cq-comparison-lookup-frame,
+cq-comparison-add cq-swatch,
+cq-comparison-add cq-accept-btn {
+  position: relative;
+}
+
