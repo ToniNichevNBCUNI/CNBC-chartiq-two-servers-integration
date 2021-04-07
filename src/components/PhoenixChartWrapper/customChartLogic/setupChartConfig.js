@@ -10,7 +10,7 @@ const setUpRangesAndPeriodicity = (symbolData, config) => {
     config.rangeMenu = [
       { label: '1D', multiplier: 1, base: 'today', interval: 1, timeUnit: 'minute', available: 'always' }
     ];
-    config.menuPeriodicity = null;
+    config.menuPeriodicity = [];
   } else if (symbolData.subType === 'Mutual Fund') {
     config.rangeMenu = [
       { type: 'range', label: '1M', cmd: 'set(1, \'month\')' },
@@ -22,9 +22,9 @@ const setUpRangesAndPeriodicity = (symbolData, config) => {
       { type: 'range', label: 'All', cmd: 'set(1, \'all\')' },
     ];
     config.menuPeriodicity = [
-      { label: '1 D', periodicity: 1, interval: 1, timeUnit: 'day', className: 'item-hide-1d' },
-      { label: '1 W', periodicity: 1, interval: 1, timeUnit: 'week', className: 'item-hide-1w' },
-      { label: '1 Mo', periodicity: 1, interval: 1, timeUnit: 'month', className: 'item-hide-1mo' },
+      { type: 'item', label: '1 D', cmd: 'Layout.setPeriodicity(1,1,\'day\')', cls: 'item-hide-1d' },
+      { type: 'item', label: '1 W', cmd: 'Layout.setPeriodicity(1,1,\'week\')', cls: 'item-hide-1w' },
+      { type: 'item', label: '1 Mo', cmd: 'Layout.setPeriodicity(1,1,\'month\')', cls: 'item-hide-1mo' },
     ];
   } else {
     config.rangeMenu = [
@@ -38,32 +38,17 @@ const setUpRangesAndPeriodicity = (symbolData, config) => {
       { type: 'range', label: '5Y', cmd: 'set(5, \'year\',1,1,\'week\')' },
       { type: 'range', label: 'All', cmd: 'set(1, \'all\')' },
     ];
-
     config.menuPeriodicity = [
-      { type: "item", label: "1 D", cmd: "Layout.setPeriodicity(1,1,'day')" },
-      { type: "item", label: "1 W", cmd: "Layout.setPeriodicity(1,1,'week')" },
-      { type: "item", label: "1 Mo", cmd: "Layout.setPeriodicity(1,1,'month')" },
-      { type: "separator", },
-      { type: "item", label: "1 Min", cmd: "Layout.setPeriodicity(1,1,'minute')" },
-      { type: "item", label: "5 Min", cmd: "Layout.setPeriodicity(1,5,'minute')" },
-      { type: "item", label: "10 Min", cmd: "Layout.setPeriodicity(1,10,'minute')" },
-      { type: "item", label: "15 Min", cmd: "Layout.setPeriodicity(3,5,'minute')" },
-      { type: "item", label: "30 Min", cmd: "Layout.setPeriodicity(1,30,'minute')" },
-      { type: "item", label: "1 Hour", cmd: "Layout.setPeriodicity(2,30,'minute')" },
+      { type: 'item', label: '1 D', cmd: 'Layout.setPeriodicity(1,1,\'day\')', cls: 'item-hide-1d' },
+      { type: 'item', label: '1 W', cmd: 'Layout.setPeriodicity(1,1,\'week\')', cls: 'item-hide-1w' },
+      { type: 'item', label: '1 Mo', cmd: 'Layout.setPeriodicity(1,1,\'month\')', cls: 'item-hide-1mo' },
+      { type: 'item', label: '1 Min', cmd: 'Layout.setPeriodicity(1,1,\'minute\')', cls: 'item-hide-1m' },
+      { type: 'item', label: '5 Min', cmd: 'Layout.setPeriodicity(1,5,\'minute\')', cls: 'item-hide-5m' },
+      { type: 'item', label: '10 Min', cmd: 'Layout.setPeriodicity(1,10,\'minute\')', cls: 'item-hide-10m' },
+      { type: 'item', label: '15 Min', cmd: 'Layout.setPeriodicity(1,15,\'minute\')', cls: 'item-hide-15m' },
+      { type: 'item', label: '30 Min', cmd: 'Layout.setPeriodicity(1,30,\'minute\')', cls: 'item-hide-30m' },
+      { type: 'item', label: '1 Hour', cmd: 'Layout.setPeriodicity(1,60,\'minute\')', cls: 'item-hide-1h' },
     ];
-    /*    
-    config.menuPeriodicity = [
-      { label: '1 D', periodicity: 1, interval: 1, timeUnit: 'day', className: 'item-hide-1d' },
-      { label: '1 W', periodicity: 1, interval: 1, timeUnit: 'week', className: 'item-hide-1w' },
-      { label: '1 Mo', periodicity: 1, interval: 1, timeUnit: 'month', className: 'item-hide-1mo' },
-      { label: '1 Min', periodicity: 1, interval: 1, timeUnit: 'minute', className: 'item-hide-1m' },
-      { label: '5 Min', periodicity: 5, interval: 1, timeUnit: 'minute', className: 'item-hide-5m' },
-      { label: '10 Min', periodicity: 10, interval: 1, timeUnit: 'minute', className: 'item-hide-10m' },
-      { label: '15 Min', periodicity: 15, interval: 1, timeUnit: 'minute', className: 'item-hide-15m' },
-      { label: '30 Min', periodicity: 30, interval: 1, timeUnit: 'minute', className: 'item-hide-30m' },
-      { label: '1 Hour', periodicity: 60, interval: 1, timeUnit: 'minute', className: 'item-hide-1h' },
-    ];
-    */
   }
 };
 

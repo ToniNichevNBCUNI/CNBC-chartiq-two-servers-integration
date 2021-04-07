@@ -35,7 +35,6 @@
 
 .chartWrapper {
 	position: relative;
-	margin: 10px;
 	height: 40vh;
 	border: 10px solid red;
 }

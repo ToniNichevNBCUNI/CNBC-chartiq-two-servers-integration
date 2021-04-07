@@ -6,6 +6,7 @@
 .chartiqWebWrapper .ciq-chart-area {
   padding: 0;
   top: 90px;
+  bottom: 0;
 }
 
 .chartiqWebWrapper .cq-chart-container,
@@ -103,8 +104,8 @@
 .chartiqWebWrapper cq-attrib-container,
 .chartiqWebWrapper cq-chart-title cq-symbol,
 .chartiqWebWrapper .ciq-search,
-.title-overlay-controls cq-chart-title.stx-show,
-.title-overlay-controls cq-comparison[cq-show],
+cq-chart-title.stx-show,
+cq-comparison[cq-show],
 cq-comparison > cq-comparison-key > cq-comparison-item > cq-comparison-price {
   display: none;
 }

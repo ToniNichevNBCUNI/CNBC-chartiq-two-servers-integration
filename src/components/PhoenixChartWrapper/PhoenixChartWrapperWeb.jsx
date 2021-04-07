@@ -1,28 +1,26 @@
 import React from "react";
 import { CIQ } from "chartiq/js/componentUI";
 
-import { default as AdvancedChart } from "./AdvancedChart/AdvancedChart";
+import AdvancedChart from "./AdvancedChart/AdvancedChart";
 import { getCustomConfig } from "./AdvancedChart/resources";
 
 // Base styles required for all charts
 import './styles/base-imports';
 
+// CNBC customizations
+// import { useQueryParamContext } from 'contexts/QueryParamContext';
+import quoteChartAnalyticsObj from 'utilities/QuoteAnalytics';
+
 // Custom Chart IQ
 import './CustomChart.css';
 import './customChartiqStyles/webChartStyles.css';
-import { default as ShortcutDialog } from './ShortcutDialog/ShortcutDialog';
-import { default as RecentSymbols } from './RecentSymbols/RecentSymbols';
-
-// CNBC customizations
-//import { useQueryParamContext } from 'contexts/QueryParamContext';
-import quoteChartAnalyticsObj from 'utilities/QuoteAnalytics';
+import ShortcutDialog from './ShortcutDialog/ShortcutDialog';
+import RecentSymbols from './RecentSymbols/RecentSymbols';
 
 import setUpChartConfig from './customChartLogic/setupChartConfig';
 import getChartInitParams from './customChartLogic/getChartInitParams';
 import setupThemeForChart from './customChartLogic/setupThemeForChart';
-import getPeriodicity from './customChartLogic/getPeriodicity';
 import updateLastChartTick from './customChartLogic/updateLastChartTick';
-
 
 import timeRangeOverride from './untestableChartiqCustomLogic/timeRangeOverride';
 import setSpanOverride from './untestableChartiqCustomLogic/setSpanOverride';
@@ -34,10 +32,10 @@ import keyStrokeOverride from './untestableChartiqCustomLogic/keyStrokeOverride'
 import LookupDriver from './lookupDriver';
 
 import {
-	noHistoryDataList,
-	noStreamableList,
-	dayTimeUnit,
-	minuteTimeUnit,
+  noHistoryDataList,
+  noStreamableList,
+  dayTimeUnit,
+  minuteTimeUnit,
 } from './chartConstants';
 
 /**
@@ -49,79 +47,80 @@ import {
  */
 class CustomChartWeb extends React.Component {
 
-	constructor(props) {
-		super(props);
-		this.store = new CIQ.NameValueStore();
-		this.hasInitialized = false;
-		this.initialSymbolData;
-		this.globalQueryParams;
+  constructor(props) {
+    super(props);
+    this.store = new CIQ.NameValueStore();
+    this.hasInitialized = false;
+    this.initialSymbolData;
+    this.globalQueryParams;
 
-		this.hasInitialized;
-		this.setHasInitialized;
+    this.hasInitialized;
+    this.setHasInitialized;
 
-		const {
-			quoteData
-		} = props;
+    const {
+      quoteData
+    } = props;
 
-		if (Array.isArray(quoteData)) {
-			//setUpChartConfig(quoteData[0], this.config);
-			this.initialSymbolData = quoteData[0];
-		} else {
-			//setUpChartConfig(quoteData, this.config);	
-			this.initialSymbolData = quoteData;
-		}		
+    if (Array.isArray(quoteData)) {
+      this.initialSymbolData = quoteData[0];
+    } else {
+      this.initialSymbolData = quoteData;
+    }
 
-		const initialCNBCconfig = {
-			quotePageSymbol: this.initialSymbolData.symbol,
-			noHistoryDataList,
-			noStreamableList,
-			timeSeriesAppendUrl: '/adjusted/EST5EDT.json',
+    const initialCNBCconfig = {
+      quotePageSymbol: this.initialSymbolData.symbol,
+      noHistoryDataList,
+      noStreamableList,
+      timeSeriesAppendUrl: '/adjusted/EST5EDT.json',			
+    };
 
-			quote_api_url: 'https://quote.cnbc.com/quote-html-webservice/quote.htm?exthrs=1&output=json&partnerId=2&1473869228859&symbols=',
-			time_series_api_url: 'https://ts-api.cnbc.com/harmony/app/bars/',
-			time_series_append_url: '/adjusted/EST5EDT.json',
-			no_streamable_list: ['.DJIA'],					
-		}    
-    
-    	this.config = getCustomConfig({ ...props, initialCNBCconfig });
+    this.config = getCustomConfig({ ...props, initialCNBCconfig });
 
-		this.config.initialSymbol = {
-			symbol: this.initialSymbolData.symbol
-		};			
+    this.config.initialSymbol = {
+      symbol: this.initialSymbolData.symbol
+    };
 
-		this.config.themes.defaultTheme = 'ciq-day';
+    this.config.themes.defaultTheme = 'ciq-day';
 
-		setUpChartConfig(this.initialSymbolData, this.config);
-		
-		this.state = {
-			chart: new CIQ.UI.Chart(),
-			stx: null,
-			uiContext: null,
-			chartInitializedCallback: props.chartInitialized,
-			shortcutDialog: false,
-			// CNBC
-			hasInitialized: false,
-			setHasInitialized: false
-		};
-	}
+    setUpChartConfig(this.initialSymbolData, this.config);
 
-	componentDidMount() {
-	}
-
+    this.state = {
+      chart: new CIQ.UI.Chart(),
+      stx: null,
+      uiContext: null,
+      shortcutDialog: false,
+      // CNBC
+      hasInitialized: false,
+      setHasInitialized: false
+    };
+  }
 
 	/**
 	 * Called after chartEngine.loadChart
 	 */
 	chartInitCallback = () => {
-		if (stxx.currentBase !== 'today' && this.initialSymbolData.curmktstatus !== 'REG_MKT') {
-			stxx.home({ maintainWhitespace:false });
-		}
-		quoteChartAnalyticsObj.setUpQuoteChartAnalytics();
-		if (noHistoryDataList.indexOf(this.initialSymbolData.symbol.toUpperCase()) !== -1) {
-			stxx.allowZoom = false;
-			stxx.allowScroll = false;
-		}
-	}	  
+    console.log('herere');
+    if (stxx.currentBase !== 'today' && this.initialSymbolData.curmktstatus !== 'REG_MKT') {
+      stxx.home({ maintainWhitespace: false });
+    }
+    quoteChartAnalyticsObj.setUpQuoteChartAnalytics();
+    if (noHistoryDataList.indexOf(this.initialSymbolData.symbol.toUpperCase()) !== -1) {
+      stxx.allowZoom = false;
+      stxx.allowScroll = false;
+      document.querySelector('cq-show-range div:first-child').classList.add('chartTimeIntervalSelected');
+    } 
+    if (
+      this.initialSymbolData.type === 'STOCK' &&
+      this.initialSymbolData.countryCode === 'US' &&
+      this.initialSymbolData.subType !== 'Exchange Traded Fund'
+    ) {
+      document.querySelector('cq-show-range div:first-child').classList.add('chartTimeIntervalSelected');
+    } else if (this.initialSymbolData.type === 'FUND') {
+      document.querySelector('cq-show-range div:nth-child(5)').classList.add('chartTimeIntervalSelected');
+    } else {
+      document.querySelector('cq-show-range div:nth-child(7)').classList.add('chartTimeIntervalSelected');
+    }
+  }
 
 	/**
 	 * The former chartInitialized function.
@@ -149,6 +148,7 @@ class CustomChartWeb extends React.Component {
 		// to-do: add timeRangeOverride 
 		// timeRangeOverride(chartEngine, this.initialSymbolData, this.preMarketOpen, this.preMarketPrevOpen);
 		setPeriodicityOverride();
+		debugger;
 
 		chartEngine.loadChart(
 			this.initialSymbolData.symbol,
@@ -743,15 +743,6 @@ class CustomChartWeb extends React.Component {
 					<cq-abstract-marker cq-type="helicopter"></cq-abstract-marker>
 
 					<cq-attribution></cq-attribution>
-
-					<div className="ciq-footer full-screen-hide">
-						<cq-share-button></cq-share-button>
-						<div
-							className="shortcuts-ui ciq-shortcut-button"
-							stxtap="Layout.showShortcuts()"
-							title="Toggle shortcut legend"
-						></div>
-					</div>
 
 					<div className="cq-context-dialog">
 						<cq-dialog>

@@ -55,7 +55,7 @@ const setSpanOverride = () => {
       stxx.selectedTimeRange = `${params.multiplier}${params.base}`;
       stxx.currentBase = params.base;
       stxx.currentMultiplier = params.multiplier;
-
+      console.log('setSpan')
       this.setSpanOriginal(params, updatedCallback);
   };
 }
