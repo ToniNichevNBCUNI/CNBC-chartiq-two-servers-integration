@@ -23,7 +23,9 @@ import marker from 'chartiq/examples/markers/markersSample.js';
 import 'chartiq/examples/markers/tradeAnalyticsSample';
 import 'chartiq/examples/markers/videoSample';
 
-import quoteFeed from "chartiq/examples/feeds/quoteFeedSimulator.js";
+// import quoteFeed from "chartiq/examples/feeds/quoteFeedSimulator.js";
+
+import QuoteFeed from "../DataConnector.js";
 
 // Uncomment the following for the forecasting simulator (required for the forecasting sample).
 // import forecastQuoteFeed from "chartiq/examples/feeds/quoteFeedForecastSimulator.js";
@@ -65,7 +67,8 @@ import defaultConfig from 'chartiq/js/defaultConfiguration';
 // import 'chartiq/examples/feeds/L2_simulator'; /* for use with cryptoiq */
 
 // Creates a complete customised configuration object
-function getConfig() { 
+function getConfig(initialCNBCconfig) { 
+  const quoteFeed = new QuoteFeed(initialCNBCconfig);
 	return defaultConfig({
 		quoteFeed,
 		// forecastQuoteFeed, // uncomment to enable forecast quote feed simulator
@@ -75,8 +78,8 @@ function getConfig() {
 }
 
 // Creates a complete customised configuration object
-function getCustomConfig({ chartId, symbol, onChartReady } = {}) {
-	const config = getConfig();
+function getCustomConfig({ chartId, symbol, onChartReady, initialCNBCconfig } = {}) {
+	const config = getConfig(initialCNBCconfig);
 
 	// Update chart configuration by modifying default configuration
 	config.chartId = chartId || "_advanced-chart";
@@ -88,6 +91,8 @@ function getCustomConfig({ chartId, symbol, onChartReady } = {}) {
 
 	// config.quoteFeeds[0].behavior.refreshInterval = 0; // disables quotefeed refresh
 	config.onChartReady = onChartReady;
+
+  config.quoteFeeds[0].behavior.refreshInterval = 10; // disables quotefeed refresh
 
 	const {
 		marketDepth,

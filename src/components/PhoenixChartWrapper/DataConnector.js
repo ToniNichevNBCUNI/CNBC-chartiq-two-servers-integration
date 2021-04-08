@@ -106,17 +106,15 @@ const DataConnector = (config) => {
 
   // called by chart to fetch initial data
   function fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, cb) {
-    //debugger;
     if (!window.stxx) {
       return;
     }
-    debugger;
+
     if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) !== -1) {
       chartTimeRange = '1D';
     } else {
-      chartTimeRange = getChartTimeRange();
+      chartTimeRange = '1D'; // getChartTimeRange();
     }
-
     const is5YorALL = chartTimeRange === '5Y' || chartTimeRange === 'ALL';
     const queryUrl = `${TIME_SERIES_CHART_API}/${chartTimeRange}.json?symbol=${symbol}`;
 
