@@ -1,7 +1,7 @@
 import globalAppConfig from 'app/globalAppConfig';
 import DateHelper from './DateHelper';
 import getChartTimeRange from './getChartTimeRange';
-import { CIQ } from "chartiq/js/componentUI";
+import { CIQ } from 'chartiq/js/chartiq';
 
 export function getGranularity(intervalValue, period, suggestedStartDate) {
   if (suggestedStartDate.getFullYear() < 1990) {
@@ -17,7 +17,7 @@ export function getGranularity(intervalValue, period, suggestedStartDate) {
 const DataConnector = (config) => {
   const tsAppendURL = config.timeSeriesAppendUrl; // /adjusted/EST5EDT.json
   const { TIME_SERIES_CHART_API, TIME_SERIES_BAR_API } = globalAppConfig.getProperties();
-  // const CIQ = config.CIQ;
+  //const CIQ = config.CIQ;
 
   let startDate;
   let endDate;
@@ -106,9 +106,11 @@ const DataConnector = (config) => {
 
   // called by chart to fetch initial data
   function fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, cb) {
+    //debugger;
     if (!window.stxx) {
       return;
     }
+    debugger;
     if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) !== -1) {
       chartTimeRange = '1D';
     } else {
