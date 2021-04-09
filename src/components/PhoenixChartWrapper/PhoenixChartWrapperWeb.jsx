@@ -8,7 +8,7 @@ import { getCustomConfig } from "./AdvancedChart/resources";
 import './styles/base-imports';
 
 // CNBC customizations
-// import { useQueryParamContext } from 'contexts/QueryParamContext';
+//import { useQueryParamContext } from 'contexts/QueryParamContext';
 import quoteChartAnalyticsObj from 'utilities/QuoteAnalytics';
 
 // Custom Chart IQ
@@ -82,7 +82,7 @@ class CustomChartWeb extends React.Component {
 
     this.config.themes.defaultTheme = 'ciq-day';
 
-    // setUpChartConfig(this.initialSymbolData, this.config);
+    setUpChartConfig(this.initialSymbolData, this.config);
 
     this.state = {
       chart: new CIQ.UI.Chart(),
@@ -95,7 +95,32 @@ class CustomChartWeb extends React.Component {
     };
   }
 
-	
+	/**
+	 * Called after chartEngine.loadChart
+	 */
+	chartInitCallback = () => {
+    console.log('herere');
+    if (stxx.currentBase !== 'today' && this.initialSymbolData.curmktstatus !== 'REG_MKT') {
+      stxx.home({ maintainWhitespace: false });
+    }
+    quoteChartAnalyticsObj.setUpQuoteChartAnalytics();
+    if (noHistoryDataList.indexOf(this.initialSymbolData.symbol.toUpperCase()) !== -1) {
+      stxx.allowZoom = false;
+      stxx.allowScroll = false;
+      document.querySelector('cq-show-range div:first-child').classList.add('chartTimeIntervalSelected');
+    } 
+    if (
+      this.initialSymbolData.type === 'STOCK' &&
+      this.initialSymbolData.countryCode === 'US' &&
+      this.initialSymbolData.subType !== 'Exchange Traded Fund'
+    ) {
+      document.querySelector('cq-show-range div:first-child').classList.add('chartTimeIntervalSelected');
+    } else if (this.initialSymbolData.type === 'FUND') {
+      document.querySelector('cq-show-range div:nth-child(5)').classList.add('chartTimeIntervalSelected');
+    } else {
+      document.querySelector('cq-show-range div:nth-child(7)').classList.add('chartTimeIntervalSelected');
+    }
+  }
 
 	/**
 	 * The former chartInitialized function.
@@ -109,7 +134,65 @@ class CustomChartWeb extends React.Component {
 
     	chartEngine.setChartType("mountain");
 
-		window.stxx.selectedTimeRange = '1year';
+		setupThemeForChart(this.globalQueryParams); // we don't need this for WEB chart
+		chartXAxisOVerride(); // to-fix: throwwing error because stxx.selectedTimeRange is missing 
+		setSpanOverride();
+
+		
+		// initializes chart with symbol of page
+		// eslint-disable-next-line no-param-reassign
+		chartEngine.chart.symbolObject = this.initialSymbolData;
+
+
+		// to-fix: meaningless passing of preMarketOpen and preMarketPrevOpen since they are never initialized.			
+		// to-do: add timeRangeOverride 
+		// timeRangeOverride(chartEngine, this.initialSymbolData, this.preMarketOpen, this.preMarketPrevOpen);
+		setPeriodicityOverride();
+
+		chartEngine.loadChart(
+			this.initialSymbolData.symbol,
+			getChartInitParams(this.initialSymbolData, chartEngine, this.preMarketOpen, this.preMarketPrevOpen, false),
+			this.chartInitCallback
+		);
+		new CIQ.InactivityTimer({
+			stx: chartEngine,
+			minutes: 2
+		});
+		keyStrokeOverride(uiContext);
+		// applies cnbc symbol lookup as comparison driver
+		uiContext.setLookupDriver(new LookupDriver(chartEngine));
+		
+		new CIQ.Tooltip({ stx: chartEngine, ohl: true, volume: true, series: true, studies: true });	
+
+		//this.setUpAppChartInit(chartEngine);
+		/*
+		// ====================================
+		// the usual V8 chart setup
+		// ====================================
+		if (this.props.chartIntialized) {
+			this.props.chartIntialized({ chartEngine, uiContext });
+		}
+
+		this.updateCustomization(this.config).then(() => {
+			this.addPreferencesHelper(uiContext);
+			this.drawingToolsInfo = this.getDrawingTools(uiContext);
+		});
+		// portalizeContextDialogs(container);
+
+		const self = this;
+		const isForecasting = (symbol) => /_fcst$/.test(symbol);
+		uiContext.stx.addEventListener(
+			"symbolChange",
+			({ symbol, symbolObject, action }) => {
+				if (
+					!isForecasting(symbol) &&
+					(action === "master" || action === "add-series")
+				) {
+					self.updateSymbolStore(symbol, symbolObject);
+				}
+			}
+		);
+		*/
 
 		this.setState({ stx: chartEngine, uiContext: uiContext });
 	}

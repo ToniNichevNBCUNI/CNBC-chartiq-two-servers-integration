@@ -43,11 +43,11 @@ const setUpRangesAndPeriodicity = (symbolData, config) => {
       { type: 'item', label: '1 W', cmd: 'Layout.setPeriodicity(1,1,\'week\')', cls: 'item-hide-1w' },
       { type: 'item', label: '1 Mo', cmd: 'Layout.setPeriodicity(1,1,\'month\')', cls: 'item-hide-1mo' },
       { type: 'item', label: '1 Min', cmd: 'Layout.setPeriodicity(1,1,\'minute\')', cls: 'item-hide-1m' },
-      { type: 'item', label: '5 Min', cmd: 'Layout.setPeriodicity(1,5,\'minute\')', cls: 'item-hide-5m' },
-      { type: 'item', label: '10 Min', cmd: 'Layout.setPeriodicity(1,10,\'minute\')', cls: 'item-hide-10m' },
-      { type: 'item', label: '15 Min', cmd: 'Layout.setPeriodicity(1,15,\'minute\')', cls: 'item-hide-15m' },
-      { type: 'item', label: '30 Min', cmd: 'Layout.setPeriodicity(1,30,\'minute\')', cls: 'item-hide-30m' },
-      { type: 'item', label: '1 Hour', cmd: 'Layout.setPeriodicity(1,60,\'minute\')', cls: 'item-hide-1h' },
+      { type: 'item', label: '5 Min', cmd: 'Layout.setPeriodicity(5,1,\'minute\')', cls: 'item-hide-5m' },
+      { type: 'item', label: '10 Min', cmd: 'Layout.setPeriodicity(10,1,\'minute\')', cls: 'item-hide-10m' },
+      { type: 'item', label: '15 Min', cmd: 'Layout.setPeriodicity(15,1,\'minute\')', cls: 'item-hide-15m' },
+      { type: 'item', label: '30 Min', cmd: 'Layout.setPeriodicity(30,1,\'minute\')', cls: 'item-hide-30m' },
+      { type: 'item', label: '1 Hour', cmd: 'Layout.setPeriodicity(60,1,\'minute\')', cls: 'item-hide-1h' },
     ];
   }
 };

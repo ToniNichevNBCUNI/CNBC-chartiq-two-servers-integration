@@ -1,3 +1,8 @@
+.chartWrapper {
+  position: relative;
+  border: 0;
+}
+
 .chartiqAppWrapper {
   margin: 0;
   height: 100%;
@@ -6,6 +11,7 @@
 .chartiqAppWrapper .ciq-chart-area {
   padding: 0;
   top: 0;
+  bottom: 0;
 }
 
 .chartiqAppWrapper .cq-chart-container.break-sm,

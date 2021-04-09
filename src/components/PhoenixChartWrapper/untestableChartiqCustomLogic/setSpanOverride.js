@@ -41,8 +41,7 @@ const setSpanOverride = () => {
         } else {
           if (
             (params.base.includes('day')) &&
-            params.multiplier === '1' &&
-            stxx.isFullScreen
+            params.multiplier === '1'
           ) {
             return;
           } else {
