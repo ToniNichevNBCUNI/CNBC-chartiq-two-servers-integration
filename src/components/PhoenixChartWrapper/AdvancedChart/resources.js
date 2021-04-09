@@ -90,43 +90,7 @@ function getCustomConfig({ chartId, symbol, onChartReady, initialCNBCconfig } = 
   // config.symbolLookupTabs = ['ALL', 'FX', 'STOCKS'];
   // config.footer = null;
   // config.menus = ['menuPeriodicity', 'menuDisplay', 'menuStudies'];
-  console.log('>>>>', config);
-  /*
-	// CNBC customization, that won't work with the new config
-	config.menuPeriodicity = [
-		{ label: '1 D', periodicity: 1, interval: 1, timeUnit: 'day' },
-		{ label: '1 W', periodicity: 1, interval: 1, timeUnit: 'week' },
-		{ label: '1 Mo', periodicity: 1, interval: 1, timeUnit: 'month' },
-		{ label: '1 Min', periodicity: 1, interval: 1, timeUnit: 'minute' },
-		{ label: '5 Min', periodicity: 1, interval: 5, timeUnit: 'minute' },
-		{ label: '10 Min', periodicity: 1, interval: 10, timeUnit: 'minute' },
-		{ label: '15 Min', periodicity: 3, interval: 5, timeUnit: 'minute' },
-		{ label: '30 Min', periodicity: 1, interval: 30, timeUnit: 'minute' },
-		{ label: '1 Hour', periodicity: 2, interval: 30, timeUnit: 'minute' },
-		{ label: '4 Hour', periodicity: 8, interval: 30, timeUnit: 'minute' },
-	  ];
-	  */
-
-  config.menuPeriodicity = [
-    { type: 'item', label: '1 D', cmd: 'Layout.setPeriodicity(1,1,\'day\')' },
-    { type: 'item', label: '1 W', cmd: 'Layout.setPeriodicity(1,1,\'week\')' },
-    { type: 'item', label: '1 Mo', cmd: 'Layout.setPeriodicity(1,1,\'month\')' },
-    { type: 'separator', },
-    { type: 'item', label: '1 Min', cmd: 'Layout.setPeriodicity(1,1,\'minute\')' },
-    { type: 'item', label: '5 Min', cmd: 'Layout.setPeriodicity(1,5,\'minute\')' },
-    { type: 'item', label: '10 Min', cmd: 'Layout.setPeriodicity(1,10,\'minute\')' },
-    { type: 'item', label: '15 Min', cmd: 'Layout.setPeriodicity(3,5,\'minute\')' },
-    { type: 'item', label: '30 Min', cmd: 'Layout.setPeriodicity(1,30,\'minute\')' },
-    { type: 'item', label: '1 Hour', cmd: 'Layout.setPeriodicity(2,30,\'minute\')' },
-    { type: 'item', label: '4 Hour', cmd: 'Layout.setPeriodicity(8,30,\'minute\')' },
-    { type: 'separator', },
-    { type: 'item', label: '1 Sec', cmd: 'Layout.setPeriodicity(1,1,\'second\')' },
-    { type: 'item', label: '10 Sec', cmd: 'Layout.setPeriodicity(1,10,\'second\')' },
-    { type: 'item', label: '30 Sec', cmd: 'Layout.setPeriodicity(1,30,\'second\')' },
-    { type: 'separator', },
-    { type: 'item', label: '250 MSec', cmd: 'Layout.setPeriodicity(1,250,\'millisecond\')' }
-  ];
-
+ 
   config.quoteFeeds[0].behavior.refreshInterval = 10; // seconds
   config.onChartReady = onChartReady;
 
