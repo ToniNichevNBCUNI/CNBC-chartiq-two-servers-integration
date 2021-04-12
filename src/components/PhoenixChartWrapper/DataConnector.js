@@ -94,7 +94,7 @@ const DataConnector = (config) => {
   
       if (
         shouldRequestBeMadeObj.addNewDataOnly === false &&
-        (config.noHistoryDataList.indexOf(config.quotePageSymbol.toUpperCase()) !== -1 ||
+        (config.noHistoryDataList.indexOf(config.symbol.toUpperCase()) !== -1 ||
         !shouldRequestBeMadeObj.fromInitialDataRequest)
       ) {
         chartBuilderGlobal({ quotes: formatedChartData, moreAvailable: false });

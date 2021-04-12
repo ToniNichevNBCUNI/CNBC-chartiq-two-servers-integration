@@ -191,3 +191,6 @@ cq-comparison-add cq-accept-btn {
   position: relative;
 }
 
+.item-hide-1d {
+  border: 1px solid red;
+}

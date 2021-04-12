@@ -29,7 +29,7 @@ const setUpRangesAndPeriodicity = (symbolData, config) => {
   } else {
     config.rangeMenu = [
       { type: 'range', label: '1D', cmd: 'set(1, \'today\', 1, 1, \'minute\')' },
-      { type: 'range', label: '5M', cmd: 'set(5, \'day\', 5, 1, \'minute\')' },
+      { type: 'range', label: '5D', cmd: 'set(5, \'day\', 5, 1, \'minute\')' },
       { type: 'range', label: '1M', cmd: 'set(1, \'month\')' },
       { type: 'range', label: '3M', cmd: 'set(3, \'month\')' },
       { type: 'range', label: '6M', cmd: 'set(6, \'month\')' },
@@ -74,7 +74,7 @@ const setUpChartConfig = (symbolData, config) => {
   config.footerShare = false;
   config.marketFactory = marketFactory;
   config.symbolData = symbolData;
-  setUpRangesAndPeriodicity(symbolData, config);
+  //setUpRangesAndPeriodicity(symbolData, config);
   return config;
 };
 

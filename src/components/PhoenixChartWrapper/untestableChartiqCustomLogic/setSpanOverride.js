@@ -1,6 +1,7 @@
 import { CIQ } from 'chartiq/js/chartiq';
 import getPeriodicity from '../customChartLogic/getPeriodicity';
 import setExtendedHours from './setExtendedHours';
+import timeRangeOverride from './timeRangeOverride';
 
 const setSpanOverride = () => {
   CIQ.ChartEngine.prototype.setSpanOriginal = CIQ.ChartEngine.prototype.setSpan;
@@ -56,6 +57,7 @@ const setSpanOverride = () => {
       stxx.currentMultiplier = params.multiplier;
       console.log('setSpan')
       this.setSpanOriginal(params, updatedCallback);
+      timeRangeOverride(params);
   };
 }
 

@@ -28,6 +28,7 @@ import setPeriodicityOverride from './untestableChartiqCustomLogic/setPeriodicit
 import chartXAxisOVerride from './untestableChartiqCustomLogic/chartXAxisOverride';
 import setExtendedHours from './untestableChartiqCustomLogic/setExtendedHours';
 import keyStrokeOverride from './untestableChartiqCustomLogic/keyStrokeOverride';
+import addTimeRangeClasses from './untestableChartiqCustomLogic/addTimeRangeClasses';
 
 import LookupDriver from './lookupDriver';
 
@@ -68,7 +69,8 @@ class CustomChartWeb extends React.Component {
     }
 
     const initialCNBCconfig = {
-      quotePageSymbol: this.initialSymbolData.symbol,
+      symbol: this.initialSymbolData.symbol,
+	  quoteData: this.initialSymbolData,
       noHistoryDataList,
       noStreamableList,
       timeSeriesAppendUrl: '/adjusted/EST5EDT.json',			
@@ -99,27 +101,27 @@ class CustomChartWeb extends React.Component {
 	 * Called after chartEngine.loadChart
 	 */
 	chartInitCallback = () => {
-    console.log('herere');
-    if (stxx.currentBase !== 'today' && this.initialSymbolData.curmktstatus !== 'REG_MKT') {
-      stxx.home({ maintainWhitespace: false });
-    }
-    quoteChartAnalyticsObj.setUpQuoteChartAnalytics();
-    if (noHistoryDataList.indexOf(this.initialSymbolData.symbol.toUpperCase()) !== -1) {
-      stxx.allowZoom = false;
-      stxx.allowScroll = false;
-      document.querySelector('cq-show-range div:first-child').classList.add('chartTimeIntervalSelected');
-    } 
-    if (
-      this.initialSymbolData.type === 'STOCK' &&
-      this.initialSymbolData.countryCode === 'US' &&
-      this.initialSymbolData.subType !== 'Exchange Traded Fund'
-    ) {
-      document.querySelector('cq-show-range div:first-child').classList.add('chartTimeIntervalSelected');
-    } else if (this.initialSymbolData.type === 'FUND') {
-      document.querySelector('cq-show-range div:nth-child(5)').classList.add('chartTimeIntervalSelected');
-    } else {
-      document.querySelector('cq-show-range div:nth-child(7)').classList.add('chartTimeIntervalSelected');
-    }
+		console.log('herere');
+		if (stxx.currentBase !== 'today' && this.initialSymbolData.curmktstatus !== 'REG_MKT') {
+			stxx.home({ maintainWhitespace: false });
+		}
+		quoteChartAnalyticsObj.setUpQuoteChartAnalytics();
+		if (noHistoryDataList.indexOf(this.initialSymbolData.symbol.toUpperCase()) !== -1) {
+			stxx.allowZoom = false;
+			stxx.allowScroll = false;
+			document.querySelector('cq-show-range div:first-child').classList.add('chartTimeIntervalSelected');
+		} 
+	    if (this.initialSymbolData.type === 'STOCK' &&
+			this.initialSymbolData.countryCode === 'US' &&
+			this.initialSymbolData.subType !== 'Exchange Traded Fund'
+		) {
+			document.querySelector('cq-show-range div:first-child').classList.add('chartTimeIntervalSelected');
+		} else if (this.initialSymbolData.type === 'FUND') {
+			document.querySelector('cq-show-range div:nth-child(5)').classList.add('chartTimeIntervalSelected');
+		} else {
+			document.querySelector('cq-show-range div:nth-child(7)').classList.add('chartTimeIntervalSelected');
+		}
+		addTimeRangeClasses();
   }
 
 	/**
@@ -146,7 +148,7 @@ class CustomChartWeb extends React.Component {
 
 		// to-fix: meaningless passing of preMarketOpen and preMarketPrevOpen since they are never initialized.			
 		// to-do: add timeRangeOverride 
-		// timeRangeOverride(chartEngine, this.initialSymbolData, this.preMarketOpen, this.preMarketPrevOpen);
+		//timeRangeOverride(chartEngine, this.initialSymbolData, this.preMarketOpen, this.preMarketPrevOpen);
 		setPeriodicityOverride();
 
 		chartEngine.loadChart(
