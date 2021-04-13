@@ -138,7 +138,6 @@ class CustomChartWeb extends React.Component {
 
 		setupThemeForChart(this.globalQueryParams); // we don't need this for WEB chart
 		chartXAxisOVerride(); // to-fix: throwwing error because stxx.selectedTimeRange is missing 
-		setSpanOverride();
 
 		
 		// initializes chart with symbol of page
@@ -150,6 +149,8 @@ class CustomChartWeb extends React.Component {
 		// to-do: add timeRangeOverride 
 		//timeRangeOverride(chartEngine, this.initialSymbolData, this.preMarketOpen, this.preMarketPrevOpen);
 		setPeriodicityOverride();
+
+		setSpanOverride();
 
 		chartEngine.loadChart(
 			this.initialSymbolData.symbol,
@@ -163,6 +164,7 @@ class CustomChartWeb extends React.Component {
 		keyStrokeOverride(uiContext);
 		// applies cnbc symbol lookup as comparison driver
 		uiContext.setLookupDriver(new LookupDriver(chartEngine));
+
 		
 		new CIQ.Tooltip({ stx: chartEngine, ohl: true, volume: true, series: true, studies: true });	
 

@@ -1,31 +1,15 @@
 /* eslint-disable guard-for-in, no-restricted-syntax */
 const adjustPeriodicitySelector = (setVisible) => {
-  const selectors = [
-    'item-hide-1m',
-    'item-hide-5m',
-    'item-hide-10m',
-    'item-hide-15m',
-    'item-hide-30m',
-    'item-hide-1h',
-    'item-hide-4h',
-    'item-hide-1d',
-    'item-hide-1w',
-    'item-hide-1mo',
-    'item-hide-3mo'
-  ];
-  for (const index in selectors) {
-    const selector = selectors[index];
-    if ($.inArray(selector, setVisible) === -1) {
-      $(`.${  selector}`).css('display', 'none');
-    } else {
-      $(`.${  selector}`).css('display', 'block');
+
+  document.querySelector('.ciq-menu.ciq-period > cq-menu-dropdown > cq-menu-container').querySelectorAll('cq-item').forEach( element => {
+    console.log(">>>", setVisible);
+    if(setVisible.includes(element.className) ) {
+      element.style.display = 'block';
     }
-  }
-  if (setVisible.length < 1) {
-    $('.ciq-period cq-menu-dropdown').css('display', 'none');
-  } else {
-    $('.ciq-period cq-menu-dropdown').css('display', 'block');
-  }
+    else {
+      element.style.display = 'none';
+    }
+  });
 };
 
 export default adjustPeriodicitySelector;

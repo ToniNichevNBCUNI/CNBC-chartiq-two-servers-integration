@@ -20,7 +20,8 @@ import marker from 'chartiq/examples/markers/markersSample';
 import 'chartiq/examples/markers/tradeAnalyticsSample';
 import 'chartiq/examples/markers/videoSample';
 
-import { noHistoryDataList, noStreamableList } from '../chartConstants';
+import { noHistoryDataList } from '../chartConstants';
+import marketFactory from '../marketFactory';
 
 // Uncomment the following for the forecasting simulator (required for the forecasting sample).
 // import forecastQuoteFeed from "chartiq/examples/feeds/quoteFeedForecastSimulator.js";
@@ -101,6 +102,7 @@ function setUpRangesAndPeriodicity(symbolData, config) {
       { type: 'item', label: '1 D', cmd: 'Layout.setPeriodicity(1,1,\'day\')', cls: 'item-hide-1d' },
       { type: 'item', label: '1 W', cmd: 'Layout.setPeriodicity(1,1,\'week\')', cls: 'item-hide-1w' },
       { type: 'item', label: '1 Mo', cmd: 'Layout.setPeriodicity(1,1,\'month\')', cls: 'item-hide-1mo' },
+      { type: 'item', label: '3 Mo', cmd: 'Layout.setPeriodicity(3,1,\'month\')', cls: 'item-hide-3mo' },
       { type: 'item', label: '1 Min', cmd: 'Layout.setPeriodicity(1,1,\'minute\')', cls: 'item-hide-1m' },
       { type: 'item', label: '5 Min', cmd: 'Layout.setPeriodicity(5,1,\'minute\')', cls: 'item-hide-5m' },
       { type: 'item', label: '10 Min', cmd: 'Layout.setPeriodicity(10,1,\'minute\')', cls: 'item-hide-10m' },
@@ -149,6 +151,12 @@ function getCustomConfig({ chartId, symbol, onChartReady, initialCNBCconfig, quo
   // config.enabledAddOns.continuousZoom = true;
 
   setUpRangesAndPeriodicity(quoteData, config);
+
+  //CIQ.localStorage.removeItem('myChartLayout');
+
+
+  config.footerShare = false;
+  config.marketFactory = marketFactory;  
 
   return config;
 }
