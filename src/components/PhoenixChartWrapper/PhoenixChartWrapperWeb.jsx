@@ -22,7 +22,7 @@ import getChartInitParams from './customChartLogic/getChartInitParams';
 import setupThemeForChart from './customChartLogic/setupThemeForChart';
 import updateLastChartTick from './customChartLogic/updateLastChartTick';
 
-import timeRangeOverride from './untestableChartiqCustomLogic/timeRangeOverride';
+//import timeRangeOverride from './untestableChartiqCustomLogic/timeRangeOverride';
 import setSpanOverride from './untestableChartiqCustomLogic/setSpanOverride';
 import setPeriodicityOverride from './untestableChartiqCustomLogic/setPeriodicityOverride';
 import chartXAxisOVerride from './untestableChartiqCustomLogic/chartXAxisOverride';
