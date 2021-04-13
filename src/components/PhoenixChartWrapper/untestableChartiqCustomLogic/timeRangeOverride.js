@@ -9,16 +9,23 @@ import {
   timeZoneOffsetFromESTToUTC
 } from '../chartConstants';
 
+const setTimeRangeHighlight = () => {
+    document.querySelectorAll('cq-show-range > div').forEach( element => {
+        element.classList.remove('chartTimeIntervalSelected');
+        console.log(">@#@##@#@>>>", window.stxx.selectedTimeRange);
+       });    
+}
+
 const timeRangeOverride = (params) => {
 
     const oneWeekPeriodBarsClass = 'item-hide-1w';
     const oneMonthPeriodBarsClass = 'item-hide-1mo';
     let periodicity = `${params.multiplier}${params.base}`;
 
-    //periodicity = periodicity.replace(/(today)|(day)/i, 'd');
-    //periodicity = `${params.multiplier}${periodicity}`;
 
     console.log("!!!!!!!!!!!!!!!!!!!!!!!", periodicity);
+
+    setTimeRangeHighlight();
     
     switch (periodicity) {
         case '1today':
