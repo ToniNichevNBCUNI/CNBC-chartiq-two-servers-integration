@@ -12,8 +12,9 @@ import {
 const setTimeRangeHighlight = () => {
     document.querySelectorAll('cq-show-range > div').forEach( element => {
         element.classList.remove('chartTimeIntervalSelected');
-        console.log(">@#@##@#@>>>", window.stxx.selectedTimeRange);
-       });    
+    });
+    if(document.querySelector(`cq-show-range > .range-${window.stxx.selectedTimeRange}`))
+        document.querySelector(`cq-show-range > .range-${window.stxx.selectedTimeRange}`).classList.add('chartTimeIntervalSelected');
 }
 
 const timeRangeOverride = (params) => {
@@ -22,21 +23,20 @@ const timeRangeOverride = (params) => {
     const oneMonthPeriodBarsClass = 'item-hide-1mo';
     let periodicity = `${params.multiplier}${params.base}`;
 
-
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!", periodicity);
-
     setTimeRangeHighlight();
     
     switch (periodicity) {
         case '1today':
           adjustPeriodicitySelector(['item-hide-1min', 'item-hide-5min', 'item-hide-10min', 'item-hide-15min', 'item-hide-30min', 'item-hide-1hour']);
+          window.stxx.extendedHours.set(true);
           break;
         case '5day':
           adjustPeriodicitySelector(['item-hide-5min', 'item-hide-10min', 'item-hide-15min', 'item-hide-30min', 'item-hide-1hour']);
+          window.stxx.extendedHours.set(true);
           break;
         case '1month':
           adjustPeriodicitySelector(['item-hide-1d', oneWeekPeriodBarsClass]);
-          chartEngine.extendedHours.set(false);
+          window.stxx.extendedHours.set(false);
           break;
         case '3month':
           adjustPeriodicitySelector(['item-hide-1d', oneWeekPeriodBarsClass, oneMonthPeriodBarsClass]);

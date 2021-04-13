@@ -388,23 +388,6 @@ class CustomChartWeb extends React.Component {
 										<cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
 									</cq-toggle>
 
-									<cq-menu class="ciq-menu toggle-options collapse">
-										<span></span>
-										<cq-menu-dropdown>
-											<cq-item cq-member="crosshair">
-												Hide Heads-Up Display
-												<span className="ciq-radio">
-													<span></span>
-												</span>
-											</cq-item>
-											<cq-item cq-member="headsUp-static">
-												Show Heads-Up Display
-												<span className="ciq-radio">
-													<span></span>
-												</span>
-											</cq-item>
-										</cq-menu-dropdown>
-									</cq-menu>
 								</cq-info-toggle-dropdown>
 
 								<cq-info-toggle-dropdown>
@@ -452,13 +435,6 @@ class CustomChartWeb extends React.Component {
 									</span>
 									<cq-menu-dropdown>
 										<cq-menu-container cq-name="menuPeriodicity"></cq-menu-container>
-									</cq-menu-dropdown>
-								</cq-menu>
-
-								<cq-menu class="ciq-menu ciq-views collapse">
-									<span>Views</span>
-									<cq-menu-dropdown>
-										<cq-views></cq-views>
 									</cq-menu-dropdown>
 								</cq-menu>
 
@@ -520,100 +496,7 @@ class CustomChartWeb extends React.Component {
 										</cq-heading>
 										<cq-studies></cq-studies>
 									</cq-menu-dropdown>
-								</cq-menu>
-
-								<cq-menu class="ciq-menu stx-markers collapse">
-									<span>Events</span>
-									<cq-menu-dropdown>
-										<cq-heading>Chart Events</cq-heading>
-										<cq-item stxtap="Markers.showMarkers('square')">
-											Simple Square
-											<span className="ciq-radio">
-												<span></span>
-											</span>
-										</cq-item>
-										<cq-item stxtap="Markers.showMarkers('circle')">
-											Simple Circle
-											<span className="ciq-radio">
-												<span></span>
-											</span>
-										</cq-item>
-										<cq-item stxtap="Markers.showMarkers('callout')">
-											Callouts
-											<span className="ciq-radio">
-												<span></span>
-											</span>
-										</cq-item>
-										<cq-item
-											class="ta_markers-ui"
-											stxtap="Markers.showMarkers('trade')"
-										>
-											Trade
-											<span className="ciq-radio">
-												<span></span>
-											</span>
-										</cq-item>
-										<cq-item
-											class="video_markers-ui"
-											stxtap="Markers.showMarkers('video')"
-										>
-											Video
-											<span className="ciq-radio">
-												<span></span>
-											</span>
-										</cq-item>
-										<cq-item stxtap="Markers.showMarkers('abstract')">
-											Abstract
-											<span className="ciq-radio">
-												<span></span>
-											</span>
-										</cq-item>
-										<cq-separator></cq-separator>
-										<cq-item
-											stxtap="Markers.showMarkers()"
-											class="ciq-active"
-										>
-											None
-											<span className="ciq-radio">
-												<span></span>
-											</span>
-										</cq-item>
-										<div className="timespanevent-ui">
-											<cq-separator></cq-separator>
-											<cq-heading>Panel Events</cq-heading>
-											<cq-item
-												class="span-event"
-												stxtap="TimeSpanEvent.showMarkers('Order')"
-												cq-no-close
-											>
-												Order
-												<span className="ciq-checkbox ciq-active">
-													<span></span>
-												</span>
-											</cq-item>
-											<cq-item
-												class="span-event"
-												stxtap="TimeSpanEvent.showMarkers('CEO')"
-												cq-no-close
-											>
-												CEO
-												<span className="ciq-checkbox ciq-active">
-													<span></span>
-												</span>
-											</cq-item>
-											<cq-item
-												class="span-event"
-												stxtap="TimeSpanEvent.showMarkers('News')"
-												cq-no-close
-											>
-												News
-												<span className="ciq-checkbox ciq-active">
-													<span></span>
-												</span>
-											</cq-item>
-										</div>
-									</cq-menu-dropdown>
-								</cq-menu>
+								</cq-menu>								
 
 								<cq-menu class="ciq-menu ciq-preferences collapse">
 									<span></span>

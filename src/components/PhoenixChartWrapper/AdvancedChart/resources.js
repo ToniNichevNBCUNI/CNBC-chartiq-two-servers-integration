@@ -88,15 +88,15 @@ function setUpRangesAndPeriodicity(symbolData, config) {
     ];
   } else {
     config.rangeMenu = [
-      { type: 'range', label: '1D', cmd: 'set(1, \'today\', 1, 1, \'minute\')', cls: '1today'  },
-      { type: 'range', label: '5D', cmd: 'set(5, \'day\', 5, 1, \'minute\')', cls: '5day' },
-      { type: 'range', label: '1M', cmd: 'set(1, \'month\')' },
-      { type: 'range', label: '3M', cmd: 'set(3, \'month\')' },
-      { type: 'range', label: '6M', cmd: 'set(6, \'month\')' },
-      { type: 'range', label: 'YTD', cmd: 'set(1, \'ytd\')' },
-      { type: 'range', label: '1Y', cmd: 'set(1, \'year\')' },
-      { type: 'range', label: '5Y', cmd: 'set(5, \'year\',1,1,\'week\')' },
-      { type: 'range', label: 'All', cmd: 'set(1, \'all\')' },
+      { type: 'range', label: '1D', cmd: 'set(1, \'today\', 1, 1, \'minute\')', cls: 'range-1today'  },
+      { type: 'range', label: '5D', cmd: 'set(5, \'day\', 5, 1, \'minute\')', cls: 'range-5day' },
+      { type: 'range', label: '1M', cmd: 'set(1, \'month\')', cls: 'range-1month' },
+      { type: 'range', label: '3M', cmd: 'set(3, \'month\')', cls: 'range-3month' },
+      { type: 'range', label: '6M', cmd: 'set(6, \'month\')', cls: 'range-6month' },
+      { type: 'range', label: 'YTD', cmd: 'set(1, \'ytd\')', cls: 'range-1ytd' },
+      { type: 'range', label: '1Y', cmd: 'set(1, \'year\')', cls: 'range-1year' },
+      { type: 'range', label: '5Y', cmd: 'set(5, \'year\',1,1,\'week\')', cls: 'range-5year' },
+      { type: 'range', label: 'All', cmd: 'set(1, \'all\')', cls: 'range-1all' },
     ];
     config.menuPeriodicity = [
       { type: 'item', label: '1 D', cmd: 'Layout.setPeriodicity(1,1,\'day\')', cls: 'item-hide-1d' },
