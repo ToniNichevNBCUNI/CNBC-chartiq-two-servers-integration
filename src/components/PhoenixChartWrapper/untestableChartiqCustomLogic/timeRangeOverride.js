@@ -29,8 +29,8 @@ const timeRangeOverride = (params) => {
     const fiveYearMultiplierValue = 5;
     let updatedBase = params.base;
     let updatedMultiplier = params.multiplier;
-    let preMarketOpen;
-    let preMarketPrevOpen;
+    let preMarketOpen;  // makes no sence but setExtendedHours breaks without it 
+    let preMarketPrevOpen; // makes no sence but setExtendedHours breaks without it
 
     function setExtendedHours() {
         const timeZoneOffset = date.getTimezoneOffset()/minInHours;
@@ -51,7 +51,7 @@ const timeRangeOverride = (params) => {
             }
             if (date.getDay() === 1) {
               base = 'day';
-              multiplier = weekendPremarketMultiplierValue;
+              // multiplier = weekendPremarketMultiplierValue;
             }
           } else if (market.getClose() < date || market.getOpen() > date) {
             // post-market
