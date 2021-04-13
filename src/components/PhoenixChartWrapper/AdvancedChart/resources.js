@@ -88,8 +88,8 @@ function setUpRangesAndPeriodicity(symbolData, config) {
     ];
   } else {
     config.rangeMenu = [
-      { type: 'range', label: '1D', cmd: 'set(1, \'today\', 1, 1, \'minute\')' },
-      { type: 'range', label: '5D', cmd: 'set(5, \'day\', 5, 1, \'minute\')' },
+      { type: 'range', label: '1D', cmd: 'set(1, \'today\', 1, 1, \'minute\')', cls: '1d'  },
+      { type: 'range', label: '5D', cmd: 'set(5, \'day\', 5, 1, \'minute\')', cls: '5d' },
       { type: 'range', label: '1M', cmd: 'set(1, \'month\')' },
       { type: 'range', label: '3M', cmd: 'set(3, \'month\')' },
       { type: 'range', label: '6M', cmd: 'set(6, \'month\')' },
