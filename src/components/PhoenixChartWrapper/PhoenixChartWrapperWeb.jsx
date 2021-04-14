@@ -396,32 +396,7 @@ class CustomChartWeb extends React.Component {
 										<cq-tooltip>Info</cq-tooltip>
 									</cq-toggle>
 
-									<cq-menu class="ciq-menu toggle-options collapse tooltip-ui">
-										<span></span>
-										<cq-menu-dropdown>
-											<cq-item cq-member="headsUp-dynamic">
-												Show Dynamic Callout
-												<span className="ciq-radio">
-													<span></span>
-												</span>
-											</cq-item>
-											<cq-item cq-member="headsUp-floating">
-												Show Tooltip
-												<span className="ciq-radio">
-													<span></span>
-												</span>
-											</cq-item>
-										</cq-menu-dropdown>
-									</cq-menu>
 								</cq-info-toggle-dropdown>
-
-								<cq-toggle
-									className="ciq-DT tableview-ui"
-									cq-member="tableView"
-								>
-									<span></span>
-									<cq-tooltip>Table View</cq-tooltip>
-								</cq-toggle>
 							</div>
 						</cq-side-nav>
 
@@ -497,56 +472,7 @@ class CustomChartWeb extends React.Component {
 										<cq-studies></cq-studies>
 									</cq-menu-dropdown>
 								</cq-menu>								
-
-								<cq-menu class="ciq-menu ciq-preferences collapse">
-									<span></span>
-									<cq-menu-dropdown>
-										<cq-menu-dropdown-section class="chart-preferences">
-											<cq-heading>Chart Preferences</cq-heading>
-											<cq-menu-container cq-name="menuChartPreferences"></cq-menu-container>
-											<cq-separator></cq-separator>
-										</cq-menu-dropdown-section>
-										<cq-menu-dropdown-section class="y-axis-preferences">
-											<cq-heading>Y-Axis Preferences</cq-heading>
-											<cq-menu-container cq-name="menuYAxisPreferences"></cq-menu-container>
-											<cq-separator></cq-separator>
-										</cq-menu-dropdown-section>
-										<cq-menu-dropdown-section class="chart-theme">
-											<cq-heading>Themes</cq-heading>
-											<cq-themes></cq-themes>
-											<cq-separator></cq-separator>
-										</cq-menu-dropdown-section>
-										<cq-menu-dropdown-section class="chart-locale">
-											<cq-heading>Locale</cq-heading>
-											<cq-item>
-												<cq-clickable
-													cq-selector="cq-timezone-dialog"
-													cq-method="open"
-												>
-													Change Timezone
-												</cq-clickable>
-											</cq-item>
-											<cq-item stxsetget="Layout.Language()">
-												<cq-flag></cq-flag>
-												<cq-language-name>Change Language</cq-language-name>
-											</cq-item>
-										</cq-menu-dropdown-section>
-										<cq-menu-dropdown-section className="shortcuts-ui">
-											<cq-separator></cq-separator>
-											<cq-heading>Shortcuts</cq-heading>
-											<cq-item stxtap="Layout.showShortcuts(true)">
-												Shortcuts / Hotkeys
-											</cq-item>
-										</cq-menu-dropdown-section>
-										<cq-menu-dropdown-section class="chart-preferences">
-											<cq-separator></cq-separator>
-											<cq-heading>Preferences</cq-heading>
-											<cq-item stxtap="Layout.openPreferences('drawingTools')">
-												Drawing Tools
-											</cq-item>
-										</cq-menu-dropdown-section>
-									</cq-menu-dropdown>
-								</cq-menu>
+								
 							</div>
 
 							{pluginToggles}
