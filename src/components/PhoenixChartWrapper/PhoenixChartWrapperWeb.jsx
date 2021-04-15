@@ -136,7 +136,7 @@ class CustomChartWeb extends React.Component {
 
     	chartEngine.setChartType("mountain");
 
-		setupThemeForChart(this.globalQueryParams); // we don't need this for WEB chart
+		// setupThemeForChart(this.globalQueryParams); // we don't need this for WEB chart
 		chartXAxisOVerride(); // to-fix: throwwing error because stxx.selectedTimeRange is missing 
 
 		
@@ -202,132 +202,8 @@ class CustomChartWeb extends React.Component {
 	}
 
 
-	// Update chart configuration with drawing tool shortcuts stored
-	// in localStorage
-	updateCustomization(config) {
-		// currently only tool shortcuts are customized locally
-		return this.getValue(this.shortcutStorageName).then((shortcuts) => {
-			if (!shortcuts || !Object.keys(shortcuts).length) {
-				return;
-			}
-			config.drawingTools.forEach((item) => {
-				item.shortcut = shortcuts[item.tool] || "";
-			});
-		});
-	}
-
-	updateSymbolStore(symbol, { name = "", exchDisp = "" } = {}) {
-		return this.getRecentSymbols().then((list) => {
-			const count = ((list.symbol && list.symbol.count) || 0) + 1;
-			list[symbol] = { symbol, name, exchDisp, count, last: +new Date() };
-			return this.updateRecentSymbols(list);
-		});
-	}
-
-	getRecentSymbols() {
-		return this.getValue(this.symbolStorageName);
-	}
-
-	updateRecentSymbols(value) {
-		return this.setValue(this.symbolStorageName, value);
-	}
-
-	// Get a value from localStorage
-	getValue(name) {
-		return new Promise((resolve, reject) => {
-			this.store.get(name, (err, value) => {
-				if (err) return reject(err);
-				resolve(value || {});
-			});
-		});
-	}
-	// Set a value from localStorage
-	setValue(name, value) {
-		return new Promise((resolve, reject) => {
-			this.store.set(name, value, (err) => {
-				if (err) return reject(err);
-				resolve(value);
-			});
-		});
-	}
-
-	// Injects a helper into the ChartIQ UI Layout object to invoke when
-	// the custom added "Drawing Tools" item in the options menu is selected.
-	addPreferencesHelper(uiContext) {
-		const layoutHelper = uiContext.getAdvertised("Layout");
-
-		layoutHelper.openPreferences = (node, type) => {
-			this.setState({ shortcutDialog: true });
-		};
-	}
-
-	// Retrieve an array of the drawing tools from the ChartIQ config object to
-	// pass along to the custom ShortcutDialog component.
-	getDrawingTools(uiContext) {
-		const { drawingToolDetails: details } = this;
-
-		let drawingTools = this.config.drawingTools.slice();
-		return drawingTools.map(({ label, shortcut, tool }) => {
-			return {
-				label,
-				tool,
-				shortcut: shortcut || "",
-				detail: details[tool]
-			};
-		});
-	}
-
-	// Store shortcut changed from the custom ShortcutDialog component in
-	// localStorage
-	setDrawingToolShortcuts(shortcuts) {
-		const { topNode } = this.state.uiContext;
-
-		this.config.drawingTools.forEach((item) => {
-			item.shortcut = shortcuts[item.tool];
-		});
-
-		this.setValue(this.shortcutStorageName, shortcuts);
-
-		rebuildDrawingPalette(topNode);
-	}
-
-	// Handler to pass along to the custom ShortcutDialog component that sets
-	// its closed state
-	closeDialog() {
-		this.setState({ shortcutDialog: false });
-	}
-
-	// Return elements for chart plugin toggle buttons
-	getPluginToggles() {
-		const { tfc } = this.state.stx || {};
-		return (
-			<div className="trade-toggles ciq-toggles">
-				{tfc && (
-					<cq-toggle class="tfc-ui sidebar stx-trade" cq-member="tfc">
-						<span></span>
-						<cq-tooltip>Trade</cq-tooltip>
-					</cq-toggle>
-				)}
-				<cq-toggle
-					class="analystviews-ui stx-analystviews tc-ui stx-tradingcentral"
-					cq-member="analystviews"
-				>
-					<span></span>
-					<cq-tooltip>Analyst Views</cq-tooltip>
-				</cq-toggle>
-				<cq-toggle
-					class="technicalinsights-ui stx-technicalinsights recognia-ui stx-recognia"
-					cq-member="technicalinsights"
-				>
-					<span></span>
-					<cq-tooltip>Technical Insights</cq-tooltip>
-				</cq-toggle>
-			</div>
-		);
-	}
 
 	render() {
-		const pluginToggles = this.getPluginToggles();
 
 		let shortcutDialog = null;
 		if (this.state.shortcutDialog)
@@ -345,150 +221,123 @@ class CustomChartWeb extends React.Component {
 
 		return (
 			<div className="chartWrapper">
-				<AdvancedChart
-					config={this.config}
-					chartInitialized={this.postInit.bind(this)}
-					onChartReady={this.props.onChartReady}
-				>
+				<AdvancedChart config={this.config} chartInitialized={this.postInit.bind(this)} onChartReady={this.props.onChartReady}>
 					<div className="ciq-nav full-screen-hide">
-            <div>
-              <cq-show-range />
-            </div>
-						<div className="sidenav-toggle ciq-toggles">
-							<cq-toggle
-								class="ciq-sidenav"
-								cq-member="sidenav"
-								cq-toggles="sidenavOn,sidenavOff"
-								cq-toggle-classes="active,"
-							>
-								<span></span>
-								<cq-tooltip>More</cq-tooltip>
-							</cq-toggle>
+						<div className="ciq-nav">
+							<cq-show-range />
+							<button className="advanced-chart" onClick={ () => { this.expandChart() } } className={this.expanded ? 'basic-chart' : 'advanced-chart' }>
+								<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzMiIGhlaWdodD0iMzMiIHZpZXdCb3g9IjAgMCAzMyAzMyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTMyLjU1MSAwLjM5NDE5OEMzMi4yNzA0IDAuMTEyNjI4IDMxLjkzMzcgMCAzMS41OTY5IDBIMjJDMjEuNjA3MSAwIDIxLjMyNjUgMC4xMTI2MjggMjEuMDQ1OSAwLjM5NDE5OEMyMC43NjUzIDAuNjc1NzY4IDIwLjY1MzEgMS4wMTM2NSAyMC42NTMxIDEuMzUxNTRDMjAuNjUzMSAxLjc0NTczIDIwLjc2NTMgMi4wMjczIDIxLjA0NTkgMi4zMDg4N0wyNC4xMzI3IDUuNDA2MTRMMTYuNSAxMy4wNjQ4TDE3LjAwNTEgMTMuNTcxN0wxOS40NzQ1IDE2LjA0OTVMMTkuOTc5NiAxNi41NTYzTDI3LjYxMjIgOC44OTc2MUwzMC42OTkgMTEuOTk0OUMzMC45Nzk2IDEyLjI3NjUgMzEuMzE2MyAxMi4zODkxIDMxLjY1MzEgMTIuMzg5MUMzMi4wNDU5IDEyLjM4OTEgMzIuMzI2NSAxMi4yNzY1IDMyLjYwNzEgMTEuOTk0OUMzMi44ODc4IDExLjcxMzMgMzMgMTEuMzc1NCAzMyAxMS4wMzc1VjEuNDA3ODVDMzIuOTQzOSAwLjk1NzMzOCAzMi43NzU1IDAuNjE5NDU0IDMyLjU1MSAwLjM5NDE5OFoiIGZpbGw9IiM3NDc0NzQiLz4KPHBhdGggZD0iTTEzLjUyNTUgMTcuMDA2OEwxMy4wMjA0IDE2LjVMNS4zODc3NiAyNC4xNTg3TDIuMzAxMDIgMjEuMDYxNEMyLjAyMDQxIDIwLjc3OTkgMS42ODM2NyAyMC42NjcyIDEuMzQ2OTQgMjAuNjY3MkMwLjk1NDA4MiAyMC42NjcyIDAuNjczNDY5IDIwLjc3OTkgMC4zOTI4NTcgMjEuMDYxNEMwLjExMjI0NSAyMS4zNDMgMCAyMS42ODA5IDAgMjIuMDE4OFYzMS42NDg1QzAgMzIuMDQyNyAwLjExMjI0NSAzMi4zMjQyIDAuMzkyODU3IDMyLjYwNThDMC42NzM0NjkgMzIuODg3NCAxLjAxMDIgMzMgMS4zNDY5NCAzM0gxMC45NDM5QzExLjMzNjcgMzMgMTEuNjE3MyAzMi44ODc0IDExLjg5OCAzMi42MDU4QzEyLjE3ODYgMzIuMzI0MiAxMi4yOTA4IDMxLjk4NjQgMTIuMjkwOCAzMS42NDg1QzEyLjI5MDggMzEuMzEwNiAxMi4xNzg2IDMwLjk3MjcgMTEuODk4IDMwLjY5MTFMOC44MTEyMiAyNy41OTM5TDE1LjkzODggMjAuNDQyTDE2LjQ0MzkgMTkuOTM1MkwxNS45Mzg4IDE5LjQyODNMMTMuNTI1NSAxNy4wMDY4WiIgZmlsbD0iIzc0NzQ3NCIvPgo8L3N2Zz4K" />
+							</button>							
 						</div>
 
-						<cq-menu class="ciq-search">
-							<RecentSymbols getRecentSymbols={() => this.getRecentSymbols()}>
-								<cq-lookup
-									cq-keystroke-claim
-									cq-keystroke-default
-									cq-uppercase
-								></cq-lookup>
-							</RecentSymbols>
-						</cq-menu>
+						<div className="chartToolsWrapper">				
+							<cq-comparison-lookup></cq-comparison-lookup>							
 
-						<cq-side-nav cq-on="sidenavOn">
-							<div className="icon-toggles ciq-toggles">
-								<cq-toggle class="ciq-draw" cq-member="drawing">
-									<span></span>
-									<cq-tooltip>Draw</cq-tooltip>
-								</cq-toggle>
-								<cq-info-toggle-dropdown>
-									<cq-toggle class="ciq-CH" cq-member="crosshair">
+							<cq-side-nav cq-on="sidenavOn">
+								<div className="icon-toggles ciq-toggles">
+									<cq-toggle class="ciq-draw" cq-member="drawing">
 										<span></span>
-										<cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
+										<cq-tooltip>Draw</cq-tooltip>
 									</cq-toggle>
+									<cq-info-toggle-dropdown>
+										<cq-toggle class="ciq-CH" cq-member="crosshair">
+											<span></span>
+											<cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
+										</cq-toggle>
 
-								</cq-info-toggle-dropdown>
+									</cq-info-toggle-dropdown>
 
-								<cq-info-toggle-dropdown>
-									<cq-toggle class="ciq-HU" cq-member="headsUp">
-										<span></span>
-										<cq-tooltip>Info</cq-tooltip>
-									</cq-toggle>
+									<cq-info-toggle-dropdown>
+										<cq-toggle class="ciq-HU" cq-member="headsUp">
+											<span></span>
+											<cq-tooltip>Info</cq-tooltip>
+										</cq-toggle>
 
-								</cq-info-toggle-dropdown>
-							</div>
-						</cq-side-nav>
+									</cq-info-toggle-dropdown>
+								</div>
+							</cq-side-nav>
 
-						<div className="ciq-menu-section">
-							<div className="ciq-dropdowns">
-								<cq-menu class="ciq-menu ciq-period">
-									<span>
-										<cq-clickable stxbind="Layout.periodicity">
-											1D
-										</cq-clickable>
-									</span>
-									<cq-menu-dropdown>
-										<cq-menu-container cq-name="menuPeriodicity"></cq-menu-container>
-									</cq-menu-dropdown>
-								</cq-menu>
+							<div className="ciq-menu-section">
+								<div className="ciq-dropdowns">
+									<cq-menu class="ciq-menu ciq-period">
+										<span>
+											<cq-clickable stxbind="Layout.periodicity">
+												1D
+											</cq-clickable>
+										</span>
+										<cq-menu-dropdown>
+											<cq-menu-container cq-name="menuPeriodicity"></cq-menu-container>
+										</cq-menu-dropdown>
+									</cq-menu>
 
-								<cq-menu class="ciq-menu ciq-display collapse">
-									<span>Display</span>
-									<cq-menu-dropdown>
-										<cq-menu-dropdown-section class="chart-types">
-											<cq-heading>Chart Style</cq-heading>
-											<cq-menu-container cq-name="menuChartStyle"></cq-menu-container>
-										</cq-menu-dropdown-section>
-										<cq-menu-dropdown-section class="chart-aggregations">
-											<cq-menu-container cq-name="menuChartAggregates"></cq-menu-container>
-										</cq-menu-dropdown-section>
-									</cq-menu-dropdown>
-								</cq-menu>
+									<cq-menu class="ciq-menu ciq-display collapse">
+										<span>Display</span>
+										<cq-menu-dropdown>
+											<cq-menu-dropdown-section class="chart-types">
+												<cq-heading>Chart Style</cq-heading>
+												<cq-menu-container cq-name="menuChartStyle"></cq-menu-container>
+											</cq-menu-dropdown-section>
+											<cq-menu-dropdown-section class="chart-aggregations">
+												<cq-menu-container cq-name="menuChartAggregates"></cq-menu-container>
+											</cq-menu-dropdown-section>
+										</cq-menu-dropdown>
+									</cq-menu>
 
-								<cq-menu
-									class="ciq-menu ciq-studies collapse"
-									cq-focus="input"
-								>
-									<span>Studies</span>
-									<cq-menu-dropdown>
-										<cq-study-legend cq-no-close>
-											<cq-section-dynamic>
-												<cq-heading>Current Studies</cq-heading>
-												<cq-study-legend-content>
-													<template cq-study-legend="true">
-														<cq-item>
-															<cq-label class="click-to-edit"></cq-label>
-															<div className="ciq-icon ciq-close"></div>
-														</cq-item>
-													</template>
-												</cq-study-legend-content>
-												<cq-placeholder>
-													<div
-														stxtap="Layout.clearStudies()"
-														className="ciq-btn sm"
+									<cq-menu
+										class="ciq-menu ciq-studies collapse"
+										cq-focus="input"
+									>
+										<span>Studies</span>
+										<cq-menu-dropdown>
+											<cq-study-legend cq-no-close>
+												<cq-section-dynamic>
+													<cq-heading>Current Studies</cq-heading>
+													<cq-study-legend-content>
+														<template cq-study-legend="true">
+															<cq-item>
+																<cq-label class="click-to-edit"></cq-label>
+																<div className="ciq-icon ciq-close"></div>
+															</cq-item>
+														</template>
+													</cq-study-legend-content>
+													<cq-placeholder>
+														<div
+															stxtap="Layout.clearStudies()"
+															className="ciq-btn sm"
+														>
+															Clear All
+														</div>
+													</cq-placeholder>
+												</cq-section-dynamic>
+											</cq-study-legend>
+											<div className="scriptiq-ui">
+												<cq-heading>ScriptIQ</cq-heading>
+												<cq-item>
+													<cq-clickable
+														cq-selector="cq-scriptiq-editor"
+														cq-method="open"
 													>
-														Clear All
-													</div>
-												</cq-placeholder>
-											</cq-section-dynamic>
-										</cq-study-legend>
-										<div className="scriptiq-ui">
-											<cq-heading>ScriptIQ</cq-heading>
-											<cq-item>
-												<cq-clickable
-													cq-selector="cq-scriptiq-editor"
-													cq-method="open"
-												>
-													New Script
-												</cq-clickable>
-											</cq-item>
-											<cq-scriptiq-menu></cq-scriptiq-menu>
-											<cq-separator></cq-separator>
-										</div>
-										<cq-heading cq-filter cq-filter-min="-1">
-											Studies
-										</cq-heading>
-										<cq-studies></cq-studies>
-									</cq-menu-dropdown>
-								</cq-menu>								
-								
+														New Script
+													</cq-clickable>
+												</cq-item>
+												<cq-scriptiq-menu></cq-scriptiq-menu>
+												<cq-separator></cq-separator>
+											</div>
+											<cq-heading cq-filter cq-filter-min="-1">
+												Studies
+											</cq-heading>
+											<cq-studies></cq-studies>
+										</cq-menu-dropdown>
+									</cq-menu>								
+								</div>
+
 							</div>
 
-							{pluginToggles}
-						</div>
+							
+						</div>						
 					</div>
 
-					<cq-scriptiq class="scriptiq-ui"></cq-scriptiq>
 
-					<cq-tradingcentral
-						class="tc-ui"
-						token="eZOrIVNU3KR1f0cf6PTUYg=="
-						partner="1000"
-						disabled
-					></cq-tradingcentral>
-
-					<cq-recognia uid="" lang="en" disabled></cq-recognia>
 
 					<RecentSymbols
 						connectCount="2"
@@ -542,8 +391,6 @@ class CustomChartWeb extends React.Component {
 										cq-marker
 									></cq-chartcontrol-group>
 
-									<cq-comparison-lookup></cq-comparison-lookup>
-
 									<cq-chart-legend></cq-chart-legend>
 
 									<cq-loader></cq-loader>
@@ -566,52 +413,10 @@ class CustomChartWeb extends React.Component {
 						</cq-dialog>
 					</div>
 
-					<cq-side-panel></cq-side-panel>
-
-					{shortcutDialog}
 				</AdvancedChart>
 			</div>
 		);
 	}
-}
-
-/**
- * For applications that have more then one chart, keep single dialog of the same type
- * and move it outside context node to be shared by all chart components
- */
-function portalizeContextDialogs(container) {
-	container.querySelectorAll("cq-dialog").forEach((dialog) => {
-		dialog.remove();
-		if (!dialogPortalized(dialog)) {
-			document.body.appendChild(dialog);
-		}
-	});
-}
-
-function dialogPortalized(el) {
-	const tag = el.firstChild.nodeName.toLowerCase();
-	return Array.from(document.querySelectorAll(tag)).some(
-		(el) => !el.closest("cq-context")
-	);
-}
-
-// Helper function that removes the existing drawing palette component and adds
-// a new one.
-function rebuildDrawingPalette(el) {
-	const qs = (path) => el.querySelector(path);
-	const container = qs(".palette-dock-container");
-	const palette = qs("cq-drawing-palette");
-	const newPalette = document.createElement("cq-drawing-palette");
-
-	newPalette.className = palette.className;
-	newPalette.setAttribute("docked", palette.getAttribute("docked"));
-	newPalette.setAttribute("orientation", palette.getAttribute("orientation"));
-	newPalette.setAttribute("min-height", palette.getAttribute("min-height"));
-	const noOp = () => {};
-	palette.keyStroke = palette.handleMessage = noOp;
-	palette.remove();
-
-	container.appendChild(newPalette);
 }
 
 export default CustomChartWeb;

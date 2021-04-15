@@ -195,3 +195,12 @@ cq-comparison-add cq-accept-btn {
 .toniTest {
   border: 1px solid red;
 }
+
+
+.toniTest2 {
+  border: 2px solid blue;
+}
+
+.chartToolsWrapper {
+  border: 2px solid green;
+}
