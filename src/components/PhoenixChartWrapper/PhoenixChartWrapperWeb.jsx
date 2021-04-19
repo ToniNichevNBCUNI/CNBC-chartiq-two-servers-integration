@@ -234,7 +234,17 @@ class CustomChartWeb extends React.Component {
 
 						<div className="chartToolsWrapper">				
 							
-							<ChartComparison />						
+							<ChartComparison />	
+
+						<cq-menu class="ciq-search">
+							<RecentSymbols getRecentSymbols={() => this.getRecentSymbols()}>
+								<cq-lookup
+									cq-keystroke-claim
+									cq-keystroke-default
+									cq-uppercase
+								></cq-lookup>
+							</RecentSymbols>
+						</cq-menu>                            					
 
 							<cq-side-nav cq-on="sidenavOn">
 								<div className="icon-toggles ciq-toggles">
@@ -255,8 +265,28 @@ class CustomChartWeb extends React.Component {
 											<span></span>
 											<cq-tooltip>Info</cq-tooltip>
 										</cq-toggle>
-
 									</cq-info-toggle-dropdown>
+                                    
+
+									<cq-menu class="ciq-menu toggle-options collapse tooltip-ui">
+										<span></span>
+										<cq-menu-dropdown>
+											<cq-item cq-member="headsUp-dynamic">
+												Show Dynamic Callout
+												<span className="ciq-radio">
+													<span></span>
+												</span>
+											</cq-item>
+											<cq-item cq-member="headsUp-floating">
+												Show Tooltip
+												<span className="ciq-radio">
+													<span></span>
+												</span>
+											</cq-item>
+										</cq-menu-dropdown>
+									</cq-menu>
+
+
 								</div>
 							</cq-side-nav>
 
@@ -333,10 +363,7 @@ class CustomChartWeb extends React.Component {
 										</cq-menu-dropdown>
 									</cq-menu>								
 								</div>
-
-							</div>
-
-							
+							</div>							
 						</div>						
 					</div>
 
