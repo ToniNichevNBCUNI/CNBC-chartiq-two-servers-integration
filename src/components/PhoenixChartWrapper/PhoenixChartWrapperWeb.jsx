@@ -30,6 +30,8 @@ import setExtendedHours from './untestableChartiqCustomLogic/setExtendedHours';
 import keyStrokeOverride from './untestableChartiqCustomLogic/keyStrokeOverride';
 import addTimeRangeClasses from './untestableChartiqCustomLogic/addTimeRangeClasses';
 
+import ChartComparison from './customChartLogic/chartComparison';
+
 import LookupDriver from './lookupDriver';
 
 import {
@@ -231,7 +233,8 @@ class CustomChartWeb extends React.Component {
 						</div>
 
 						<div className="chartToolsWrapper">				
-							<cq-comparison-lookup></cq-comparison-lookup>							
+							
+							<ChartComparison />						
 
 							<cq-side-nav cq-on="sidenavOn">
 								<div className="icon-toggles ciq-toggles">
