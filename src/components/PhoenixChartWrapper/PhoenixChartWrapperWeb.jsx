@@ -17,7 +17,7 @@ import './customChartiqStyles/webChartStyles.css';
 import ShortcutDialog from './ShortcutDialog/ShortcutDialog';
 import RecentSymbols from './RecentSymbols/RecentSymbols';
 
-import setUpChartConfig from './customChartLogic/setupChartConfig';
+//import setUpChartConfig from './customChartLogic/setupChartConfig';
 import getChartInitParams from './customChartLogic/getChartInitParams';
 import setupThemeForChart from './customChartLogic/setupThemeForChart';
 import updateLastChartTick from './customChartLogic/updateLastChartTick';
@@ -86,7 +86,7 @@ class CustomChartWeb extends React.Component {
 
     this.config.themes.defaultTheme = 'ciq-day';
 
-    setUpChartConfig(this.initialSymbolData, this.config);
+    //setUpChartConfig(this.initialSymbolData, this.config);
 
     this.state = {
       chart: new CIQ.UI.Chart(),
@@ -265,28 +265,7 @@ class CustomChartWeb extends React.Component {
 											<span></span>
 											<cq-tooltip>Info</cq-tooltip>
 										</cq-toggle>
-									</cq-info-toggle-dropdown>
-                                    
-
-									<cq-menu class="ciq-menu toggle-options collapse tooltip-ui">
-										<span></span>
-										<cq-menu-dropdown>
-											<cq-item cq-member="headsUp-dynamic">
-												Show Dynamic Callout
-												<span className="ciq-radio">
-													<span></span>
-												</span>
-											</cq-item>
-											<cq-item cq-member="headsUp-floating">
-												Show Tooltip
-												<span className="ciq-radio">
-													<span></span>
-												</span>
-											</cq-item>
-										</cq-menu-dropdown>
-									</cq-menu>
-
-
+									</cq-info-toggle-dropdown>                                    
 								</div>
 							</cq-side-nav>
 
