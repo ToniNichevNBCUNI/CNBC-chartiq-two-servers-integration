@@ -31,6 +31,7 @@ import keyStrokeOverride from './untestableChartiqCustomLogic/keyStrokeOverride'
 import addTimeRangeClasses from './untestableChartiqCustomLogic/addTimeRangeClasses';
 
 import ChartComparison from './customChartLogic/chartComparison';
+import timeRangeOverride from './untestableChartiqCustomLogic/timeRangeOverride';
 
 import LookupDriver from './lookupDriver';
 
@@ -124,6 +125,7 @@ class CustomChartWeb extends React.Component {
 			document.querySelector('cq-show-range div:nth-child(7)').classList.add('chartTimeIntervalSelected');
 		}
 		addTimeRangeClasses();
+		timeRangeOverride(stxx.selectedTimeRange);
   }
 
 	/**
@@ -145,13 +147,13 @@ class CustomChartWeb extends React.Component {
 		// initializes chart with symbol of page
 		// eslint-disable-next-line no-param-reassign
 		chartEngine.chart.symbolObject = this.initialSymbolData;
+		chartEngine.selectedTimeRange = '1today';
 
 
 		// to-fix: meaningless passing of preMarketOpen and preMarketPrevOpen since they are never initialized.			
 		// to-do: add timeRangeOverride 
 		//timeRangeOverride(chartEngine, this.initialSymbolData, this.preMarketOpen, this.preMarketPrevOpen);
 		setPeriodicityOverride();
-
 		setSpanOverride();
 
 		chartEngine.loadChart(

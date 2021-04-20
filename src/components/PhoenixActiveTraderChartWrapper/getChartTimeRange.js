@@ -13,7 +13,7 @@ const getChartTimeRange = () => {
     '1all': 'ALL'
   };
 
-  const selectedTimeRange = '1today'; // stxx.selectedTimeRange.toLowerCase();
+  const selectedTimeRange = stxx.selectedTimeRange.toLowerCase() || '1today';
   return timeRangeHarmonyAPIKeyMap[selectedTimeRange];
 };
 
