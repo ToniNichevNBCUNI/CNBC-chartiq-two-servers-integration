@@ -20,7 +20,7 @@ export default class HeadsUpStatic extends React.Component {
 	render() {
 		return (
 			<cq-hu-static marker="true" ref={this.node}>
-				TEST 124
+				TEST ...
 			</cq-hu-static>
 		);
 	}
