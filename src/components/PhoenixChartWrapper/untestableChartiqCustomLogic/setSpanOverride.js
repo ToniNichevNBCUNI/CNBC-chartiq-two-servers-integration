@@ -30,20 +30,6 @@ const setSpanOverride = () => {
       stxx.extendedHours.set(false)
     }
 
-    /*
-    if (stxx.isAppChart && params.base.includes('day')) {
-      if (params.multiplier === '1') {
-        if (params.base !== 'today') {
-          params.base = 'today';
-        }
-        params.periodicity.period = 5;
-      }
-    } else if(!stxx.isAppChart) {
-      //timeRangeOverride(stxx.selectedTimeRange);
-    }
-    */
-   //timeRangeOverride(stxx.selectedTimeRange);
-
     const updatedCallback = () => {
       if (cb) { cb(); }
 

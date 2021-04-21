@@ -33,6 +33,8 @@ import addTimeRangeClasses from './untestableChartiqCustomLogic/addTimeRangeClas
 import ChartComparison from './customChartLogic/chartComparison';
 import timeRangeOverride from './untestableChartiqCustomLogic/timeRangeOverride';
 
+import HeadsUpStatic from './customChartLogic/HeadsUpStatic';
+
 import LookupDriver from './lookupDriver';
 
 import {
@@ -171,61 +173,17 @@ class CustomChartWeb extends React.Component {
 
 		
 		new CIQ.Tooltip({ stx: chartEngine, ohl: true, volume: true, series: true, studies: true });	
-
-		//this.setUpAppChartInit(chartEngine);
-		/*
-		// ====================================
-		// the usual V8 chart setup
-		// ====================================
-		if (this.props.chartIntialized) {
-			this.props.chartIntialized({ chartEngine, uiContext });
-		}
-
-		this.updateCustomization(this.config).then(() => {
-			this.addPreferencesHelper(uiContext);
-			this.drawingToolsInfo = this.getDrawingTools(uiContext);
-		});
-		// portalizeContextDialogs(container);
-
-		const self = this;
-		const isForecasting = (symbol) => /_fcst$/.test(symbol);
-		uiContext.stx.addEventListener(
-			"symbolChange",
-			({ symbol, symbolObject, action }) => {
-				if (
-					!isForecasting(symbol) &&
-					(action === "master" || action === "add-series")
-				) {
-					self.updateSymbolStore(symbol, symbolObject);
-				}
-			}
-		);
-		*/
-
 		this.setState({ stx: chartEngine, uiContext: uiContext });
 	}
 
 
 
 	render() {
-
-		let shortcutDialog = null;
-		if (this.state.shortcutDialog)
-			shortcutDialog = (
-				<ShortcutDialog
-					drawingToolsInfo={this.drawingToolsInfo}
-					closeDialog={(event) => {
-						this.closeDialog();
-					}}
-					setDrawingToolShortcuts={(shortcuts) => {
-						this.setDrawingToolShortcuts(shortcuts);
-					}}
-				></ShortcutDialog>
-			);
-
 		return (
 			<div className="chartWrapper">
 				<AdvancedChart config={this.config} chartInitialized={this.postInit.bind(this)} onChartReady={this.props.onChartReady}>
+				
+
 					<div className="ciq-nav full-screen-hide">
 						<div className="ciq-nav">
 							<cq-show-range />
@@ -235,18 +193,19 @@ class CustomChartWeb extends React.Component {
 						</div>
 
 						<div className="chartToolsWrapper">				
+						
 							
-							<ChartComparison />	
+							<ChartComparison />								
 
-						<cq-menu class="ciq-search">
-							<RecentSymbols getRecentSymbols={() => this.getRecentSymbols()}>
-								<cq-lookup
-									cq-keystroke-claim
-									cq-keystroke-default
-									cq-uppercase
-								></cq-lookup>
-							</RecentSymbols>
-						</cq-menu>                            					
+							<cq-menu class="ciq-search">
+								<RecentSymbols getRecentSymbols={() => this.getRecentSymbols()}>
+									<cq-lookup
+										cq-keystroke-claim
+										cq-keystroke-default
+										cq-uppercase
+									></cq-lookup>
+								</RecentSymbols>
+							</cq-menu>           					
 
 							<cq-side-nav cq-on="sidenavOn">
 								<div className="icon-toggles ciq-toggles">
@@ -409,7 +368,7 @@ class CustomChartWeb extends React.Component {
 							</div>
 						</div>
 					</RecentSymbols>
-
+					
 					<cq-abstract-marker cq-type="helicopter"></cq-abstract-marker>
 
 					<cq-attribution></cq-attribution>
@@ -424,6 +383,10 @@ class CustomChartWeb extends React.Component {
 						</cq-dialog>
 					</div>
 
+					<div className="heads-up-static-wrapper">
+						<HeadsUpStatic />
+					</div> 	
+					
 				</AdvancedChart>
 			</div>
 		);

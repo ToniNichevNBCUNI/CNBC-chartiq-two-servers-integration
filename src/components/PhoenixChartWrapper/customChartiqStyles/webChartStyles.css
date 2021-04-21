@@ -204,3 +204,19 @@ cq-comparison-add cq-accept-btn {
 .chartToolsWrapper {
   border: 2px solid green;
 }
+
+cq-scroll {
+  display: block !important;
+  border: 1px solid red;
+}
+
+.heads-up-static-wrapper {
+  border: 2px solid blue;
+  height: 100px;
+  width: 200px;
+  background: red;
+  position: absolute;
+  left:200px;
+  top:100px;
+  z-index: 500000;
+}
