@@ -16,12 +16,11 @@ export default class ChartComparison extends React.PureComponent {
       <cq-comparison marker="true">
         <cq-menu className="cq-comparison-new">
           <cq-comparison-add-label>
-            <cq-comparison-plus></cq-comparison-plus>
+            <cq-comparison-plus />
             <span>Comparison</span>
           </cq-comparison-add-label>
           <cq-comparison-add>
             <cq-comparison-lookup-frame>
-              {/*<template cq-lookup="true">*/}
               <cq-lookup cq-keystroke-claim>
                 <cq-lookup-input cq-no-close>
                   <input
@@ -33,7 +32,7 @@ export default class ChartComparison extends React.PureComponent {
                     autoCapitalize="off"
                     placeholder="Enter Symbol"
                   />
-                  <cq-lookup-icon></cq-lookup-icon>
+                  <cq-lookup-icon />
                 </cq-lookup-input>
                 <cq-lookup-results>
                   <cq-scroll>
@@ -55,9 +54,8 @@ export default class ChartComparison extends React.PureComponent {
                   </cq-scroll>
                 </cq-lookup-results>
               </cq-lookup>
-              {/*</template>*/}
             </cq-comparison-lookup-frame>
-            <cq-swatch cq-no-close></cq-swatch>
+            <cq-swatch cq-no-close />
             <span>
               <cq-accept-btn class="stx-btn">ADD</cq-accept-btn>
             </span>
@@ -66,11 +64,11 @@ export default class ChartComparison extends React.PureComponent {
         <cq-comparison-key>
           <template cq-comparison-item="true">
             <cq-comparison-item>
-              <cq-comparison-swatch></cq-comparison-swatch>
+              <cq-comparison-swatch />
               <cq-comparison-label>AAPL</cq-comparison-label>
-              <cq-comparison-price cq-animate></cq-comparison-price>
-              <cq-comparison-loader></cq-comparison-loader>
-              <div className="stx-btn-ico ciq-close"></div>
+              <cq-comparison-price cq-animate />
+              <cq-comparison-loader />
+              <div className="stx-btn-ico ciq-close" />
             </cq-comparison-item>
           </template>
         </cq-comparison-key>

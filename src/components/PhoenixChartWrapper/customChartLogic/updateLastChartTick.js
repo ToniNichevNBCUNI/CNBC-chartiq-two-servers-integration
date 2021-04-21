@@ -1,6 +1,6 @@
 import setExtendedHours from '../untestableChartiqCustomLogic/setExtendedHours';
 
-const updateLastChartTick = (quoteData, chartEngineGlobal) => {
+const updateLastChartTick = (quoteData) => {
   let lastSymbolValue;
   let lastTimeValue;
   const replaceCommaRegex = /,/gi;
@@ -11,9 +11,9 @@ const updateLastChartTick = (quoteData, chartEngineGlobal) => {
     }
     lastSymbolValue = parseFloat(quoteData.ExtendedMktQuote.last.replace(replaceCommaRegex, ''));
     if (
-      !chartEngineGlobal.layout.extended && (
-        chartEngineGlobal.currentBase === 'today' ||
-        chartEngineGlobal.currentBase === 'day'
+      !stxx.layout.extended && (
+        stxx.currentBase === 'today' ||
+        stxx.currentBase === 'day'
       )
     ) {
       setExtendedHours(quoteData);
@@ -25,16 +25,16 @@ const updateLastChartTick = (quoteData, chartEngineGlobal) => {
     lastSymbolValue = parseFloat(quoteData.last.replace(replaceCommaRegex, ''));
     lastTimeValue = quoteData.last_time ? new Date(quoteData.last_time) : null;
     if (
-      chartEngineGlobal.layout.extended && (
-        chartEngineGlobal.currentBase === 'today' ||
-        chartEngineGlobal.currentBase === 'day'
+      stxx.layout.extended && (
+        stxx.currentBase === 'today' ||
+        stxx.currentBase === 'day'
       )
     ) {
       setExtendedHours(quoteData);
     }
   }
 
-  const chartDataLastPoint = chartEngineGlobal.chart.dataSegment[chartEngineGlobal.chart.dataSegment.length -1];
+  const chartDataLastPoint = stxx.chart.dataSegment[stxx.chart.dataSegment.length -1];
 
   if (!chartDataLastPoint) {
     return;
@@ -43,15 +43,15 @@ const updateLastChartTick = (quoteData, chartEngineGlobal) => {
     chartDataLastPoint.Close !== null &&
     lastSymbolValue !== chartDataLastPoint.Close
   ) {
-    const isDayTimeRange = chartEngineGlobal.selectedTimeRange.includes('day');
+    const isDayTimeRange = stxx.selectedTimeRange.includes('day');
     const lastChartTime = chartDataLastPoint.DT;
-    const periodicity = chartEngineGlobal.layout.setSpan?.periodicity?.period;
+    const periodicity = stxx.layout.setSpan?.periodicity?.period;
     if (isDayTimeRange) {
       if (!lastTimeValue) {
         lastTimeValue = lastChartTime;
       }
       const isSameTimeAsLastTick = lastTimeValue && lastTimeValue.getHours() <= lastChartTime.getHours() && lastTimeValue.getMinutes() < lastChartTime.getMinutes() + periodicity;
-      chartEngineGlobal.appendMasterData(
+      stxx.updateChartData(
         [{
           DT: isSameTimeAsLastTick ? lastChartTime : lastTimeValue,
           Open: chartDataLastPoint.Open,
@@ -73,7 +73,7 @@ const updateLastChartTick = (quoteData, chartEngineGlobal) => {
       const extendedHoursVolume = quoteData?.ExtendedMktQuote?.volume ? parseFloat(quoteData.ExtendedMktQuote.volume.replace(replaceCommaRegex, '')) : 0;
       const lastTotalVolume = marketHoursVolume + extendedHoursVolume;
 
-      chartEngineGlobal.appendMasterData(
+      stxx.updateChartData(
         [{
           DT: isSameTimeAsLastTick ? lastChartTime : lastTimeValue,
           Open: lastSymbolValue,

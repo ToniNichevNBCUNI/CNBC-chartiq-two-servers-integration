@@ -15,12 +15,7 @@ import 'chartiq/examples/translations/translationSample';
 import 'chartiq/js/componentUI';
 import 'chartiq/js/components';
 
-// Event Markers
-import marker from 'chartiq/examples/markers/markersSample';
-import 'chartiq/examples/markers/tradeAnalyticsSample';
-import 'chartiq/examples/markers/videoSample';
-
-import { noHistoryDataList } from '../chartConstants';
+import { noHistoryDataList, noStreamableList } from '../chartConstants';
 import marketFactory from '../marketFactory';
 
 // Uncomment the following for the forecasting simulator (required for the forecasting sample).
@@ -115,49 +110,54 @@ function setUpRangesAndPeriodicity(symbolData, config) {
 
 
 // Creates a complete customised configuration object
-function getConfig(initialCNBCconfig) {
-  const quoteFeed = new QuoteFeed(initialCNBCconfig);
+function getConfig(feedConfig) {
+  const quoteFeed = new QuoteFeed(feedConfig);
   return defaultConfig({
     quoteFeed,
     // forecastQuoteFeed, // uncomment to enable forecast quote feed simulator
-    markerSample: marker.MarkersSample,
-    scrollStyle: PerfectScrollbar,
+    // markerSample: marker.MarkersSample,
+    // scrollStyle: PerfectScrollbar,
   });
 }
 
 // Creates a complete customised configuration object
-function getCustomConfig({ chartId, symbol, onChartReady, initialCNBCconfig, quoteData } = {}) {
-  const config = getConfig(initialCNBCconfig);
-
-  // Update chart configuration by modifying default configuration
-  config.chartId = chartId || '_advanced-chart';
-  config.initialSymbol = symbol || {
-    symbol: 'AAPL',
-    name: 'Apple Inc',
-    exchDisp: 'NASDAQ'
+function getCustomConfig({ chartId, symbol, onChartReady, quoteData } = {}) {
+  CIQ.localStorage.removeItem('myChartLayout');
+  const feedConfig = {
+    CIQ,
+    timeSeriesAppendUrl: '/adjusted/EST5EDT.json',
+    noStreamableList,
+    noHistoryDataList,
+    symbol: quoteData.symbol,
+    quoteData: quoteData
   };
+  const config = getConfig(feedConfig);
+  // Update chart configuration by modifying default configuration
+  config.defaultSymbol = quoteData.symbol;
+  // CIQ.localStorage.removeItem('myChartLayout');
+  config.initialSymbol = {
+    symbol: quoteData.symbol,
+    name: quoteData.name,
+    eschDisp: quoteData.exchange
+  }
   config.addOns.tooltip = null;
   // to-do: neither one of these affects the chart
   // select and order symbol market tabs
   // config.symbolLookupTabs = ['ALL', 'FX', 'STOCKS'];
   // config.footer = null;
-  // config.menus = ['menuPeriodicity', 'menuDisplay', 'menuStudies'];
- 
   config.quoteFeeds[0].behavior.refreshInterval = 10; // seconds
   config.onChartReady = onChartReady;
 
   // Enable / disable addOns
   // config.enabledAddOns.tooltip = false;
   // config.enabledAddOns.continuousZoom = true;
-
   setUpRangesAndPeriodicity(quoteData, config);
-
-  //CIQ.localStorage.removeItem('myChartLayout');
-
-
+  // removes arrowup & arrowdown keyboard controls for chart
+  config.hotkeyConfig.hotkeys[1].commands = [];
+  config.hotkeyConfig.hotkeys[0].commands = [];
   config.footerShare = false;
   config.marketFactory = marketFactory;  
-
+  config.themes.defaultTheme = 'ciq-day';
   return config;
 }
 

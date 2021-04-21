@@ -1,47 +1,36 @@
-import React from "react";
-import { CIQ } from "chartiq/js/componentUI";
+/* eslint-disable no-new */
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { CIQ } from 'chartiq/js/componentUI';
 
-import AdvancedChart from "./AdvancedChart/AdvancedChart";
-import { getCustomConfig } from "./AdvancedChart/resources";
+import quoteChartAnalyticsObj from 'utilities/QuoteAnalytics';
+
+import AdvancedChart from './AdvancedChart/AdvancedChart';
+import { getCustomConfig } from './AdvancedChart/resources';
 
 // Base styles required for all charts
 import './styles/base-imports';
 
-// CNBC customizations
-//import { useQueryParamContext } from 'contexts/QueryParamContext';
-import quoteChartAnalyticsObj from 'utilities/QuoteAnalytics';
-
 // Custom Chart IQ
 import './CustomChart.css';
 import './customChartiqStyles/webChartStyles.css';
-import ShortcutDialog from './ShortcutDialog/ShortcutDialog';
-import RecentSymbols from './RecentSymbols/RecentSymbols';
+import expandArrow from './expandArrows.svg';
 
-//import setUpChartConfig from './customChartLogic/setupChartConfig';
+// CNBC customizations
 import getChartInitParams from './customChartLogic/getChartInitParams';
-import setupThemeForChart from './customChartLogic/setupThemeForChart';
 import updateLastChartTick from './customChartLogic/updateLastChartTick';
 
-//import timeRangeOverride from './untestableChartiqCustomLogic/timeRangeOverride';
 import setSpanOverride from './untestableChartiqCustomLogic/setSpanOverride';
 import setPeriodicityOverride from './untestableChartiqCustomLogic/setPeriodicityOverride';
 import chartXAxisOVerride from './untestableChartiqCustomLogic/chartXAxisOverride';
-import setExtendedHours from './untestableChartiqCustomLogic/setExtendedHours';
-import keyStrokeOverride from './untestableChartiqCustomLogic/keyStrokeOverride';
 import addTimeRangeClasses from './untestableChartiqCustomLogic/addTimeRangeClasses';
 
 import ChartComparison from './customChartLogic/chartComparison';
-import timeRangeOverride from './untestableChartiqCustomLogic/timeRangeOverride';
-
-import HeadsUpStatic from './customChartLogic/HeadsUpStatic';
 
 import LookupDriver from './lookupDriver';
 
 import {
   noHistoryDataList,
-  noStreamableList,
-  dayTimeUnit,
-  minuteTimeUnit,
 } from './chartConstants';
 
 /**
@@ -51,346 +40,289 @@ import {
  * @class CustomChart
  * @extends {React.Component}
  */
-class CustomChartWeb extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.store = new CIQ.NameValueStore();
-    this.hasInitialized = false;
-    this.initialSymbolData;
-    this.globalQueryParams;
+let initialSymbolData;
+let config;
 
-    this.hasInitialized;
-    this.setHasInitialized;
+const CustomChartWeb = (props) => {
+  const {
+    quoteData
+  } = props;
 
-    const {
-      quoteData
-    } = props;
+  const [isExpanded, setIsExpanded] = useState(false);
 
-    if (Array.isArray(quoteData)) {
-      this.initialSymbolData = quoteData[0];
-    } else {
-      this.initialSymbolData = quoteData;
-    }
-
-    const initialCNBCconfig = {
-      symbol: this.initialSymbolData.symbol,
-	  quoteData: this.initialSymbolData,
-      noHistoryDataList,
-      noStreamableList,
-      timeSeriesAppendUrl: '/adjusted/EST5EDT.json',			
-    };
-
-    this.config = getCustomConfig({ ...props, initialCNBCconfig });
-
-    this.config.initialSymbol = {
-      symbol: this.initialSymbolData.symbol
-    };
-
-    this.config.themes.defaultTheme = 'ciq-day';
-
-    //setUpChartConfig(this.initialSymbolData, this.config);
-
-    this.state = {
-      chart: new CIQ.UI.Chart(),
-      stx: null,
-      uiContext: null,
-      shortcutDialog: false,
-      // CNBC
-      hasInitialized: false,
-      setHasInitialized: false
-    };
+  if (!config) {
+    config = getCustomConfig({ ...props });
   }
 
-	/**
+  if (Array.isArray(quoteData)) {
+    initialSymbolData = quoteData[0];
+  } else {
+    initialSymbolData = quoteData;
+  }
+
+  useEffect(() => {
+    if (!stxx) { return; }
+    if (!stxx.masterData || !stxx.chart.dataSegment) { return; }
+
+    updateLastChartTick(quoteData);
+  }, [quoteData]);
+  /**
 	 * Called after chartEngine.loadChart
 	 */
-	chartInitCallback = () => {
-		console.log('herere');
-		if (stxx.currentBase !== 'today' && this.initialSymbolData.curmktstatus !== 'REG_MKT') {
-			stxx.home({ maintainWhitespace: false });
-		}
-		quoteChartAnalyticsObj.setUpQuoteChartAnalytics();
-		if (noHistoryDataList.indexOf(this.initialSymbolData.symbol.toUpperCase()) !== -1) {
-			stxx.allowZoom = false;
-			stxx.allowScroll = false;
-			document.querySelector('cq-show-range div:first-child').classList.add('chartTimeIntervalSelected');
-		} 
-	    if (this.initialSymbolData.type === 'STOCK' &&
-			this.initialSymbolData.countryCode === 'US' &&
-			this.initialSymbolData.subType !== 'Exchange Traded Fund'
-		) {
-			document.querySelector('cq-show-range div:first-child').classList.add('chartTimeIntervalSelected');
-		} else if (this.initialSymbolData.type === 'FUND') {
-			document.querySelector('cq-show-range div:nth-child(5)').classList.add('chartTimeIntervalSelected');
-		} else {
-			document.querySelector('cq-show-range div:nth-child(7)').classList.add('chartTimeIntervalSelected');
-		}
-		addTimeRangeClasses();
-		timeRangeOverride(stxx.selectedTimeRange);
-  }
+  const chartInitCallback = () => {
+    if (stxx.currentBase !== 'today' && initialSymbolData.curmktstatus !== 'REG_MKT') {
+      stxx.home({ maintainWhitespace: false });
+    }
+    quoteChartAnalyticsObj.setUpQuoteChartAnalytics();
+    if (noHistoryDataList.indexOf(initialSymbolData.symbol.toUpperCase()) !== -1) {
+      stxx.allowZoom = false;
+      stxx.allowScroll = false;
+      document.querySelector('cq-show-range div:first-child').classList.add('chartTimeIntervalSelected');
+    }
+    if (
+      initialSymbolData.type === 'STOCK' &&
+      initialSymbolData.countryCode === 'US' &&
+      initialSymbolData.subType !== 'Exchange Traded Fund'
+    ) {
+      document.querySelector('cq-show-range div:first-child').classList.add('chartTimeIntervalSelected');
+    } else if (initialSymbolData.type === 'FUND') {
+      document.querySelector('cq-show-range div:nth-child(5)').classList.add('chartTimeIntervalSelected');
+    } else {
+      document.querySelector('cq-show-range div:nth-child(7)').classList.add('chartTimeIntervalSelected');
+    }
+	  addTimeRangeClasses();
+  };
 
-	/**
+  /**
 	 * The former chartInitialized function.
 	 * The starting point of the chart customization process
-	 * @param { chartEngine, uiContext }  
+	 * @param { chartEngine, uiContext }
 	 */
-	postInit({ chartEngine, uiContext }) {
-		console.log('herere')
-		window.stxx = chartEngine; // bad idea to make chart engine global object, but we have no time to refactor.
-		this.globalQueryParams = chartEngine;
+  const postInit = ({ chartEngine, uiContext }) => {
+    // applies stxx to global space for useEffect
+    window.stxx = chartEngine;
 
-    	chartEngine.setChartType("mountain");
+    chartEngine.setChartType('mountain');
+    stxx.layout.crosshair = true;
+    // eslint-disable-next-line no-param-reassign
+    chartEngine.chart.symbolObject = initialSymbolData;
 
-		// setupThemeForChart(this.globalQueryParams); // we don't need this for WEB chart
-		chartXAxisOVerride(); // to-fix: throwwing error because stxx.selectedTimeRange is missing 
+    chartXAxisOVerride();
+    setPeriodicityOverride();
+    setSpanOverride();
 
-		
-		// initializes chart with symbol of page
-		// eslint-disable-next-line no-param-reassign
-		chartEngine.chart.symbolObject = this.initialSymbolData;
-		chartEngine.selectedTimeRange = '1today';
+    chartEngine.loadChart(
+      initialSymbolData.symbol,
+      getChartInitParams(initialSymbolData, chartEngine, false),
+      chartInitCallback
+    );
+    new CIQ.InactivityTimer({
+      stx: chartEngine,
+      minutes: 2
+    });
+    // applies cnbc symbol lookup as comparison driver
+    uiContext.setLookupDriver(new LookupDriver(chartEngine));
 
+    new CIQ.Tooltip({ stx: chartEngine, ohl: true, volume: true, series: true, studies: true });
+  };
 
-		// to-fix: meaningless passing of preMarketOpen and preMarketPrevOpen since they are never initialized.			
-		// to-do: add timeRangeOverride 
-		//timeRangeOverride(chartEngine, this.initialSymbolData, this.preMarketOpen, this.preMarketPrevOpen);
-		setPeriodicityOverride();
-		setSpanOverride();
+  /**
+	 * Expand the chart, and hides all other elements, leaving only header and footer
+	 */
+  const expandChart = () => {
+    if (isExpanded) {
+      document.querySelector('[class*="QuotePageBuilder-sidebar"]').style.display = 'block';
+      document.querySelector('[class*="QuotePageTabs').style.display = 'block';
+      document.querySelector('[class*="QuotePageBuilder-mainContent"]').style.minWidth = '';
+      document.querySelector('.chartWrapper').style.height = '40vh';
+      setIsExpanded(false);
+      quoteChartAnalyticsObj.triggerAnalyticsCall('basic');
+    } else {
+      document.querySelector('[class*="QuotePageBuilder-sidebar"]').style.display = 'none';
+      document.querySelector('[class*="QuotePageTabs').style.display = 'none';
+      document.querySelector('[class*="QuotePageBuilder-mainContent"]').style.minWidth = '100%';
+      document.querySelector('.chartWrapper').style.height = '60vh';
+      setIsExpanded(true);
+      quoteChartAnalyticsObj.triggerAnalyticsCall('advanced');
+    }
+  };
 
-		chartEngine.loadChart(
-			this.initialSymbolData.symbol,
-			getChartInitParams(this.initialSymbolData, chartEngine, this.preMarketOpen, this.preMarketPrevOpen, false),
-			this.chartInitCallback
-		);
-		new CIQ.InactivityTimer({
-			stx: chartEngine,
-			minutes: 2
-		});
-		keyStrokeOverride(uiContext);
-		// applies cnbc symbol lookup as comparison driver
-		uiContext.setLookupDriver(new LookupDriver(chartEngine));
+  return (
+    <div className="chartWrapper">
+      <AdvancedChart config={config} chartInitialized={postInit}>
+        <div className="ciq-nav full-screen-hide">
+          <div className="ciq-nav">
+            <cq-show-range />
+            <button onClick={() => { expandChart(); }} className={isExpanded ? 'basic-chart' : 'advanced-chart'}>
+              <img src={expandArrow} alt={'expanded Arrow button'} />
+            </button>
+          </div>
+          <div className="chartToolsWrapper">
+            <ChartComparison />
+            <cq-side-nav cq-on="sidenavOn">
+              <div className="icon-toggles ciq-toggles">
+                <cq-toggle class="ciq-draw" cq-member="drawing">
+                  <span />
+                  <cq-tooltip>Draw</cq-tooltip>
+                </cq-toggle>
+                <cq-info-toggle-dropdown>
+                  <cq-toggle class="ciq-CH" cq-member="crosshair">
+                    <span />
+                    <cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
+                  </cq-toggle>
 
-		
-		new CIQ.Tooltip({ stx: chartEngine, ohl: true, volume: true, series: true, studies: true });	
-		this.setState({ stx: chartEngine, uiContext: uiContext });
-	}
+                </cq-info-toggle-dropdown>
 
+                <cq-info-toggle-dropdown>
+                  <cq-toggle class="ciq-HU" cq-member="headsUp">
+                    <span />
+                    <cq-tooltip>Info</cq-tooltip>
+                  </cq-toggle>
+                </cq-info-toggle-dropdown>
+              </div>
+            </cq-side-nav>
+            <div className="ciq-menu-section">
+              <div className="ciq-dropdowns">
+                <cq-menu class="ciq-menu ciq-period">
+                  <span>
+                    <cq-clickable stxbind="Layout.periodicity">
+                      1D
+                    </cq-clickable>
+                  </span>
+                  <cq-menu-dropdown>
+                    <cq-menu-container cq-name="menuPeriodicity" />
+                  </cq-menu-dropdown>
+                </cq-menu>
+                <cq-menu class="ciq-menu ciq-display collapse">
+                  <span>Display</span>
+                  <cq-menu-dropdown>
+                    <cq-menu-dropdown-section class="chart-types">
+                      <cq-heading>Chart Style</cq-heading>
+                      <cq-menu-container cq-name="menuChartStyle" />
+                    </cq-menu-dropdown-section>
+                    <cq-menu-dropdown-section class="chart-aggregations">
+                      <cq-menu-container cq-name="menuChartAggregates" />
+                    </cq-menu-dropdown-section>
+                  </cq-menu-dropdown>
+                </cq-menu>
+                <cq-menu
+                  class="ciq-menu ciq-studies collapse"
+                  cq-focus="input"
+                >
+                  <span>Studies</span>
+                  <cq-menu-dropdown>
+                    <cq-study-legend cq-no-close>
+                      <cq-section-dynamic>
+                        <cq-heading>Current Studies</cq-heading>
+                        <cq-study-legend-content>
+                          <template cq-study-legend="true">
+                            <cq-item>
+                              <cq-label class="click-to-edit" />
+                              <div className="ciq-icon ciq-close" />
+                            </cq-item>
+                          </template>
+                        </cq-study-legend-content>
+                        <cq-placeholder>
+                          <div
+                            stxtap="Layout.clearStudies()"
+                            className="ciq-btn sm"
+                          >
+                            Clear All
+                          </div>
+                        </cq-placeholder>
+                      </cq-section-dynamic>
+                    </cq-study-legend>
+                    <div className="scriptiq-ui">
+                      <cq-heading>ScriptIQ</cq-heading>
+                      <cq-item>
+                        <cq-clickable
+                          cq-selector="cq-scriptiq-editor"
+                          cq-method="open"
+                        >
+                          New Script
+                        </cq-clickable>
+                      </cq-item>
+                      <cq-separator />
+                    </div>
+                    <cq-heading cq-filter cq-filter-min="-1">
+                      Studies
+                    </cq-heading>
+                    <cq-studies />
+                  </cq-menu-dropdown>
+                </cq-menu>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="ciq-chart-area">
+          <div className="ciq-chart">
+            <cq-message-toaster
+              defaultDisplayTime="10"
+              defaultTransition="slide"
+              defaultPosition="top"
+            />
+            <cq-palette-dock>
+              <div className="palette-dock-container">
+                <cq-drawing-palette
+                  class="palette-drawing grid palette-hide"
+                  docked="true"
+                  orientation="vertical"
+                  min-height="300"
+                  cq-drawing-edit="none"
+                />
+                <cq-drawing-settings
+                  class="palette-settings"
+                  docked="true"
+                  hide="true"
+                  orientation="horizontal"
+                  min-height="40"
+                  cq-drawing-edit="none"
+                />
+              </div>
+            </cq-palette-dock>
 
+            <div className="chartContainer">
+              <stx-hu-tooltip>
+                <stx-hu-tooltip-field field="DT">
+                  <stx-hu-tooltip-field-name>
+                    Date/Time
+                  </stx-hu-tooltip-field-name>
+                  <stx-hu-tooltip-field-value />
+                </stx-hu-tooltip-field>
+                <stx-hu-tooltip-field field="Close">
+                  <stx-hu-tooltip-field-name />
+                  <stx-hu-tooltip-field-value />
+                </stx-hu-tooltip-field>
+              </stx-hu-tooltip>
 
-	render() {
-		return (
-			<div className="chartWrapper">
-				<AdvancedChart config={this.config} chartInitialized={this.postInit.bind(this)} onChartReady={this.props.onChartReady}>
-				
+              <cq-chart-title cq-marker cq-browser-tab />
+              <cq-chartcontrol-group
+                class="full-screen-show"
+                cq-marker
+              />
+              <cq-chart-legend />
+              <cq-loader />
+            </div>
+          </div>
+        </div>
+        <cq-attribution />
+        <div className="cq-context-dialog">
+          <cq-dialog>
+            <cq-drawing-context />
+          </cq-dialog>
 
-					<div className="ciq-nav full-screen-hide">
-						<div className="ciq-nav">
-							<cq-show-range />
-							<button className="advanced-chart" onClick={ () => { this.expandChart() } } className={this.expanded ? 'basic-chart' : 'advanced-chart' }>
-								<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzMiIGhlaWdodD0iMzMiIHZpZXdCb3g9IjAgMCAzMyAzMyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTMyLjU1MSAwLjM5NDE5OEMzMi4yNzA0IDAuMTEyNjI4IDMxLjkzMzcgMCAzMS41OTY5IDBIMjJDMjEuNjA3MSAwIDIxLjMyNjUgMC4xMTI2MjggMjEuMDQ1OSAwLjM5NDE5OEMyMC43NjUzIDAuNjc1NzY4IDIwLjY1MzEgMS4wMTM2NSAyMC42NTMxIDEuMzUxNTRDMjAuNjUzMSAxLjc0NTczIDIwLjc2NTMgMi4wMjczIDIxLjA0NTkgMi4zMDg4N0wyNC4xMzI3IDUuNDA2MTRMMTYuNSAxMy4wNjQ4TDE3LjAwNTEgMTMuNTcxN0wxOS40NzQ1IDE2LjA0OTVMMTkuOTc5NiAxNi41NTYzTDI3LjYxMjIgOC44OTc2MUwzMC42OTkgMTEuOTk0OUMzMC45Nzk2IDEyLjI3NjUgMzEuMzE2MyAxMi4zODkxIDMxLjY1MzEgMTIuMzg5MUMzMi4wNDU5IDEyLjM4OTEgMzIuMzI2NSAxMi4yNzY1IDMyLjYwNzEgMTEuOTk0OUMzMi44ODc4IDExLjcxMzMgMzMgMTEuMzc1NCAzMyAxMS4wMzc1VjEuNDA3ODVDMzIuOTQzOSAwLjk1NzMzOCAzMi43NzU1IDAuNjE5NDU0IDMyLjU1MSAwLjM5NDE5OFoiIGZpbGw9IiM3NDc0NzQiLz4KPHBhdGggZD0iTTEzLjUyNTUgMTcuMDA2OEwxMy4wMjA0IDE2LjVMNS4zODc3NiAyNC4xNTg3TDIuMzAxMDIgMjEuMDYxNEMyLjAyMDQxIDIwLjc3OTkgMS42ODM2NyAyMC42NjcyIDEuMzQ2OTQgMjAuNjY3MkMwLjk1NDA4MiAyMC42NjcyIDAuNjczNDY5IDIwLjc3OTkgMC4zOTI4NTcgMjEuMDYxNEMwLjExMjI0NSAyMS4zNDMgMCAyMS42ODA5IDAgMjIuMDE4OFYzMS42NDg1QzAgMzIuMDQyNyAwLjExMjI0NSAzMi4zMjQyIDAuMzkyODU3IDMyLjYwNThDMC42NzM0NjkgMzIuODg3NCAxLjAxMDIgMzMgMS4zNDY5NCAzM0gxMC45NDM5QzExLjMzNjcgMzMgMTEuNjE3MyAzMi44ODc0IDExLjg5OCAzMi42MDU4QzEyLjE3ODYgMzIuMzI0MiAxMi4yOTA4IDMxLjk4NjQgMTIuMjkwOCAzMS42NDg1QzEyLjI5MDggMzEuMzEwNiAxMi4xNzg2IDMwLjk3MjcgMTEuODk4IDMwLjY5MTFMOC44MTEyMiAyNy41OTM5TDE1LjkzODggMjAuNDQyTDE2LjQ0MzkgMTkuOTM1MkwxNS45Mzg4IDE5LjQyODNMMTMuNTI1NSAxNy4wMDY4WiIgZmlsbD0iIzc0NzQ3NCIvPgo8L3N2Zz4K" />
-							</button>							
-						</div>
+          <cq-dialog>
+            <cq-study-context />
+          </cq-dialog>
+        </div>
+      </AdvancedChart>
+    </div>
+  );
+};
 
-						<div className="chartToolsWrapper">				
-						
-							
-							<ChartComparison />								
-
-							<cq-menu class="ciq-search">
-								<RecentSymbols getRecentSymbols={() => this.getRecentSymbols()}>
-									<cq-lookup
-										cq-keystroke-claim
-										cq-keystroke-default
-										cq-uppercase
-									></cq-lookup>
-								</RecentSymbols>
-							</cq-menu>           					
-
-							<cq-side-nav cq-on="sidenavOn">
-								<div className="icon-toggles ciq-toggles">
-									<cq-toggle class="ciq-draw" cq-member="drawing">
-										<span></span>
-										<cq-tooltip>Draw</cq-tooltip>
-									</cq-toggle>
-									<cq-info-toggle-dropdown>
-										<cq-toggle class="ciq-CH" cq-member="crosshair">
-											<span></span>
-											<cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
-										</cq-toggle>
-
-									</cq-info-toggle-dropdown>
-
-									<cq-info-toggle-dropdown>
-										<cq-toggle class="ciq-HU" cq-member="headsUp">
-											<span></span>
-											<cq-tooltip>Info</cq-tooltip>
-										</cq-toggle>
-									</cq-info-toggle-dropdown>                                    
-								</div>
-							</cq-side-nav>
-
-							<div className="ciq-menu-section">
-								<div className="ciq-dropdowns">
-									<cq-menu class="ciq-menu ciq-period">
-										<span>
-											<cq-clickable stxbind="Layout.periodicity">
-												1D
-											</cq-clickable>
-										</span>
-										<cq-menu-dropdown>
-											<cq-menu-container cq-name="menuPeriodicity"></cq-menu-container>
-										</cq-menu-dropdown>
-									</cq-menu>
-
-									<cq-menu class="ciq-menu ciq-display collapse">
-										<span>Display</span>
-										<cq-menu-dropdown>
-											<cq-menu-dropdown-section class="chart-types">
-												<cq-heading>Chart Style</cq-heading>
-												<cq-menu-container cq-name="menuChartStyle"></cq-menu-container>
-											</cq-menu-dropdown-section>
-											<cq-menu-dropdown-section class="chart-aggregations">
-												<cq-menu-container cq-name="menuChartAggregates"></cq-menu-container>
-											</cq-menu-dropdown-section>
-										</cq-menu-dropdown>
-									</cq-menu>
-
-									<cq-menu
-										class="ciq-menu ciq-studies collapse"
-										cq-focus="input"
-									>
-										<span>Studies</span>
-										<cq-menu-dropdown>
-											<cq-study-legend cq-no-close>
-												<cq-section-dynamic>
-													<cq-heading>Current Studies</cq-heading>
-													<cq-study-legend-content>
-														<template cq-study-legend="true">
-															<cq-item>
-																<cq-label class="click-to-edit"></cq-label>
-																<div className="ciq-icon ciq-close"></div>
-															</cq-item>
-														</template>
-													</cq-study-legend-content>
-													<cq-placeholder>
-														<div
-															stxtap="Layout.clearStudies()"
-															className="ciq-btn sm"
-														>
-															Clear All
-														</div>
-													</cq-placeholder>
-												</cq-section-dynamic>
-											</cq-study-legend>
-											<div className="scriptiq-ui">
-												<cq-heading>ScriptIQ</cq-heading>
-												<cq-item>
-													<cq-clickable
-														cq-selector="cq-scriptiq-editor"
-														cq-method="open"
-													>
-														New Script
-													</cq-clickable>
-												</cq-item>
-												<cq-scriptiq-menu></cq-scriptiq-menu>
-												<cq-separator></cq-separator>
-											</div>
-											<cq-heading cq-filter cq-filter-min="-1">
-												Studies
-											</cq-heading>
-											<cq-studies></cq-studies>
-										</cq-menu-dropdown>
-									</cq-menu>								
-								</div>
-							</div>							
-						</div>						
-					</div>
-
-
-
-					<RecentSymbols
-						connectCount="2"
-						getRecentSymbols={() => this.getRecentSymbols()}
-					>
-						<div className="ciq-chart-area">
-							<div className="ciq-chart">
-								<cq-message-toaster
-									defaultDisplayTime="10"
-									defaultTransition="slide"
-									defaultPosition="top"
-								></cq-message-toaster>
-								<cq-palette-dock>
-									<div className="palette-dock-container">
-										<cq-drawing-palette
-											class="palette-drawing grid palette-hide"
-											docked="true"
-											orientation="vertical"
-											min-height="300"
-											cq-drawing-edit="none"
-										></cq-drawing-palette>
-										<cq-drawing-settings
-											class="palette-settings"
-											docked="true"
-											hide="true"
-											orientation="horizontal"
-											min-height="40"
-											cq-drawing-edit="none"
-										></cq-drawing-settings>
-									</div>
-								</cq-palette-dock>
-
-								<div className="chartContainer">
-									<stx-hu-tooltip>
-										<stx-hu-tooltip-field field="DT">
-											<stx-hu-tooltip-field-name>
-												Date/Time
-											</stx-hu-tooltip-field-name>
-											<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
-										</stx-hu-tooltip-field>
-										<stx-hu-tooltip-field field="Close">
-											<stx-hu-tooltip-field-name></stx-hu-tooltip-field-name>
-											<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
-										</stx-hu-tooltip-field>
-									</stx-hu-tooltip>
-
-									<cq-chart-title cq-marker cq-browser-tab></cq-chart-title>
-
-									<cq-chartcontrol-group
-										class="full-screen-show"
-										cq-marker
-									></cq-chartcontrol-group>
-
-									<cq-chart-legend></cq-chart-legend>
-
-									<cq-loader></cq-loader>
-								</div>
-							</div>
-						</div>
-					</RecentSymbols>
-					
-					<cq-abstract-marker cq-type="helicopter"></cq-abstract-marker>
-
-					<cq-attribution></cq-attribution>
-
-					<div className="cq-context-dialog">
-						<cq-dialog>
-							<cq-drawing-context></cq-drawing-context>
-						</cq-dialog>
-
-						<cq-dialog>
-							<cq-study-context></cq-study-context>
-						</cq-dialog>
-					</div>
-
-					<div className="heads-up-static-wrapper">
-						<HeadsUpStatic />
-					</div> 	
-					
-				</AdvancedChart>
-			</div>
-		);
-	}
-}
+CustomChartWeb.propTypes = {
+  quoteData: PropTypes.object.isRequired,
+};
 
 export default CustomChartWeb;

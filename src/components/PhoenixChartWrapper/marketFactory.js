@@ -30,7 +30,6 @@ const marketFactory = (symbolObject) => {
   } else if (
     symbolObject.type === 'FOREX' ||
     symbolObject.type === 'CURRENCY' ||
-    symbolObject.type === 'DERIVATIVE' ||
     symbolObject.type === 'INDEX' && symbolObject.subType === 'CNBC Synthetic'
   ) {
     market = CIQ.Market.HR24;

@@ -1,13 +1,12 @@
 /* eslint-disable no-param-reassign */
 import { CIQ } from 'chartiq/js/chartiq';
 import adjustPeriodicitySelector from './adjustPeriodicitySelector';
-import { noHistoryDataList, weekendPremarketMultiplierValue } from '../chartConstants';
+import { weekendPremarketMultiplierValue } from '../chartConstants';
+import marketFactory from '../marketFactory';
 
 const getChartInitParams = (
   symbolData,
   chartEngine,
-  preMarketOpen,
-  preMarketPrevOpen,
   appChart = false,
   date = undefined
 ) => {
@@ -15,12 +14,10 @@ const getChartInitParams = (
   let multiplier = 1;
   let timeUnit = 'minute';
 
+  chartEngine.setMarket(marketFactory(symbolData));
   const market = chartEngine.chart.market;
-  chartEngine.setTimeZone('America/New_York', market.market_tz);
 
-  if (noHistoryDataList.indexOf(symbolData.symbol.toUpperCase()) !== - 1) {
-    $('cq-show-range div:first-child').addClass('chartTimeIntervalSelected');
-  } else if (
+  if (
     symbolData.type === 'STOCK' &&
     symbolData.countryCode === 'US' &&
     symbolData.subType !== 'Exchange Traded Fund'
@@ -70,8 +67,6 @@ const getChartInitParams = (
         widthFactor: .05
       });
     }
-    $('cq-show-range div:first-child').addClass('chartTimeIntervalSelected');
-    adjustPeriodicitySelector(['item-hide-1m', 'item-hide-5m', 'item-hide-10m', 'item-hide-15m', 'item-hide-30m', 'item-hide-1h']);
   } else {
     if (symbolData.subType === 'Exchange Traded Fund') {
       // these lines may be used in the future

@@ -36,18 +36,6 @@ const chartXAxisOverride = () => {
     }
     return newAxisRepresentation;
   });
-
-  CIQ.ChartEngine.prototype.prepend("drawXAxis", function(chart){
-    const xAxisDisplayValues = getXAxisDisplayValue();
-
-    if (xAxisDisplayValues) {
-      stxx.chart.xAxis.timeUnit = xAxisDisplayValues.timeUnit;
-      stxx.chart.xAxis.timeUnitMultiplier = xAxisDisplayValues.timeUnitMultiplier;
-    } else {
-      stxx.chart.xAxis.timeUnit = null;
-      stxx.chart.xAxis.timeUnitMultiplier = null;
-    }
-  });
 }
 
 export default chartXAxisOverride;
