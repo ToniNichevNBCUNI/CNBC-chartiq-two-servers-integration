@@ -175,10 +175,14 @@ const CustomChartWeb = (props) => {
                 </cq-info-toggle-dropdown>
 
                 <cq-info-toggle-dropdown>
-                  <cq-toggle class="ciq-HU" cq-member="headsUp">
+                                    
+                  
+                  <cq-toggle class="ciq-HU" cq-member="headsUp" cq-toggles="static,null">
                     <span />
                     <cq-tooltip>Info</cq-tooltip>
                   </cq-toggle>
+
+
                 </cq-info-toggle-dropdown>
               </div>
             </cq-side-nav>
