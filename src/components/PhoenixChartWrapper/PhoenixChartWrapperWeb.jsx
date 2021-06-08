@@ -52,7 +52,8 @@ const CustomChartWeb = (props) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   if (!config) {
-    config = getCustomConfig({ ...props, noHistoryDataList });
+    //config = getCustomConfig({ ...props, noHistoryDataList });
+    config = getCustomConfig(CIQ, { ...props });
   }
 
   if (Array.isArray(quoteData)) {

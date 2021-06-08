@@ -15,12 +15,13 @@ import 'chartiq/examples/translations/translationSample';
 import 'chartiq/js/componentUI';
 import 'chartiq/js/components';
 
+import { noHistoryDataList, noStreamableList } from '../chartConstants';
+
 // Event Markers
 import marker from 'chartiq/examples/markers/markersSample';
 import 'chartiq/examples/markers/tradeAnalyticsSample';
 import 'chartiq/examples/markers/videoSample';
 
-import { noHistoryDataList } from '../chartConstants';
 import marketFactory from '../marketFactory';
 
 // Uncomment the following for the forecasting simulator (required for the forecasting sample).
@@ -120,23 +121,33 @@ function getConfig(initialCNBCconfig) {
   return defaultConfig({
     quoteFeed,
     // forecastQuoteFeed, // uncomment to enable forecast quote feed simulator
-    markerSample: marker.MarkersSample,
-    scrollStyle: PerfectScrollbar,
+    //markerSample: marker.MarkersSample,
+    //scrollStyle: PerfectScrollbar,
   });
 }
 
 // Creates a complete customised configuration object
-function getCustomConfig({ chartId, symbol, onChartReady, initialCNBCconfig, quoteData } = {}) {
-  debugger;
-  const config = getConfig(initialCNBCconfig);
+//function getCustomConfig({ chartId, symbol, onChartReady, initialCNBCconfig, quoteData } = {}) {
+function getCustomConfig(CIQ, { onChartReady, quoteData } = {}) {
+  //const config = getConfig(initialCNBCconfig);
+
+  const feedConfig = {
+    CIQ,
+    timeSeriesAppendUrl: '/adjusted/EST5EDT.json',
+    noStreamableList,
+    noHistoryDataList,
+    symbol: quoteData.symbol,
+    quoteData: quoteData
+  };
+  const config = getConfig(CIQ, feedConfig);  
 
   // Update chart configuration by modifying default configuration
-  config.chartId = chartId || '_advanced-chart';
-  config.initialSymbol = symbol || {
-    symbol: 'AAPL',
-    name: 'Apple Inc',
-    exchDisp: 'NASDAQ'
-  };
+  //config.chartId = chartId || '_advanced-chart';
+  config.initialSymbol = {
+    symbol: quoteData.symbol,
+    name: quoteData.name,
+    eschDisp: quoteData.exchange
+  }
   config.addOns.tooltip = null;
   // to-do: neither one of these affects the chart
   // select and order symbol market tabs
