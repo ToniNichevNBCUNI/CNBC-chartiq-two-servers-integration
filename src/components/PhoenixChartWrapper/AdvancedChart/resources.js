@@ -91,7 +91,8 @@ function setUpRangesAndPeriodicity(symbolData, config) {
       { type: 'range', label: 'YTD', cmd: 'set(1, \'ytd\')', cls: 'range-1ytd' },
       { type: 'range', label: '1Y', cmd: 'set(1, \'year\')', cls: 'range-1year' },
       { type: 'range', label: '5Y', cmd: 'set(5, \'year\',1,1,\'week\')', cls: 'range-5year' },
-      { type: 'range', label: 'All', cmd: 'set(1, \'all\', \'month\', 3)', cls: 'range-1all' },
+      //{ type: 'range', label: 'All', cmd: 'set(1, \'all\', \'month\', 3)', cls: 'range-1all' },
+      { type: 'range', label: 'All', cmd: 'set(1, \'all\')', cls: 'range-1all' },
     ];
     config.menuPeriodicity = [
       { type: 'item', label: '1 D', cmd: 'Layout.setPeriodicity(1,1,\'day\')', cls: 'item-hide-1d' },
@@ -122,7 +123,8 @@ function getConfig(feedConfig) {
 
 // Creates a complete customised configuration object
 function getCustomConfig({ chartId, symbol, onChartReady, quoteData } = {}) {
-  CIQ.localStorage.removeItem('myChartLayout');
+
+  //CIQ.localStorage.removeItem('myChartLayout');
   const feedConfig = {
     CIQ,
     timeSeriesAppendUrl: '/adjusted/EST5EDT.json',
