@@ -142,7 +142,6 @@ function getCustomConfig(CIQ, { onChartReady, quoteData } = {}) {
   const config = getConfig(CIQ, feedConfig);  
 
   // Update chart configuration by modifying default configuration
-  //config.chartId = chartId || '_advanced-chart';
   config.initialSymbol = {
     symbol: quoteData.symbol,
     name: quoteData.name,
