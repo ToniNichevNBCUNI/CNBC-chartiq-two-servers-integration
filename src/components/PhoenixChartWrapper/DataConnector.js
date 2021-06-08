@@ -134,7 +134,7 @@ const DataConnector = (config) => {
   // called by chart to fetch pagination data
   const fetchPaginationData = (symbol, suggestedStartDate, suggestedEndDate, params, cb) => {
     // consoleLogHelper('fetchPaginationData', suggestedStartDate, endDate, params)
-    if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) === -1 && !stxx.justSelectedTimeRange) {
+    if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) === -1) {
       // if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) === -1) {
       startDate = DateHelper.dateToDateStr(suggestedStartDate);
       endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay());
@@ -144,6 +144,8 @@ const DataConnector = (config) => {
       shouldRequestBeMadeObj = { addNewDataOnly: false, fromInitialDataRequest: false };
       return supplyChartData(queryUrl);
     }
+    debugger;
+    console.log("!!!!");
   }  
 
   // called by chart to fetch update data
@@ -156,6 +158,8 @@ const DataConnector = (config) => {
       shouldRequestBeMadeObj = { addNewDataOnly: true, fromInitialDataRequest: false };
 		  return supplyChartData(queryUrl);
     }
+    debugger;
+    console.log("!!!!");
   }  
 
   return {

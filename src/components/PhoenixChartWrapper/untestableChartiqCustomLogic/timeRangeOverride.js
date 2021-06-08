@@ -53,7 +53,7 @@ const timeRangeOverride = (selectedTimeRange) => {
       adjustPeriodicitySelector([oneWeekPeriodBarsClass, oneMonthPeriodBarsClass]);
       break;
     case '1all':
-      adjustPeriodicitySelector([]);
+      adjustPeriodicitySelector(['item-hide-3mo']);
       break;
     default:
       break;
