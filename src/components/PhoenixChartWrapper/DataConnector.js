@@ -21,6 +21,10 @@ let chartBuilderGlobal;
 
 const DataConnector = (config) => {
 
+  config = {};
+  config.noHistoryDataList = [];
+  config.symbol = 'TSLA';
+  
   const getGranularity = (intervalValue, period, suggestedStartDate) => {
     if (suggestedStartDate.getFullYear() < 1990) {
       return '3MO';
