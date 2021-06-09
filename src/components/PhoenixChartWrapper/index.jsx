@@ -2,6 +2,10 @@ import React from 'react';
 import Loadable from 'react-loadable';
 import Loading from './Loading';
 
+import {
+  noHistoryDataList,
+} from './chartConstants';
+
 let PhoenixChartWrapper = Loading;
 if (typeof document !== 'undefined') {
   PhoenixChartWrapper = Loadable({
@@ -23,6 +27,7 @@ const finalProps = {
   globalQueryParams: {
   appChart: false
   },
+  noHistoryDataList: noHistoryDataList,
   quoteData: {
     DEBTEQTYQ: "52.82%",
     EventData: {

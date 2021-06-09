@@ -16,6 +16,12 @@ import 'chartiq/js/componentUI';
 import 'chartiq/js/components';
 
 import { noHistoryDataList, noStreamableList } from '../chartConstants';
+
+// Event Markers
+import marker from 'chartiq/examples/markers/markersSample';
+import 'chartiq/examples/markers/tradeAnalyticsSample';
+import 'chartiq/examples/markers/videoSample';
+
 import marketFactory from '../marketFactory';
 
 // Uncomment the following for the forecasting simulator (required for the forecasting sample).
@@ -91,7 +97,6 @@ function setUpRangesAndPeriodicity(symbolData, config) {
       { type: 'range', label: 'YTD', cmd: 'set(1, \'ytd\')', cls: 'range-1ytd' },
       { type: 'range', label: '1Y', cmd: 'set(1, \'year\')', cls: 'range-1year' },
       { type: 'range', label: '5Y', cmd: 'set(5, \'year\',1,1,\'week\')', cls: 'range-5year' },
-      //{ type: 'range', label: 'All', cmd: 'set(1, \'all\', \'month\', 3)', cls: 'range-1all' },
       { type: 'range', label: 'All', cmd: 'set(1, \'all\')', cls: 'range-1all' },
     ];
     config.menuPeriodicity = [
@@ -111,20 +116,21 @@ function setUpRangesAndPeriodicity(symbolData, config) {
 
 
 // Creates a complete customised configuration object
-function getConfig(feedConfig) {
-  const quoteFeed = new QuoteFeed(feedConfig);
+function getConfig(initialCNBCconfig) {
+  const quoteFeed = new QuoteFeed(initialCNBCconfig);
   return defaultConfig({
     quoteFeed,
     // forecastQuoteFeed, // uncomment to enable forecast quote feed simulator
-    // markerSample: marker.MarkersSample,
-    // scrollStyle: PerfectScrollbar,
+    //markerSample: marker.MarkersSample,
+    //scrollStyle: PerfectScrollbar,
   });
 }
 
 // Creates a complete customised configuration object
-function getCustomConfig({ chartId, symbol, onChartReady, quoteData } = {}) {
+//function getCustomConfig({ chartId, symbol, onChartReady, initialCNBCconfig, quoteData } = {}) {
+function getCustomConfig(CIQ, { onChartReady, quoteData } = {}) {
+  //const config = getConfig(initialCNBCconfig);
 
-  //CIQ.localStorage.removeItem('myChartLayout');
   const feedConfig = {
     CIQ,
     timeSeriesAppendUrl: '/adjusted/EST5EDT.json',
@@ -133,10 +139,9 @@ function getCustomConfig({ chartId, symbol, onChartReady, quoteData } = {}) {
     symbol: quoteData.symbol,
     quoteData: quoteData
   };
-  const config = getConfig(feedConfig);
+  const config = getConfig(CIQ, feedConfig);  
+
   // Update chart configuration by modifying default configuration
-  config.defaultSymbol = quoteData.symbol;
-  // CIQ.localStorage.removeItem('myChartLayout');
   config.initialSymbol = {
     symbol: quoteData.symbol,
     name: quoteData.name,
@@ -147,19 +152,23 @@ function getCustomConfig({ chartId, symbol, onChartReady, quoteData } = {}) {
   // select and order symbol market tabs
   // config.symbolLookupTabs = ['ALL', 'FX', 'STOCKS'];
   // config.footer = null;
+  // config.menus = ['menuPeriodicity', 'menuDisplay', 'menuStudies'];
+ 
   config.quoteFeeds[0].behavior.refreshInterval = 10; // seconds
   config.onChartReady = onChartReady;
 
   // Enable / disable addOns
   // config.enabledAddOns.tooltip = false;
   // config.enabledAddOns.continuousZoom = true;
+
   setUpRangesAndPeriodicity(quoteData, config);
-  // removes arrowup & arrowdown keyboard controls for chart
-  config.hotkeyConfig.hotkeys[1].commands = [];
-  config.hotkeyConfig.hotkeys[0].commands = [];
+
+  //CIQ.localStorage.removeItem('myChartLayout');
+
+
   config.footerShare = false;
   config.marketFactory = marketFactory;  
-  config.themes.defaultTheme = 'ciq-day';
+
   return config;
 }
 
