@@ -104,7 +104,6 @@ const CustomChartWeb = (props) => {
     window.stxx = chartEngine;
 
     chartEngine.setChartType('mountain');
-    stxx.layout.crosshair = true;
     // eslint-disable-next-line no-param-reassign
     chartEngine.chart.symbolObject = initialSymbolData;
 
@@ -125,6 +124,48 @@ const CustomChartWeb = (props) => {
     uiContext.setLookupDriver(new LookupDriver(chartEngine));
 
     new CIQ.Tooltip({ stx: chartEngine, ohl: true, volume: true, series: true, studies: true });
+
+
+    //const stxx = chartEngine;
+
+		var flashingColors=['#0298d3','#19bcfc','#5dcffc','#9ee3ff'];
+		var flashingColorIndex=0;
+		var flashingColorThrottle=20;
+		var flashingColorThrottleCounter=0;    
+    var filterSession=false;
+		var nextBoundary=null;
+
+		stxx.append("draw", function() {
+			if(filterSession) return;
+			if (this.chart.dataSet && this.chart.dataSet.length && this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation ) {
+				if(flashingColorThrottleCounter%flashingColorThrottle===0) {
+					flashingColorIndex++;
+					flashingColorThrottleCounter=0;
+				}
+				flashingColorThrottleCounter++;
+
+			    var context = this.chart.context;
+			    var panel = this.chart.panel;
+			    var currentQuote = this.currentQuote();
+			    if(!currentQuote) return;
+			    var price = currentQuote.Close;
+			    var x = this.pixelFromTick(currentQuote.tick, this.chart);
+			    if( this.chart.lastTickOffset ) x = x + this.chart.lastTickOffset;
+			    var y = this.pixelFromPrice(price, panel);
+			    if (this.chart.yAxis.left > x &&
+			    	this.chart.yAxis.top <= y &&
+			    	this.chart.yAxis.bottom >= y) {
+			      if(flashingColorIndex >= flashingColors.length) flashingColorIndex = 0;
+			      context.beginPath();
+			      context.moveTo(x, y);
+			      context.arc(x, y, 2+flashingColorIndex*1.07, 0, Math.PI * 2, false);
+				  context.fillStyle = flashingColors[flashingColorIndex];
+				  context.fill();
+			    }
+			}
+		});
+    
+    stxx.layout.crosshair = true;
   };
 
   /**
