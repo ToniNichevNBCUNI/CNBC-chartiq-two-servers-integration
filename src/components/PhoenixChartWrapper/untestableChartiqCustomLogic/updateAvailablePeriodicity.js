@@ -14,14 +14,8 @@ const setTimeRangeHighlight = () => {
   }
 }
 
-const timeRangeOverride = (selectedTimeRange) => {
-  console.log(">>>> timeRangeOverride ");
-  if(document.querySelector('.ciq-menu.ciq-period > cq-menu-dropdown > cq-menu-container').innerText === '') {
-    // skip further actions if periodicity container is empty (on initial load)
-    return;
-  }
+const updateAvailablePeriodicity = (selectedTimeRange) => {
   stxx.justSelectedTimeRange = true;
-
   const oneWeekPeriodBarsClass = 'item-hide-1w';
   const oneMonthPeriodBarsClass = 'item-hide-1mo';
 
@@ -60,4 +54,4 @@ const timeRangeOverride = (selectedTimeRange) => {
   }
 };
 
-export default timeRangeOverride;
+export default updateAvailablePeriodicity;

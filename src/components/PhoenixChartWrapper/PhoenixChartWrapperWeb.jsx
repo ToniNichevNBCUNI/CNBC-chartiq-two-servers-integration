@@ -1,7 +1,8 @@
 /* eslint-disable no-new */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { CIQ } from 'chartiq/js/componentUI';
+import { CIQ as CIQUI } from 'chartiq/js/componentUI';
+import { CIQ } from 'chartiq/js/chartiq';
 
 import quoteChartAnalyticsObj from 'utilities/QuoteAnalytics';
 
@@ -14,6 +15,7 @@ import './styles/base-imports';
 // Custom Chart IQ
 import './CustomChart.css';
 import './customChartiqStyles/webChartStyles.css';
+//import './untestableChartiqCustomLogic/TooltipCustom';
 import expandArrow from './expandArrows.svg';
 
 // CNBC customizations
@@ -24,6 +26,8 @@ import setSpanOverride from './untestableChartiqCustomLogic/setSpanOverride';
 import setPeriodicityOverride from './untestableChartiqCustomLogic/setPeriodicityOverride';
 import chartXAxisOVerride from './untestableChartiqCustomLogic/chartXAxisOverride';
 import addTimeRangeClasses from './untestableChartiqCustomLogic/addTimeRangeClasses';
+//import updateAvailablePeriodicity from './untestableChartiqCustomLogic/updateAvailablePeriodicity';
+//import addDotToLatestPrice from './untestableChartiqCustomLogic/addDotToLatestPrice';
 
 import ChartComparison from './customChartLogic/chartComparison';
 
@@ -49,10 +53,11 @@ const CustomChartWeb = (props) => {
     quoteData
   } = props;
 
+  window.CIQ = CIQ;
   const [isExpanded, setIsExpanded] = useState(false);
 
   if (!config) {
-    config = getCustomConfig({ ...props });
+    config = getCustomConfig(CIQ, { ...props });
   }
 
   if (Array.isArray(quoteData)) {
@@ -70,7 +75,7 @@ const CustomChartWeb = (props) => {
   /**
 	 * Called after chartEngine.loadChart
 	 */
-  const chartInitCallback = () => {
+   const chartInitCallback = () => {
     if (stxx.currentBase !== 'today' && initialSymbolData.curmktstatus !== 'REG_MKT') {
       stxx.home({ maintainWhitespace: false });
     }
@@ -102,9 +107,9 @@ const CustomChartWeb = (props) => {
   const postInit = ({ chartEngine, uiContext }) => {
     // applies stxx to global space for useEffect
     window.stxx = chartEngine;
-
-    chartEngine.setChartType('mountain');
+    //stxx.cleanupGaps = 'carry';
     stxx.layout.crosshair = true;
+    chartEngine.setChartType('mountain');
     // eslint-disable-next-line no-param-reassign
     chartEngine.chart.symbolObject = initialSymbolData;
 
@@ -114,17 +119,19 @@ const CustomChartWeb = (props) => {
 
     chartEngine.loadChart(
       initialSymbolData.symbol,
-      getChartInitParams(initialSymbolData, chartEngine, false),
+      getChartInitParams(CIQ, initialSymbolData, chartEngine),
       chartInitCallback
     );
-    new CIQ.InactivityTimer({
+    new CIQUI.InactivityTimer({
       stx: chartEngine,
       minutes: 2
     });
     // applies cnbc symbol lookup as comparison driver
     uiContext.setLookupDriver(new LookupDriver(chartEngine));
 
-    new CIQ.Tooltip({ stx: chartEngine, ohl: true, volume: true, series: true, studies: true });
+    new CIQUI.Tooltip({ stx: chartEngine, ohl: true, volume: true, series: true, studies: true });
+
+    //addDotToLatestPrice(chartEngine);
   };
 
   /**
@@ -154,7 +161,11 @@ const CustomChartWeb = (props) => {
         <div className="ciq-nav full-screen-hide">
           <div className="ciq-nav">
             <cq-show-range />
-            <button onClick={() => { expandChart(); }} className={isExpanded ? 'basic-chart' : 'advanced-chart'}>
+            <button
+              onClick={() => {
+                expandChart();
+              }}
+              className={isExpanded ? 'basic-chart' : 'advanced-chart'}>
               <img src={expandArrow} alt={'expanded Arrow button'} />
             </button>
           </div>
@@ -175,14 +186,10 @@ const CustomChartWeb = (props) => {
                 </cq-info-toggle-dropdown>
 
                 <cq-info-toggle-dropdown>
-                                    
-                  
                   <cq-toggle class="ciq-HU" cq-member="headsUp" cq-toggles="static,null">
                     <span />
                     <cq-tooltip>Info</cq-tooltip>
                   </cq-toggle>
-
-
                 </cq-info-toggle-dropdown>
               </div>
             </cq-side-nav>
@@ -253,6 +260,49 @@ const CustomChartWeb = (props) => {
                       Studies
                     </cq-heading>
                     <cq-studies />
+                  </cq-menu-dropdown>
+                </cq-menu>
+
+                <cq-menu class="ciq-menu ciq-preferences collapse">
+                  <span />
+                  <cq-menu-dropdown>
+                    <cq-menu-dropdown-section class="chart-preferences">
+                      <cq-heading>Chart Preferences</cq-heading>
+                      <cq-menu-container cq-name="menuChartPreferences" />
+                      <cq-separator />
+                    </cq-menu-dropdown-section>
+                    <cq-menu-dropdown-section class="y-axis-preferences">
+                      <cq-heading>Y-Axis Preferences</cq-heading>
+                      <cq-menu-container cq-name="menuYAxisPreferences" />
+                      <cq-separator />
+                    </cq-menu-dropdown-section>
+                    <cq-menu-dropdown-section class="chart-theme">
+                      <cq-heading>Themes</cq-heading>
+                      <cq-themes />
+                      <cq-separator />
+                    </cq-menu-dropdown-section>
+                    <cq-menu-dropdown-section class="chart-locale">
+                      <cq-heading>Locale</cq-heading>
+                      <cq-item>
+                        <cq-clickable
+                          cq-selector="cq-timezone-dialog"
+                          cq-method="open"
+                        >
+                          Change Timezone
+                        </cq-clickable>
+                      </cq-item>
+                      <cq-item stxsetget="Layout.Language()">
+                        <cq-flag />
+                        <cq-language-name>Change Language</cq-language-name>
+                      </cq-item>
+                    </cq-menu-dropdown-section>
+                    <cq-menu-dropdown-section className="shortcuts-ui">
+                      <cq-separator />
+                      <cq-heading>Shortcuts</cq-heading>
+                      <cq-item stxtap="Layout.showShortcuts(true)">
+                        Shortcuts / Hotkeys
+                      </cq-item>
+                    </cq-menu-dropdown-section>
                   </cq-menu-dropdown>
                 </cq-menu>
               </div>

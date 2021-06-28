@@ -26,6 +26,7 @@ describe('updateLastChartTick', () => {
       }
     },
     appendMasterData: appendMasterDataMock,
+    updateChartData: appendMasterDataMock
   };
 
   global.stxx = chartEngineGlobalMock;

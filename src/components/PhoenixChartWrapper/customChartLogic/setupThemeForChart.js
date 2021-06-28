@@ -1,26 +1,16 @@
-import { CIQ } from 'chartiq/js/chartiq';
-
-const setupThemeForChart = (queryParams) => {
-  const UIStorage = new CIQ.NameValueStore();
-  const UIThemes = $('cq-themes');
-  if (queryParams && queryParams.theme) {
-    if (UIThemes[0].initialize) {
-      UIThemes[0].initialize({
-        builtInThemes: { 'ciq-day': 'Day', 'ciq-night': 'Night' },
-        defaultTheme: queryParams.theme === 'night' ? 'ciq-night' : 'ciq-day',
-        nameValueStore: UIStorage
-      });
+const setupThemeForChart = (queryParams, chartEngine) => {
+  let selectedTheme = 'ciq-day';
+  if (queryParams && typeof queryParams.theme !=='undefined' && queryParams.theme) {
+    selectedTheme = queryParams.theme === 'night' ? 'ciq-night' : 'ciq-day';
+    if (queryParams.theme === 'night') {
+      document.querySelector('cq-context').classList.add('ciq-night');
+      // clear out the old styles to allow new ones to be cached in; and redraw.
+      // eslint-disable-next-line no-param-reassign
+      chartEngine.styles={};
+      chartEngine.draw();
     }
-    return queryParams.theme === 'night' ? 'ciq-night' : 'ciq-day';
   }
-  if (UIThemes[0].initialize) {
-    UIThemes[0].initialize({
-      builtInThemes: { 'ciq-day': 'Day', 'ciq-night': 'Night' },
-      defaultTheme: 'ciq-day',
-      nameValueStore: UIStorage
-    });
-  }
-  return 'ciq-day';
+  return selectedTheme;
 };
 
 export default setupThemeForChart;

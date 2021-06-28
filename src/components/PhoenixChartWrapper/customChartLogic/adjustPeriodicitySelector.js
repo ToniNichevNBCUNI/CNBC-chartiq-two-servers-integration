@@ -1,11 +1,10 @@
-/* eslint-disable guard-for-in, no-restricted-syntax */
+/* eslint-disable guard-for-in, no-restricted-syntax, no-param-reassign */
 const adjustPeriodicitySelector = (setVisible) => {
 
   document.querySelector('.ciq-menu.ciq-period > cq-menu-dropdown > cq-menu-container').querySelectorAll('cq-item').forEach( element => {
-    if(setVisible.includes(element.className) ) {
+    if (setVisible.includes(element.className) ) {
       element.style.display = 'block';
-    }
-    else {
+    } else {
       element.style.display = 'none';
     }
   });

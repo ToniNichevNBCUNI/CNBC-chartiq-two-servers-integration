@@ -1,69 +1,23 @@
-// Required imports from chartiq for advanced chart
-
-import { CIQ } from 'chartiq/js/chartiq';
 import 'chartiq/js/advanced';
 import 'chartiq/js/addOns';
-
 // Symbol mapping to market definition
 import 'chartiq/examples/markets/marketDefinitionsSample';
 import 'chartiq/examples/markets/marketSymbologySample';
-
 import 'chartiq/examples/feeds/symbolLookupChartIQ';
-
 import 'chartiq/examples/translations/translationSample';
-
 import 'chartiq/js/componentUI';
 import 'chartiq/js/components';
 
 import { noHistoryDataList, noStreamableList } from '../chartConstants';
 import marketFactory from '../marketFactory';
-
-// Uncomment the following for the forecasting simulator (required for the forecasting sample).
-// import forecastQuoteFeed from "chartiq/examples/feeds/quoteFeedForecastSimulator.js";
-
 import PerfectScrollbar from 'chartiq/js/thirdparty/perfect-scrollbar.esm';
-
 import defaultConfig from 'chartiq/js/defaultConfiguration';
-
-// import quoteFeed from "chartiq/examples/feeds/quoteFeedSimulator.js";
 import QuoteFeed from '../DataConnector';
-
-// Plugins
-
-// Crypto, L2 Heat Map, Market Depth,
-// Important Note. Uncomment the corresponding configuration object below when enabling this plugin.
-// import 'chartiq/plugins/activetrader/cryptoiq';
-
-// ScriptIQ
-// import 'chartiq/plugins/scriptiq/scriptiq';
-
-// Trading Central: Technical Insights
-// import 'chartiq/plugins/technicalinsights/components'
-
-// TFC plugin
-// Important Note. Uncomment the corresponding configuration object below when enabling this plugin.
-// import 'chartiq/plugins/tfc/tfc-loader';
-// import 'chartiq/plugins/tfc/tfc-demo';   /* if using demo account class */
-
-// Time Span Events
-// Important Note. Uncomment the corresponding configuration object below when enabling this plugin.
-// import 'chartiq/plugins/timespanevent/timespanevent';
-// import 'chartiq/plugins/timespanevent/examples/timeSpanEventSample';  /* if using sample */
-
-// Trading Central: Analyst Views
-// import 'chartiq/plugins/analystviews/components';
-
-// Visual Earnings
-// Important Note. Uncomment the corresponding configuration object below when enabling this plugin.
-// import 'chartiq/plugins/visualearnings/visualearnings';
-
-// Uncomment the following for the L2 simulator (required for the crypto sample and MarketDepth addOn)
-// import 'chartiq/examples/feeds/L2_simulator'; /* for use with cryptoiq */
 
 function setUpRangesAndPeriodicity(symbolData, config) {
   if (noHistoryDataList.indexOf(symbolData.symbol.toUpperCase()) !== -1) {
     config.rangeMenu = [
-      { label: '1D', multiplier: 1, base: 'today', interval: 1, timeUnit: 'minute', available: 'always' }
+      { type: 'range', label: '1D', cmd: 'set(1, \'today\', 1, 1, \'minute\')', cls: 'range-1today'  },
     ];
     config.menuPeriodicity = [];
   } else if (symbolData.subType === 'Mutual Fund') {
@@ -74,7 +28,7 @@ function setUpRangesAndPeriodicity(symbolData, config) {
       { type: 'range', label: 'YTD', cmd: 'set(1, \'YTD\')' },
       { type: 'range', label: '1Y', cmd: 'set(1, \'year\')' },
       { type: 'range', label: '5Y', cmd: 'set(5, \'year\')' },
-      { type: 'range', label: 'All', cmd: 'set(1, \'all\')' },
+      { type: 'range', label: 'All', cmd: 'set(1, \'all\', \'month\', 3)' },
     ];
     config.menuPeriodicity = [
       { type: 'item', label: '1 D', cmd: 'Layout.setPeriodicity(1,1,\'day\')', cls: 'item-hide-1d' },
@@ -91,7 +45,8 @@ function setUpRangesAndPeriodicity(symbolData, config) {
       { type: 'range', label: 'YTD', cmd: 'set(1, \'ytd\')', cls: 'range-1ytd' },
       { type: 'range', label: '1Y', cmd: 'set(1, \'year\')', cls: 'range-1year' },
       { type: 'range', label: '5Y', cmd: 'set(5, \'year\',1,1,\'week\')', cls: 'range-5year' },
-      { type: 'range', label: 'All', cmd: 'set(1, \'all\')', cls: 'range-1all' },
+      { type: 'range', label: 'All', cmd: 'set(1, \'all\', \'month\', 3)', cls: 'range-1all' },
+      // { type: 'range', label: 'All', cmd: 'set(1, \'all\')', cls: 'range-1all' },
     ];
     config.menuPeriodicity = [
       { type: 'item', label: '1 D', cmd: 'Layout.setPeriodicity(1,1,\'day\')', cls: 'item-hide-1d' },
@@ -108,21 +63,18 @@ function setUpRangesAndPeriodicity(symbolData, config) {
   }
 };
 
-
 // Creates a complete customised configuration object
-function getConfig(feedConfig) {
-  const quoteFeed = new QuoteFeed(feedConfig);
+function getConfig(CIQ, feedConfig) {
+  const quoteFeed = new QuoteFeed(CIQ, feedConfig);
   return defaultConfig({
     quoteFeed,
-    // forecastQuoteFeed, // uncomment to enable forecast quote feed simulator
-    // markerSample: marker.MarkersSample,
-    // scrollStyle: PerfectScrollbar,
+    scrollStyle: PerfectScrollbar,
   });
 }
 
 // Creates a complete customised configuration object
-function getCustomConfig({ chartId, symbol, onChartReady, quoteData } = {}) {
-  CIQ.localStorage.removeItem('myChartLayout');
+function getCustomConfig(CIQ, { onChartReady, quoteData } = {}) {
+  //CIQ.localStorage.removeItem('myChartLayout');
   const feedConfig = {
     CIQ,
     timeSeriesAppendUrl: '/adjusted/EST5EDT.json',
@@ -131,7 +83,7 @@ function getCustomConfig({ chartId, symbol, onChartReady, quoteData } = {}) {
     symbol: quoteData.symbol,
     quoteData: quoteData
   };
-  const config = getConfig(feedConfig);
+  const config = getConfig(CIQ, feedConfig);
   // Update chart configuration by modifying default configuration
   config.defaultSymbol = quoteData.symbol;
   // CIQ.localStorage.removeItem('myChartLayout');
@@ -140,11 +92,7 @@ function getCustomConfig({ chartId, symbol, onChartReady, quoteData } = {}) {
     name: quoteData.name,
     eschDisp: quoteData.exchange
   }
-  config.addOns.tooltip = null;
-  // to-do: neither one of these affects the chart
-  // select and order symbol market tabs
-  // config.symbolLookupTabs = ['ALL', 'FX', 'STOCKS'];
-  // config.footer = null;
+
   config.quoteFeeds[0].behavior.refreshInterval = 10; // seconds
   config.onChartReady = onChartReady;
 
@@ -158,7 +106,8 @@ function getCustomConfig({ chartId, symbol, onChartReady, quoteData } = {}) {
   config.footerShare = false;
   config.marketFactory = marketFactory;  
   config.themes.defaultTheme = 'ciq-day';
+  console.log(config);
   return config;
 }
 
-export { CIQ, getConfig, getCustomConfig };
+export { getConfig, getCustomConfig };

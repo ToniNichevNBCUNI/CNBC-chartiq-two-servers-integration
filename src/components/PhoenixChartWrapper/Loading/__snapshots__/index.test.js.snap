@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Loading component should render default loading component 1`] = `
+<div
+  className="wrapper"
+>
+  <div
+    className="timeRange"
+  >
+    <p>
+       ... 
+    </p>
+  </div>
+  <div>
+    Loading . . . 
+  </div>
+</div>
+`;
+
+exports[`Loading component should render night mode loading component 1`] = `
+<div
+  className="nightModeWrapper"
+>
+  <div
+    className="timeRange"
+  >
+    <p>
+       ... 
+    </p>
+  </div>
+  <div>
+    Loading . . . 
+  </div>
+</div>
+`;

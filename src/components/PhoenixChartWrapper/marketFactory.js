@@ -1,6 +1,5 @@
-import { CIQ } from 'chartiq/js/chartiq';
-
 const marketFactory = (symbolObject) => {
+  const CIQ = window.CIQ;
   const exchangeMap = {};
   exchangeMap['.SPX'] = 'XNYS';
   exchangeMap['.DJI'] = 'XNYS';

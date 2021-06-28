@@ -3,6 +3,11 @@
   margin-top: 20px;
 }
 
+.chartiqWebWrapper .chartWrapper {
+  font-size: 12px;
+  font-family: 'Proxima Nova', Helvetica, Arial, sans-serif;
+}
+
 .chartiqWebWrapper .ciq-chart-area {
   padding: 0;
   top: 90px;
@@ -13,8 +18,7 @@
 .chartiqWebWrapper .cq-chart-container.break-lg,
 .chartiqWebWrapper .cq-chart-container.break-sm,
 .chartiqWebWrapper .cq-chart-container.break-lg {
-  /* border: 1px solid silver; */
-  height: 395px;
+  height: 300px;
   position: relative;
 }
 
@@ -46,6 +50,10 @@
   font-size: 13px;
   text-transform: uppercase;
   color: rgba(32, 119, 182, 1);
+}
+
+.chartiqWebWrapper .ciq-dropdowns span {
+  font-size: 14px;
 }
 
 .chartiqWebWrapper .ciq-nav cq-show-range {
@@ -104,7 +112,9 @@
 .chartiqWebWrapper cq-attrib-container,
 .chartiqWebWrapper cq-chart-title cq-symbol,
 .chartiqWebWrapper .ciq-search,
-cq-chart-title.stx-show {
+cq-chart-title.stx-show,
+cq-comparison[cq-show],
+cq-comparison > cq-comparison-key > cq-comparison-item > cq-comparison-price {
   display: none;
 }
 
@@ -151,6 +161,10 @@ cq-chart-title.stx-show {
   margin-top: 15px;
 }
 
+.chartiqWebWrapper .ciq-menu.ciq-preferences > span {
+  width: 30px;
+}
+
 cq-comparison cq-comparison-add-label {
   padding-left: 0;
 }
@@ -174,6 +188,7 @@ cq-comparison cq-comparison-add-label {
 
 cq-comparison cq-comparison-add {
   min-width: 90px;
+  z-index: 2;
 }
 
 cq-comparison-key cq-comparison-item {
@@ -191,32 +206,39 @@ cq-comparison-add cq-accept-btn {
   position: relative;
 }
 
-
-.toniTest {
-  border: 1px solid red;
+.chartiqWebWrapper .ciq-nav > cq-show-range {
+  float: left;
 }
 
-
-.toniTest2 {
-  border: 2px solid blue;
+.chartiqWebWrapper .ciq-nav > button {
+  float: right;
 }
 
-.chartToolsWrapper {
-  border: 2px solid green;
+.chartiqWebWrapper button.advanced-chart img {
+  width: 24px;
 }
 
-cq-scroll {
-  display: block !important;
-  border: 1px solid red;
+.ciq-studies cq-menu-dropdown {
+  width: 238px;
 }
 
-.heads-up-static-wrapper {
-  border: 2px solid blue;
-  height: 100px;
-  width: 200px;
-  background: red;
-  position: absolute;
-  left:200px;
-  top:100px;
-  z-index: 500000;
+@media (max-width: 760px) {
+  .chartiqWebWrapper button.advanced-chart,
+  .chartiqWebWrapper .ciq-nav .ciq-menu-section,
+  .ciq-nav cq-comparison[cq-show],
+  .title-overlay-controls {
+    display: none;
+  }
+
+  .cq-chart-container .ciq-chart-area {
+    top: 0;
+  }
+
+  cq-show-range > div {
+    padding: 0 9px;
+  }
+
+  .chartiqWebWrapper .ciq-chart-area {
+    top: 45px;
+  }
 }

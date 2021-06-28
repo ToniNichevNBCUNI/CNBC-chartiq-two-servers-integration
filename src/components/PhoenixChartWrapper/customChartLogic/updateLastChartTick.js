@@ -1,3 +1,4 @@
+import { formatForAllBrowsers } from 'utilities/Time';
 import setExtendedHours from '../untestableChartiqCustomLogic/setExtendedHours';
 
 const updateLastChartTick = (quoteData) => {
@@ -23,7 +24,7 @@ const updateLastChartTick = (quoteData) => {
       return;
     }
     lastSymbolValue = parseFloat(quoteData.last.replace(replaceCommaRegex, ''));
-    lastTimeValue = quoteData.last_time ? new Date(quoteData.last_time) : null;
+    lastTimeValue = quoteData.last_time ? new Date(formatForAllBrowsers(quoteData.last_time)) : null;
     if (
       stxx.layout.extended && (
         stxx.currentBase === 'today' ||
@@ -66,7 +67,7 @@ const updateLastChartTick = (quoteData) => {
         return;
       }
       if (!lastTimeValue) {
-        lastTimeValue = quoteData.last_time ? new Date(quoteData.last_time) : null;
+        lastTimeValue = quoteData.last_time ? new Date(formatForAllBrowsers(quoteData.last_time)) : null;
       }
       const isSameTimeAsLastTick = lastTimeValue && lastTimeValue.getDay() === lastChartTime.getDay();
       const marketHoursVolume = quoteData?.volume ? parseFloat(quoteData.volume.replace(replaceCommaRegex, '')) : 0;

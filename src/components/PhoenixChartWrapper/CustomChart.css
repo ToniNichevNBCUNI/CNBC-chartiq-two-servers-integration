@@ -35,14 +35,15 @@
 
 .chartWrapper {
 	position: relative;
-	height: 40vh;
-	border: 10px solid red;
+	height: 325px;
 }
 
-cq-context, *[cq-context] {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0px;
-    left: 0px;
+cq-comparison-add-label, cq-lookup {
+	font-family: Roboto, Helvetica, sans-serif;
+    font-size: 12px;
 }
+
+cq-comparison-lookup-frame > cq-lookup > cq-lookup-results > cq-scroll {
+	display: block !important;
+}
+

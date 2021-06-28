@@ -1,13 +1,11 @@
 /* eslint-disable no-param-reassign */
-import { CIQ } from 'chartiq/js/chartiq';
-import adjustPeriodicitySelector from './adjustPeriodicitySelector';
-import { weekendPremarketMultiplierValue } from '../chartConstants';
+import { weekendPremarketMultiplierValue, noHistoryDataList } from '../chartConstants';
 import marketFactory from '../marketFactory';
 
 const getChartInitParams = (
+  CIQ,
   symbolData,
   chartEngine,
-  appChart = false,
   date = undefined
 ) => {
   let base = 'today';
@@ -16,7 +14,6 @@ const getChartInitParams = (
 
   chartEngine.setMarket(marketFactory(symbolData));
   const market = chartEngine.chart.market;
-
   if (
     symbolData.type === 'STOCK' &&
     symbolData.countryCode === 'US' &&
@@ -24,6 +21,7 @@ const getChartInitParams = (
   ) {
     let currentDate;
     let timeZoneOffset;
+
     if (!date) {
       currentDate = new Date();
       timeZoneOffset = currentDate.getTimezoneOffset()/60;
@@ -58,7 +56,7 @@ const getChartInitParams = (
       multiplier = weekendPremarketMultiplierValue; // force 2 days on weekends and holidays to ensure data is displayed.
     }
     // Volume Underlay applied only for us stocks not etfs
-    if (CIQ.Studies && CIQ.Studies.addStudy && !appChart) {
+    if (CIQ.Studies && CIQ.Studies.addStudy) {
       CIQ.Studies.addStudy(chartEngine, 'vol undr', {}, {
         'Down Volume': '#e0352b',
         'Up Volume': '#31a745'
@@ -67,22 +65,9 @@ const getChartInitParams = (
         widthFactor: .05
       });
     }
-  } else {
-    if (symbolData.subType === 'Exchange Traded Fund') {
-      // these lines may be used in the future
-      // preMarketPrevOpen = market.getPreviousOpen();
-      // preMarketOpen = market.getOpen();
-    }
-    // 1 year
+  } else if (noHistoryDataList.indexOf(symbolData.symbol.toUpperCase()) === -1) {
     base = 'year';
     timeUnit = 'day';
-    if (symbolData.type === 'FUND') {
-      $('cq-show-range div:nth-child(5)').addClass('chartTimeIntervalSelected');
-    } else {
-      $('cq-show-range div:nth-child(7)').addClass('chartTimeIntervalSelected');
-    }
-
-    adjustPeriodicitySelector(['item-hide-1d', 'item-hide-1w', 'item-hide-1mo']);
   }
   return {
     span: { base, multiplier },
