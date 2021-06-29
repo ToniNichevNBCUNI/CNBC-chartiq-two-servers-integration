@@ -18,45 +18,6 @@ let chartBuilderGlobal;
 
 const DataConnector = (CIQ, config) => {
 
-  const processTimeSeriesResponseCallback = (status, response, deps) => {
-    if (deps) {
-      if (deps.cb) {
-        chartBuilderGlobal = deps.cb;
-      }
-      if (deps.shouldRequestBeMadeObj) {
-        shouldRequestBeMadeObj = deps.shouldRequestBeMadeObj;
-      }
-    }
-
-    // process the HTTP response from the datafeed
-    if (status === 200) { // if successful response from datafeed
-      const rawChartData=JSON.parse(response);
-      let formatedChartData;
-      if (shouldRequestBeMadeObj.addNewDataOnly) {
-        formatedChartData = formatChartData(rawChartData, true);
-      } else {
-        formatedChartData = formatChartData(rawChartData, false);
-      }
-
-      if (
-        shouldRequestBeMadeObj.addNewDataOnly === false &&
-        (config.noHistoryDataList.indexOf(config.symbol.toUpperCase()) !== -1 ||
-        !shouldRequestBeMadeObj.fromInitialDataRequest)
-      ) {
-        chartBuilderGlobal({ quotes: formatedChartData, moreAvailable: false });
-        return;
-      }
-      chartBuilderGlobal({
-        quotes: formatedChartData,
-        attribution: { source: 'CNBC' },
-        moreAvailable: shouldRequestBeMadeObj.moreDataNeeded || false,
-      });
-    } else {
-      // else error response from datafeed & specify error in callback
-      chartBuilderGlobal({ error: status });
-    }
-  };
-
   const getGranularity = (intervalValue, period, suggestedStartDate) => {
     if (suggestedStartDate.getFullYear() < 1990) {
       return '3MO';
@@ -111,6 +72,45 @@ const DataConnector = (CIQ, config) => {
     return formatedChartData;
   };
 
+  const processTimeSeriesResponseCallback = (status, response, deps) => {
+    if (deps) {
+      if (deps.cb) {
+        chartBuilderGlobal = deps.cb;
+      }
+      if (deps.shouldRequestBeMadeObj) {
+        shouldRequestBeMadeObj = deps.shouldRequestBeMadeObj;
+      }
+    }
+
+    // process the HTTP response from the datafeed
+    if (status === 200) { // if successful response from datafeed
+      const rawChartData=JSON.parse(response);
+      let formatedChartData;
+      if (shouldRequestBeMadeObj.addNewDataOnly) {
+        formatedChartData = formatChartData(rawChartData, true);
+      } else {
+        formatedChartData = formatChartData(rawChartData, false);
+      }
+
+      if (
+        shouldRequestBeMadeObj.addNewDataOnly === false &&
+        (config.noHistoryDataList.indexOf(config.symbol.toUpperCase()) !== -1 ||
+        !shouldRequestBeMadeObj.fromInitialDataRequest)
+      ) {
+        chartBuilderGlobal({ quotes: formatedChartData, moreAvailable: false });
+        return;
+      }
+      chartBuilderGlobal({
+        quotes: formatedChartData,
+        attribution: { source: 'CNBC' },
+        moreAvailable: shouldRequestBeMadeObj.moreDataNeeded || false,
+      });
+    } else {
+      // else error response from datafeed & specify error in callback
+      chartBuilderGlobal({ error: status });
+    }
+  };  
+
   // Public methods
 
   // called by chart to fetch initial data
@@ -134,7 +134,7 @@ const DataConnector = (CIQ, config) => {
   // called by chart to fetch pagination data
   const fetchPaginationData = (symbol, suggestedStartDate, suggestedEndDate, params, cb) => {
     // consoleLogHelper('fetchPaginationData', suggestedStartDate, endDate, params)
-    if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) === -1) {
+    if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) === -1 && !stxx.justSelectedTimeRange) {
       // if (config.noHistoryDataList.indexOf(symbol.toUpperCase()) === -1) {
       startDate = DateHelper.dateToDateStr(suggestedStartDate);
       endDate = DateHelper.dateToDateStr(DateHelper.getEndOfTheDay());
@@ -144,20 +144,21 @@ const DataConnector = (CIQ, config) => {
       shouldRequestBeMadeObj = { addNewDataOnly: false, fromInitialDataRequest: false };
       return supplyChartData(queryUrl);
     }
-    return cb({ quotes: [], moreAvailable: false });
-  };
+    //return cb({ quotes: [], moreAvailable: false });
+  }  
 
   // called by chart to fetch update data
   const fetchUpdateData = (symbol, suggestedStartDate, params, cb) => {
+    // consoleLogHelper('fetchUpdateData', suggestedStartDate, '', params)
     if (config.noStreamableList.indexOf(symbol) === -1 && symbol === window.stxx.chart.symbol) {
-      // if symbol is not in the 'noStreamableList' or is quote page symbol, proceed with update
+      // if symbol is not in the 'noStreamableList', proceed with update
       const queryUrl = `${TIME_SERIES_CHART_API}/${chartTimeRange}.json?symbol=${symbol}`;
       chartBuilderGlobal = cb;
       shouldRequestBeMadeObj = { addNewDataOnly: true, fromInitialDataRequest: false };
 		  return supplyChartData(queryUrl);
     }
     return cb({ quotes: [], moreAvailable: false });
-  };
+  } 
 
   return {
     formatChartData,
